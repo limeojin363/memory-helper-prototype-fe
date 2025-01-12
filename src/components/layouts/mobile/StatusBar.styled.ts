@@ -18,11 +18,17 @@ const S = {
         height: 40px;
 
         color: red;
+
+        a {
+            text-decoration: none;
+        }
     `,
     StatusItemInner: styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
+
+        gap: 4px;
 
         flex-direction: column;
     `,

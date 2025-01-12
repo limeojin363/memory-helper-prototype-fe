@@ -3,6 +3,7 @@ import S from "./StatusBar.styled";
 import Icon, { IconName } from "../../icons/Icon";
 import { FileRoutesByFullPath } from "../../../routeTree.gen";
 import { ColorName } from "../../../designs/colors";
+import Text, { FontStyleName } from "../../texts/Text";
 
 type ItemProps = {
     iconName: IconName;
@@ -15,18 +16,35 @@ const StatusItem = ({ iconName, textView, path }: ItemProps) => {
         select: (location) => location.pathname,
     });
 
-    const colorName: ColorName =
-        path === currentPathname ? "highlight-darkest" : "neutral-light-dark";
+    const isSelected = path === currentPathname;
+
+    const iconColorName: ColorName = isSelected
+        ? "highlight-darkest"
+        : "neutral-light-dark";
+
+    const textColorName: ColorName = isSelected
+        ? "neutral-dark-darkest"
+        : "neutral-light-dark";
+
+    const fontStyle: FontStyleName = isSelected ? "action-md" : "body-sm";
 
     return (
-        <S.StatusItemInner>
+        <S.StatusItemOuter>
             <Link to={path}>
                 <S.StatusItemInner>
-                    <Icon iconName={iconName} colorName={colorName} size={40} />
-                    <div>{textView}</div>
+                    <Icon
+                        iconName={iconName}
+                        colorName={iconColorName}
+                        size={20}
+                    />
+                    <Text
+                        colorName={textColorName}
+                        label={textView}
+                        fontStyle={fontStyle}
+                    />
                 </S.StatusItemInner>
             </Link>
-        </S.StatusItemInner>
+        </S.StatusItemOuter>
     );
 };
 
