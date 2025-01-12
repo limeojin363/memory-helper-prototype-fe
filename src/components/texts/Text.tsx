@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { ColorMap, ColorName } from "../../designs/colors";
 import { css } from "@emotion/react";
+import "@fontsource/inter/index.css"; // Defaults to weight 400
 
 export const FontStyleMap = {
     "heading-1": css`
