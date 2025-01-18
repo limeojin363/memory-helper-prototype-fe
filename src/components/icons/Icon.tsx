@@ -2,12 +2,14 @@ import { Colors, ColorName } from "../../designs/colors";
 import StatusItemProblem from "../../assets/icons/status-item-problem.svg?react";
 import StatusItemSetting from "../../assets/icons/status-item-setting.svg?react";
 import StatusItemWord from "../../assets/icons/status-item-word.svg?react";
+import ArrowLeft from "../../assets/icons/arrow-left.svg?react";
 import styled from "@emotion/styled";
 
 const RawIcons = {
     "status-item-problem": StatusItemProblem,
     "status-item-setting": StatusItemSetting,
     "status-item-word": StatusItemWord,
+    "arrow-left": ArrowLeft,
 } as const;
 
 export type IconName = keyof typeof RawIcons;
