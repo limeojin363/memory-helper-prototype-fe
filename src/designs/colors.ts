@@ -1,4 +1,4 @@
-export const ColorMap = {
+export const Colors = {
     "highlight-darkest": "#006FFD",
     "highlight-dark": "#2897FF",
     "highlight-medium": "#6FBAFF",
@@ -16,4 +16,4 @@ export const ColorMap = {
     "neutral-dark-lightest": "#8F9098",
 } as const;
 
-export type ColorName = keyof typeof ColorMap;
+export type ColorName = keyof typeof Colors;

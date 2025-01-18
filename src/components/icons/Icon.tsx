@@ -1,4 +1,4 @@
-import { ColorMap, ColorName } from "../../designs/colors";
+import { Colors, ColorName } from "../../designs/colors";
 import StatusItemProblem from "../../assets/icons/status-item-problem.svg?react";
 import StatusItemSetting from "../../assets/icons/status-item-setting.svg?react";
 import StatusItemWord from "../../assets/icons/status-item-word.svg?react";
@@ -23,10 +23,10 @@ const Icon = ({ iconName, colorName, size }: IconProps) => {
         width: ${size}px;
         height: ${size}px;
         [fill]:not([fill="none"]) {
-            fill: ${ColorMap[colorName]};
+            fill: ${Colors[colorName]};
         }
         [stroke]:not([stroke="none"]) {
-            stroke: ${ColorMap[colorName]};
+            stroke: ${Colors[colorName]};
         }
     `;
 
