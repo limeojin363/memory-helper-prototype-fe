@@ -2,18 +2,16 @@ import Icon from "../../icons/Icon";
 import S from "./SearchBar.styled";
 
 type SearchBarProps = {
-    horizontalPadding?: number;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const SearchBar = ({
-    horizontalPadding = 16,
     value,
     onChange,
 }: SearchBarProps) => {
     return (
-        <S.Outer padding={horizontalPadding}>
+        <S.Outer>
             <S.Inner>
                 <Icon
                     iconName="search"

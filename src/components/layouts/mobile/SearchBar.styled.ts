@@ -3,9 +3,7 @@ import { Colors } from "../../../designs/colors";
 import { FontStyleMap } from "../../texts/Text";
 
 const S = {
-    Outer: styled.div<{ padding: number }>`
-        width: ${({padding}) => `calc(100% - ${padding * 2}px)`};
-        margin: 0 ${({ padding }) => padding}px;
+    Outer: styled.div`
         background-color: ${Colors["neutral-light-light"]};
 
         border-radius: 24px;
