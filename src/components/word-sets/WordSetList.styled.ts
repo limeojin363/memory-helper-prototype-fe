@@ -5,6 +5,9 @@ const S = {
         display: flex;
         flex-direction: column;
         gap: 8px;
+        .ghost {
+            opacity: 0;
+        }
     `,
 };
 
