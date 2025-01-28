@@ -132,9 +132,6 @@ const Text = ({
 };
 
 export default Text;
-const a = css`
-    font-size: 20px;
-`;
 
 const S = {
     Text: styled.div<{
