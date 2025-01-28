@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/inter": "^5.1.1",
     "@tanstack/react-router": "^1.95.2",
+    "@tanstack/start-config": "^1.97.25",
     "@types/lodash": "^4.17.14",
     "emotion-reset": "^3.0.1",
     "react": "19.0.0",
