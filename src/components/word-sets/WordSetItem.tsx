@@ -1,3 +1,5 @@
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import Icon from "../icons/Icon";
 import Text from "../texts/Text";
 import S from "./WordSetItem.styled";
@@ -9,29 +11,49 @@ type WordSetItemProps = {
     problemSetCount: number;
 };
 
+const formatDate = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+};
+
 const WordSetItem = ({
     id,
     createdAt,
     name,
     problemSetCount,
 }: WordSetItemProps) => {
-    const formatDate = (date: Date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, "0");
-        const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
-    };
     const formattedDate = formatDate(createdAt);
 
+    const { attributes, listeners, setNodeRef, transform, transition } =
+        useSortable({
+            id,
+            transition: {
+                duration: 150, // milliseconds
+                easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+            },
+        });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
     return (
-        <S.Root id={id}>
-            <div className="drag-handle">
-                <Icon
-                    size={16}
-                    iconName="drag-handle"
-                    colorName="neutral-dark-lightest"
-                />
-            </div>
+        <S.Root
+            id={id}
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+        >
+            <Icon
+                size={16}
+                iconName="drag-handle"
+                colorName="neutral-dark-lightest"
+            />
             <S.Body>
                 <S.TextRow>
                     <Text

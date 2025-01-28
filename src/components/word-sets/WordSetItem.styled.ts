@@ -6,6 +6,8 @@ const S = {
         display: flex;
         gap: 16px;
         align-items: center;
+        
+        user-select: none;
 
         background-color: ${Colors["neutral-light-light"]};
 
