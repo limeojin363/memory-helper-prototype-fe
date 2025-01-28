@@ -11,31 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as WordsImport } from './routes/words'
-import { Route as SettingsImport } from './routes/settings'
-import { Route as ProblemsImport } from './routes/problems'
+import { Route as StatusBarImport } from './routes/_status-bar'
 import { Route as IndexImport } from './routes/index'
 import { Route as WordsNewImport } from './routes/words_.new'
 import { Route as WordsWordIdImport } from './routes/words_.$wordId'
 import { Route as ProblemsProblemIdImport } from './routes/problems_.$problemId'
+import { Route as StatusBarWordsImport } from './routes/_status-bar.words'
+import { Route as StatusBarSettingsImport } from './routes/_status-bar.settings'
+import { Route as StatusBarProblemsImport } from './routes/_status-bar.problems'
 
 // Create/Update Routes
 
-const WordsRoute = WordsImport.update({
-  id: '/words',
-  path: '/words',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const SettingsRoute = SettingsImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProblemsRoute = ProblemsImport.update({
-  id: '/problems',
-  path: '/problems',
+const StatusBarRoute = StatusBarImport.update({
+  id: '/_status-bar',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -63,6 +51,24 @@ const ProblemsProblemIdRoute = ProblemsProblemIdImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const StatusBarWordsRoute = StatusBarWordsImport.update({
+  id: '/words',
+  path: '/words',
+  getParentRoute: () => StatusBarRoute,
+} as any)
+
+const StatusBarSettingsRoute = StatusBarSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => StatusBarRoute,
+} as any)
+
+const StatusBarProblemsRoute = StatusBarProblemsImport.update({
+  id: '/problems',
+  path: '/problems',
+  getParentRoute: () => StatusBarRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -74,26 +80,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/problems': {
-      id: '/problems'
+    '/_status-bar': {
+      id: '/_status-bar'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof StatusBarImport
+      parentRoute: typeof rootRoute
+    }
+    '/_status-bar/problems': {
+      id: '/_status-bar/problems'
       path: '/problems'
       fullPath: '/problems'
-      preLoaderRoute: typeof ProblemsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof StatusBarProblemsImport
+      parentRoute: typeof StatusBarImport
     }
-    '/settings': {
-      id: '/settings'
+    '/_status-bar/settings': {
+      id: '/_status-bar/settings'
       path: '/settings'
       fullPath: '/settings'
-      preLoaderRoute: typeof SettingsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof StatusBarSettingsImport
+      parentRoute: typeof StatusBarImport
     }
-    '/words': {
-      id: '/words'
+    '/_status-bar/words': {
+      id: '/_status-bar/words'
       path: '/words'
       fullPath: '/words'
-      preLoaderRoute: typeof WordsImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof StatusBarWordsImport
+      parentRoute: typeof StatusBarImport
     }
     '/problems_/$problemId': {
       id: '/problems_/$problemId'
@@ -121,11 +134,28 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
+interface StatusBarRouteChildren {
+  StatusBarProblemsRoute: typeof StatusBarProblemsRoute
+  StatusBarSettingsRoute: typeof StatusBarSettingsRoute
+  StatusBarWordsRoute: typeof StatusBarWordsRoute
+}
+
+const StatusBarRouteChildren: StatusBarRouteChildren = {
+  StatusBarProblemsRoute: StatusBarProblemsRoute,
+  StatusBarSettingsRoute: StatusBarSettingsRoute,
+  StatusBarWordsRoute: StatusBarWordsRoute,
+}
+
+const StatusBarRouteWithChildren = StatusBarRoute._addFileChildren(
+  StatusBarRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/problems': typeof ProblemsRoute
-  '/settings': typeof SettingsRoute
-  '/words': typeof WordsRoute
+  '': typeof StatusBarRouteWithChildren
+  '/problems': typeof StatusBarProblemsRoute
+  '/settings': typeof StatusBarSettingsRoute
+  '/words': typeof StatusBarWordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
   '/words/$wordId': typeof WordsWordIdRoute
   '/words/new': typeof WordsNewRoute
@@ -133,9 +163,10 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/problems': typeof ProblemsRoute
-  '/settings': typeof SettingsRoute
-  '/words': typeof WordsRoute
+  '': typeof StatusBarRouteWithChildren
+  '/problems': typeof StatusBarProblemsRoute
+  '/settings': typeof StatusBarSettingsRoute
+  '/words': typeof StatusBarWordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
   '/words/$wordId': typeof WordsWordIdRoute
   '/words/new': typeof WordsNewRoute
@@ -144,9 +175,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/problems': typeof ProblemsRoute
-  '/settings': typeof SettingsRoute
-  '/words': typeof WordsRoute
+  '/_status-bar': typeof StatusBarRouteWithChildren
+  '/_status-bar/problems': typeof StatusBarProblemsRoute
+  '/_status-bar/settings': typeof StatusBarSettingsRoute
+  '/_status-bar/words': typeof StatusBarWordsRoute
   '/problems_/$problemId': typeof ProblemsProblemIdRoute
   '/words_/$wordId': typeof WordsWordIdRoute
   '/words_/new': typeof WordsNewRoute
@@ -156,6 +188,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | ''
     | '/problems'
     | '/settings'
     | '/words'
@@ -165,6 +198,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | ''
     | '/problems'
     | '/settings'
     | '/words'
@@ -174,9 +208,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
-    | '/problems'
-    | '/settings'
-    | '/words'
+    | '/_status-bar'
+    | '/_status-bar/problems'
+    | '/_status-bar/settings'
+    | '/_status-bar/words'
     | '/problems_/$problemId'
     | '/words_/$wordId'
     | '/words_/new'
@@ -185,9 +220,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ProblemsRoute: typeof ProblemsRoute
-  SettingsRoute: typeof SettingsRoute
-  WordsRoute: typeof WordsRoute
+  StatusBarRoute: typeof StatusBarRouteWithChildren
   ProblemsProblemIdRoute: typeof ProblemsProblemIdRoute
   WordsWordIdRoute: typeof WordsWordIdRoute
   WordsNewRoute: typeof WordsNewRoute
@@ -195,9 +228,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ProblemsRoute: ProblemsRoute,
-  SettingsRoute: SettingsRoute,
-  WordsRoute: WordsRoute,
+  StatusBarRoute: StatusBarRouteWithChildren,
   ProblemsProblemIdRoute: ProblemsProblemIdRoute,
   WordsWordIdRoute: WordsWordIdRoute,
   WordsNewRoute: WordsNewRoute,
@@ -214,9 +245,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/problems",
-        "/settings",
-        "/words",
+        "/_status-bar",
         "/problems_/$problemId",
         "/words_/$wordId",
         "/words_/new"
@@ -225,14 +254,25 @@ export const routeTree = rootRoute
     "/": {
       "filePath": "index.tsx"
     },
-    "/problems": {
-      "filePath": "problems.tsx"
+    "/_status-bar": {
+      "filePath": "_status-bar.tsx",
+      "children": [
+        "/_status-bar/problems",
+        "/_status-bar/settings",
+        "/_status-bar/words"
+      ]
     },
-    "/settings": {
-      "filePath": "settings.tsx"
+    "/_status-bar/problems": {
+      "filePath": "_status-bar.problems.tsx",
+      "parent": "/_status-bar"
     },
-    "/words": {
-      "filePath": "words.tsx"
+    "/_status-bar/settings": {
+      "filePath": "_status-bar.settings.tsx",
+      "parent": "/_status-bar"
+    },
+    "/_status-bar/words": {
+      "filePath": "_status-bar.words.tsx",
+      "parent": "/_status-bar"
     },
     "/problems_/$problemId": {
       "filePath": "problems_.$problemId.tsx"
