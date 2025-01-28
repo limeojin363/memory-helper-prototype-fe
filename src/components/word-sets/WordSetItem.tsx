@@ -27,14 +27,20 @@ const WordSetItem = ({
 }: WordSetItemProps) => {
     const formattedDate = formatDate(createdAt);
 
-    const { attributes, listeners, setNodeRef, transform, transition } =
-        useSortable({
-            id,
-            transition: {
-                duration: 150, // milliseconds
-                easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-            },
-        });
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        setActivatorNodeRef,
+    } = useSortable({
+        id,
+        transition: {
+            duration: 150,
+            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
+        },
+    });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -42,18 +48,14 @@ const WordSetItem = ({
     };
 
     return (
-        <S.Root
-            id={id}
-            ref={setNodeRef}
-            style={style}
-            {...attributes}
-            {...listeners}
-        >
-            <Icon
-                size={16}
-                iconName="drag-handle"
-                colorName="neutral-dark-lightest"
-            />
+        <S.Root id={id} ref={setNodeRef} style={style}>
+            <div ref={setActivatorNodeRef} {...attributes} {...listeners}>
+                <Icon
+                    size={16}
+                    iconName="drag-handle"
+                    colorName="neutral-dark-lightest"
+                />
+            </div>
             <S.Body>
                 <S.TextRow>
                     <Text
