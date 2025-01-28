@@ -1,5 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Header from "../components/layouts/mobile/Header";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import SearchBar from "../components/layouts/mobile/SearchBar";
 import useInput from "../hooks/useInput";
 import WordSetList from "../components/word-sets/WordSetList";
@@ -7,25 +6,30 @@ import styled from "@emotion/styled";
 import { Colors } from "../designs/colors";
 import Icon from "../components/icons/Icon";
 
-const RouteComponent = () => {
+const WordsRouteComponent = () => {
     const [value, onChange] = useInput();
 
     return (
         <>
-            <Header title="words" goBack={() => {}} />
             <S.MiddleArea>
                 <SearchBar value={value} onChange={onChange} />
                 <WordSetList />
             </S.MiddleArea>
-            <S.AddButton>
-                <Icon iconName="plus" size={28} colorName="highlight-lightest" />
-            </S.AddButton>
+            <Link to="/words/new">
+                <S.AddButton>
+                    <Icon
+                        iconName="plus"
+                        size={28}
+                        colorName="highlight-lightest"
+                    />
+                </S.AddButton>
+            </Link>
         </>
     );
 };
 
 export const Route = createFileRoute("/words")({
-    component: RouteComponent,
+    component: WordsRouteComponent,
 });
 
 const S = {
@@ -35,9 +39,9 @@ const S = {
         gap: 16px;
 
         width: calc(100% - 32px);
-        margin: 0 16px;
+        margin: 20px 16px 0;
     `,
-    AddButton: styled.button`
+    AddButton: styled.div`
         all: unset;
 
         width: 60px;

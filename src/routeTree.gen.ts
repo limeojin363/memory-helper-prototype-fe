@@ -15,6 +15,7 @@ import { Route as WordsImport } from './routes/words'
 import { Route as SettingsImport } from './routes/settings'
 import { Route as ProblemsImport } from './routes/problems'
 import { Route as IndexImport } from './routes/index'
+import { Route as WordsNewImport } from './routes/words_.new'
 import { Route as WordsWordIdImport } from './routes/words_.$wordId'
 import { Route as ProblemsProblemIdImport } from './routes/problems_.$problemId'
 
@@ -41,6 +42,12 @@ const ProblemsRoute = ProblemsImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const WordsNewRoute = WordsNewImport.update({
+  id: '/words_/new',
+  path: '/words/new',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WordsWordIdImport
       parentRoute: typeof rootRoute
     }
+    '/words_/new': {
+      id: '/words_/new'
+      path: '/words/new'
+      fullPath: '/words/new'
+      preLoaderRoute: typeof WordsNewImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -114,6 +128,7 @@ export interface FileRoutesByFullPath {
   '/words': typeof WordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
   '/words/$wordId': typeof WordsWordIdRoute
+  '/words/new': typeof WordsNewRoute
 }
 
 export interface FileRoutesByTo {
@@ -123,6 +138,7 @@ export interface FileRoutesByTo {
   '/words': typeof WordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
   '/words/$wordId': typeof WordsWordIdRoute
+  '/words/new': typeof WordsNewRoute
 }
 
 export interface FileRoutesById {
@@ -133,6 +149,7 @@ export interface FileRoutesById {
   '/words': typeof WordsRoute
   '/problems_/$problemId': typeof ProblemsProblemIdRoute
   '/words_/$wordId': typeof WordsWordIdRoute
+  '/words_/new': typeof WordsNewRoute
 }
 
 export interface FileRouteTypes {
@@ -144,6 +161,7 @@ export interface FileRouteTypes {
     | '/words'
     | '/problems/$problemId'
     | '/words/$wordId'
+    | '/words/new'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,6 +170,7 @@ export interface FileRouteTypes {
     | '/words'
     | '/problems/$problemId'
     | '/words/$wordId'
+    | '/words/new'
   id:
     | '__root__'
     | '/'
@@ -160,6 +179,7 @@ export interface FileRouteTypes {
     | '/words'
     | '/problems_/$problemId'
     | '/words_/$wordId'
+    | '/words_/new'
   fileRoutesById: FileRoutesById
 }
 
@@ -170,6 +190,7 @@ export interface RootRouteChildren {
   WordsRoute: typeof WordsRoute
   ProblemsProblemIdRoute: typeof ProblemsProblemIdRoute
   WordsWordIdRoute: typeof WordsWordIdRoute
+  WordsNewRoute: typeof WordsNewRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -179,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   WordsRoute: WordsRoute,
   ProblemsProblemIdRoute: ProblemsProblemIdRoute,
   WordsWordIdRoute: WordsWordIdRoute,
+  WordsNewRoute: WordsNewRoute,
 }
 
 export const routeTree = rootRoute
@@ -196,7 +218,8 @@ export const routeTree = rootRoute
         "/settings",
         "/words",
         "/problems_/$problemId",
-        "/words_/$wordId"
+        "/words_/$wordId",
+        "/words_/new"
       ]
     },
     "/": {
@@ -216,6 +239,9 @@ export const routeTree = rootRoute
     },
     "/words_/$wordId": {
       "filePath": "words_.$wordId.tsx"
+    },
+    "/words_/new": {
+      "filePath": "words_.new.tsx"
     }
   }
 }
