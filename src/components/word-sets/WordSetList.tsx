@@ -6,16 +6,16 @@ import {
     DndContext,
     closestCenter,
     KeyboardSensor,
-    PointerSensor,
     useSensor,
     useSensors,
     DragEndEvent,
+    TouchSensor,
+    MouseSensor,
 } from "@dnd-kit/core";
 
 import {
     arrayMove,
     SortableContext,
-    sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import {
@@ -31,11 +31,10 @@ const WordSetList = () => {
     ]);
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates,
-        }),
-    );
+        useSensor(MouseSensor),
+        useSensor(TouchSensor),
+        useSensor(KeyboardSensor),
+        );
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
