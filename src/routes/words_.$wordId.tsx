@@ -1,9 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from "@tanstack/react-router";
+import WordSetDetail from "../components/page-specific/WordsDetail/WordsDetail";
 
-export const Route = createFileRoute('/words_/$wordId')({
-  component: WordDetailComponent,
-})
+export const Route = createFileRoute("/words_/$wordId")({
+    component: () => {
+        const { wordId } = Route.useParams();
 
-function WordDetailComponent() {
-  return <div>Word Detail Component</div>
-}
+        return <WordSetDetail wordsetId={wordId} />;
+    },
+});

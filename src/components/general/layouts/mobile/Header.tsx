@@ -4,19 +4,21 @@ import S from "./Header.styled";
 
 type HeaderProps = {
     title: string;
-    goBack: () => void;
+    goBack?: () => void;
 };
 
 const Header = ({ title, goBack }: HeaderProps) => {
     return (
         <S.Root>
-            <S.ArrowWrapper onClick={goBack}>
-                <Icon
-                    colorName="highlight-darkest"
-                    iconName="arrow-left"
-                    size={20}
-                />
-            </S.ArrowWrapper>
+            {goBack && (
+                <S.ArrowWrapper onClick={goBack}>
+                    <Icon
+                        colorName="highlight-darkest"
+                        iconName="arrow-left"
+                        size={20}
+                    />
+                </S.ArrowWrapper>
+            )}
             <Text fontStyle="heading-4" label={title} />
         </S.Root>
     );

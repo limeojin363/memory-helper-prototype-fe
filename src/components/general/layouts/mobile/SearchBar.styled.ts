@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Colors } from "../../../designs/colors";
+import { Colors } from "../../../../designs/colors";
 import { FontStyleMap } from "../../texts/Text";
 
 const S = {
