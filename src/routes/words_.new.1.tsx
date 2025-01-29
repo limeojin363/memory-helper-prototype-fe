@@ -1,15 +1,6 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-
-const GererateNewWordSetRouteComponent = () => {
-    const navigate = useNavigate();
-
-    const goBack = () => navigate({ to: "/words" });
-
-    return <>adsf</>;
-};
+import { createFileRoute } from "@tanstack/react-router";
+import NewWordsStep1 from "../components/page-specific/NewWords/NewWordsStep1";
 
 export const Route = createFileRoute("/words_/new/1")({
-    component: GererateNewWordSetRouteComponent,
+    component: NewWordsStep1,
 });
-
-const S = {};

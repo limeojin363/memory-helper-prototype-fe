@@ -1,11 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import ProblemsDetail from "../components/page-specific/ProblemsDetail/ProblemsDetail";
 
 export const Route = createFileRoute("/problems_/$problemId")({
-    component: RouteComponent,
+    component: () => {
+        const { problemId } = Route.useParams();
+        return <ProblemsDetail problemsId={problemId} />;
+    },
 });
-
-function RouteComponent() {
-    const { problemId } = Route.useParams();
-
-    return <div>{problemId}</div>;
-}
