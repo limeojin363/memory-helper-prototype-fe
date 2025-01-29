@@ -15,7 +15,7 @@ const WordsRouteComponent = () => {
         <SearchBar value={value} onChange={onChange} />
         <WordSetList />
       </S.MiddleArea>
-      <Link to="/words/new">
+      <Link to="/words/new/1">
         <S.AddButton>
           <Icon iconName="plus" size={28} colorName="highlight-lightest" />
         </S.AddButton>

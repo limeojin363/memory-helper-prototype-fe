@@ -1,14 +1,13 @@
-import { Link, useLocation } from "@tanstack/react-router";
+import { Link, ToOptions, useLocation } from "@tanstack/react-router";
 import S from "./StatusBar.styled";
 import Icon, { IconName } from "../../icons/Icon";
-import { FileRoutesByFullPath } from "../../../routeTree.gen";
 import { ColorName } from "../../../designs/colors";
 import Text, { FontStyleName } from "../../texts/Text";
 
 type ItemProps = {
     iconName: IconName;
     textView: string;
-    path: keyof FileRoutesByFullPath;
+    path: ToOptions["to"];
 };
 
 const StatusItem = ({ iconName, textView, path }: ItemProps) => {

@@ -19,6 +19,10 @@ import { Route as ProblemsProblemIdImport } from './routes/problems_.$problemId'
 import { Route as StatusBarWordsImport } from './routes/_status-bar.words'
 import { Route as StatusBarSettingsImport } from './routes/_status-bar.settings'
 import { Route as StatusBarProblemsImport } from './routes/_status-bar.problems'
+import { Route as WordsNewIndexImport } from './routes/words_.new.index'
+import { Route as WordsNew3Import } from './routes/words_.new.3'
+import { Route as WordsNew2Import } from './routes/words_.new.2'
+import { Route as WordsNew1Import } from './routes/words_.new.1'
 
 // Create/Update Routes
 
@@ -67,6 +71,30 @@ const StatusBarProblemsRoute = StatusBarProblemsImport.update({
   id: '/problems',
   path: '/problems',
   getParentRoute: () => StatusBarRoute,
+} as any)
+
+const WordsNewIndexRoute = WordsNewIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => WordsNewRoute,
+} as any)
+
+const WordsNew3Route = WordsNew3Import.update({
+  id: '/3',
+  path: '/3',
+  getParentRoute: () => WordsNewRoute,
+} as any)
+
+const WordsNew2Route = WordsNew2Import.update({
+  id: '/2',
+  path: '/2',
+  getParentRoute: () => WordsNewRoute,
+} as any)
+
+const WordsNew1Route = WordsNew1Import.update({
+  id: '/1',
+  path: '/1',
+  getParentRoute: () => WordsNewRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -129,6 +157,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WordsNewImport
       parentRoute: typeof rootRoute
     }
+    '/words_/new/1': {
+      id: '/words_/new/1'
+      path: '/1'
+      fullPath: '/words/new/1'
+      preLoaderRoute: typeof WordsNew1Import
+      parentRoute: typeof WordsNewImport
+    }
+    '/words_/new/2': {
+      id: '/words_/new/2'
+      path: '/2'
+      fullPath: '/words/new/2'
+      preLoaderRoute: typeof WordsNew2Import
+      parentRoute: typeof WordsNewImport
+    }
+    '/words_/new/3': {
+      id: '/words_/new/3'
+      path: '/3'
+      fullPath: '/words/new/3'
+      preLoaderRoute: typeof WordsNew3Import
+      parentRoute: typeof WordsNewImport
+    }
+    '/words_/new/': {
+      id: '/words_/new/'
+      path: '/'
+      fullPath: '/words/new/'
+      preLoaderRoute: typeof WordsNewIndexImport
+      parentRoute: typeof WordsNewImport
+    }
   }
 }
 
@@ -150,6 +206,24 @@ const StatusBarRouteWithChildren = StatusBarRoute._addFileChildren(
   StatusBarRouteChildren,
 )
 
+interface WordsNewRouteChildren {
+  WordsNew1Route: typeof WordsNew1Route
+  WordsNew2Route: typeof WordsNew2Route
+  WordsNew3Route: typeof WordsNew3Route
+  WordsNewIndexRoute: typeof WordsNewIndexRoute
+}
+
+const WordsNewRouteChildren: WordsNewRouteChildren = {
+  WordsNew1Route: WordsNew1Route,
+  WordsNew2Route: WordsNew2Route,
+  WordsNew3Route: WordsNew3Route,
+  WordsNewIndexRoute: WordsNewIndexRoute,
+}
+
+const WordsNewRouteWithChildren = WordsNewRoute._addFileChildren(
+  WordsNewRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof StatusBarRouteWithChildren
@@ -158,7 +232,11 @@ export interface FileRoutesByFullPath {
   '/words': typeof StatusBarWordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
   '/words/$wordId': typeof WordsWordIdRoute
-  '/words/new': typeof WordsNewRoute
+  '/words/new': typeof WordsNewRouteWithChildren
+  '/words/new/1': typeof WordsNew1Route
+  '/words/new/2': typeof WordsNew2Route
+  '/words/new/3': typeof WordsNew3Route
+  '/words/new/': typeof WordsNewIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -169,7 +247,10 @@ export interface FileRoutesByTo {
   '/words': typeof StatusBarWordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
   '/words/$wordId': typeof WordsWordIdRoute
-  '/words/new': typeof WordsNewRoute
+  '/words/new/1': typeof WordsNew1Route
+  '/words/new/2': typeof WordsNew2Route
+  '/words/new/3': typeof WordsNew3Route
+  '/words/new': typeof WordsNewIndexRoute
 }
 
 export interface FileRoutesById {
@@ -181,7 +262,11 @@ export interface FileRoutesById {
   '/_status-bar/words': typeof StatusBarWordsRoute
   '/problems_/$problemId': typeof ProblemsProblemIdRoute
   '/words_/$wordId': typeof WordsWordIdRoute
-  '/words_/new': typeof WordsNewRoute
+  '/words_/new': typeof WordsNewRouteWithChildren
+  '/words_/new/1': typeof WordsNew1Route
+  '/words_/new/2': typeof WordsNew2Route
+  '/words_/new/3': typeof WordsNew3Route
+  '/words_/new/': typeof WordsNewIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -195,6 +280,10 @@ export interface FileRouteTypes {
     | '/problems/$problemId'
     | '/words/$wordId'
     | '/words/new'
+    | '/words/new/1'
+    | '/words/new/2'
+    | '/words/new/3'
+    | '/words/new/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -204,6 +293,9 @@ export interface FileRouteTypes {
     | '/words'
     | '/problems/$problemId'
     | '/words/$wordId'
+    | '/words/new/1'
+    | '/words/new/2'
+    | '/words/new/3'
     | '/words/new'
   id:
     | '__root__'
@@ -215,6 +307,10 @@ export interface FileRouteTypes {
     | '/problems_/$problemId'
     | '/words_/$wordId'
     | '/words_/new'
+    | '/words_/new/1'
+    | '/words_/new/2'
+    | '/words_/new/3'
+    | '/words_/new/'
   fileRoutesById: FileRoutesById
 }
 
@@ -223,7 +319,7 @@ export interface RootRouteChildren {
   StatusBarRoute: typeof StatusBarRouteWithChildren
   ProblemsProblemIdRoute: typeof ProblemsProblemIdRoute
   WordsWordIdRoute: typeof WordsWordIdRoute
-  WordsNewRoute: typeof WordsNewRoute
+  WordsNewRoute: typeof WordsNewRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -231,7 +327,7 @@ const rootRouteChildren: RootRouteChildren = {
   StatusBarRoute: StatusBarRouteWithChildren,
   ProblemsProblemIdRoute: ProblemsProblemIdRoute,
   WordsWordIdRoute: WordsWordIdRoute,
-  WordsNewRoute: WordsNewRoute,
+  WordsNewRoute: WordsNewRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -281,7 +377,29 @@ export const routeTree = rootRoute
       "filePath": "words_.$wordId.tsx"
     },
     "/words_/new": {
-      "filePath": "words_.new.tsx"
+      "filePath": "words_.new.tsx",
+      "children": [
+        "/words_/new/1",
+        "/words_/new/2",
+        "/words_/new/3",
+        "/words_/new/"
+      ]
+    },
+    "/words_/new/1": {
+      "filePath": "words_.new.1.tsx",
+      "parent": "/words_/new"
+    },
+    "/words_/new/2": {
+      "filePath": "words_.new.2.tsx",
+      "parent": "/words_/new"
+    },
+    "/words_/new/3": {
+      "filePath": "words_.new.3.tsx",
+      "parent": "/words_/new"
+    },
+    "/words_/new/": {
+      "filePath": "words_.new.index.tsx",
+      "parent": "/words_/new"
     }
   }
 }
