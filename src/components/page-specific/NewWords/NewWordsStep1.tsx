@@ -70,9 +70,6 @@ const useWordInputPairListState = () => {
             return next;
         });
 
-    const getPairDataById = (pairId: string) =>
-        pairList.find((pairItem) => pairItem.pairId === pairId)!;
-
     const setEngValueOfSpecificPair = (pairId: string, value: string) =>
         setPairList((prev) => {
             const next = _.cloneDeep(prev);
@@ -103,12 +100,24 @@ const useWordInputPairListState = () => {
     return {
         pairList,
         addNewPairItem,
-        deletePairItem,
-        addNewKorItemToSpecificPair,
-        deleteSingleKorItemOfSpecificPair,
-        getPairDataById,
-        setEngValueOfSpecificPair,
-        setKorValueOfSpecificPair,
+        getPairItemHandlers: (pairId: string) => ({
+            addKorItem: () => addNewKorItemToSpecificPair(pairId),
+            deleteThis: () => deletePairItem(pairId),
+            engValueHandler: (e: ChangeEvent<HTMLInputElement>) =>
+                setEngValueOfSpecificPair(pairId, e.target.value),
+            getKorItemHandlers: (korItemId: string) => ({
+                deleteKorItem: () =>
+                    deleteSingleKorItemOfSpecificPair(pairId, korItemId),
+                korItemValueHandler: (e: ChangeEvent<HTMLInputElement>) =>
+                    setKorValueOfSpecificPair(
+                        pairId,
+                        korItemId,
+                        e.target.value,
+                    ),
+            }),
+        }),
+        getPairItemData: (pairId: string) =>
+            pairList.find((item) => item.pairId === pairId)!,
     };
 };
 
@@ -131,30 +140,12 @@ const NewWordsStep1 = () => {
 };
 
 const WordInputPairItem = ({ pairId }: { pairId: string }) => {
-    const {
-        addNewKorItemToSpecificPair,
-        deletePairItem,
-        deleteSingleKorItemOfSpecificPair,
-        getPairDataById,
-        setEngValueOfSpecificPair,
-        setKorValueOfSpecificPair,
-    } = useWordInputPairListState();
+    const { getPairItemHandlers, getPairItemData } =
+        useWordInputPairListState();
 
-    const addKor = () => addNewKorItemToSpecificPair(pairId);
-
-    const deleteThis = () => deletePairItem(pairId);
-
-    const deleteKorItem = (korItemId: string) => () =>
-        deleteSingleKorItemOfSpecificPair(pairId, korItemId);
-
-    const onChangeEngValue = (e: ChangeEvent<HTMLInputElement>) =>
-        setEngValueOfSpecificPair(pairId, e.target.value);
-
-    const onChangeKorValue =
-        (korItemId: string) => (e: ChangeEvent<HTMLInputElement>) =>
-            setKorValueOfSpecificPair(pairId, korItemId, e.target.value);
-
-    const { engValue, korItems } = getPairDataById(pairId);
+    const { addKorItem, deleteThis, engValueHandler, getKorItemHandlers } =
+        getPairItemHandlers(pairId);
+    const { engValue, korItems } = getPairItemData(pairId);
 
     return (
         <S.WordInputPairItemWrapper>
@@ -172,7 +163,7 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                     <WordInput
                         placeholder="placeholder"
                         value={engValue}
-                        onChange={onChangeEngValue}
+                        onChange={engValueHandler}
                         status="INITIAL"
                     />
                 </S.EngArea>
@@ -183,28 +174,32 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                             colorName="neutral-dark-darkest"
                             iconName="plus"
                             size={13.5}
-                            onClick={addKor}
+                            onClick={addKorItem}
                         />
                     </S.KorTopWrapper>
-                    {korItems.map((korItem) => (
-                        <S.KorItemWrapper>
-                            <WordInput
-                                placeholder="placeholder"
-                                value={korItem.value}
-                                onChange={onChangeKorValue(korItem.korItemId)}
-                                status="INITIAL"
-                                key={korItem.korItemId}
-                            />
-                            <S.KorTrashWrapper>
-                                <Icon
-                                    onClick={deleteKorItem(korItem.korItemId)}
-                                    colorName="neutral-dark-darkest"
-                                    iconName="trash"
-                                    size={16}
+                    {korItems.map((korItem) => {
+                        const { deleteKorItem, korItemValueHandler } =
+                            getKorItemHandlers(korItem.korItemId);
+                        return (
+                            <S.KorItemWrapper>
+                                <WordInput
+                                    placeholder="placeholder"
+                                    value={korItem.value}
+                                    onChange={korItemValueHandler}
+                                    status="INITIAL"
+                                    key={korItem.korItemId}
                                 />
-                            </S.KorTrashWrapper>
-                        </S.KorItemWrapper>
-                    ))}
+                                <S.KorTrashWrapper>
+                                    <Icon
+                                        onClick={deleteKorItem}
+                                        colorName="neutral-dark-darkest"
+                                        iconName="trash"
+                                        size={16}
+                                    />
+                                </S.KorTrashWrapper>
+                            </S.KorItemWrapper>
+                        );
+                    })}
                 </S.KorArea>
             </S.InputArea>
         </S.WordInputPairItemWrapper>
