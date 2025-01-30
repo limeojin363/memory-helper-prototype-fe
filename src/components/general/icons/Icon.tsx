@@ -7,6 +7,7 @@ import IcSearch from "../../../assets/icons/search.svg?react";
 import IcEnter from "../../../assets/icons/enter.svg?react";
 import IcDragHandle from "../../../assets/icons/drag-handle.svg?react";
 import IcPlus from "../../../assets/icons/plus.svg?react";
+import IcTrash from "../../../assets/icons/trash.svg?react"
 import styled from "@emotion/styled";
 
 const RawIcons = {
@@ -18,6 +19,7 @@ const RawIcons = {
     enter: IcEnter,
     "drag-handle": IcDragHandle,
     plus: IcPlus,
+    trash: IcTrash
 } as const;
 
 export type IconName = keyof typeof RawIcons;
