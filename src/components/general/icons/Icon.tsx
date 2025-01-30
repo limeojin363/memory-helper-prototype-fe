@@ -7,7 +7,9 @@ import IcSearch from "../../../assets/icons/search.svg?react";
 import IcEnter from "../../../assets/icons/enter.svg?react";
 import IcDragHandle from "../../../assets/icons/drag-handle.svg?react";
 import IcPlus from "../../../assets/icons/plus.svg?react";
+import IcTrash from "../../../assets/icons/trash.svg?react";
 import styled from "@emotion/styled";
+import { MouseEventHandler } from "react";
 
 const RawIcons = {
     "status-item-problem": IcStatusItemProblem,
@@ -18,6 +20,7 @@ const RawIcons = {
     enter: IcEnter,
     "drag-handle": IcDragHandle,
     plus: IcPlus,
+    trash: IcTrash,
 } as const;
 
 export type IconName = keyof typeof RawIcons;
@@ -26,9 +29,10 @@ export type IconProps = {
     iconName: IconName;
     colorName: ColorName;
     size: number;
+    onClick?: MouseEventHandler;
 };
 
-const Icon = ({ iconName, colorName, size }: IconProps) => {
+const Icon = ({ iconName, colorName, size, onClick }: IconProps) => {
     const StyledIcon = styled(RawIcons[iconName])`
         width: ${size}px;
         height: ${size}px;
@@ -40,7 +44,7 @@ const Icon = ({ iconName, colorName, size }: IconProps) => {
         }
     `;
 
-    return <StyledIcon />;
+    return <StyledIcon onClick={onClick} />;
 };
 
 export default Icon;
