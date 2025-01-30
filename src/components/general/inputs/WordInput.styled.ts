@@ -21,6 +21,8 @@ const getBorderStyle = (status: WordInputStatus) => {
 const S = {
     Input: styled.input<ISInputProps>`
         all: unset;
+        min-width: 0;
+        width: 100%;
         border: ${({ status }) => getBorderStyle(status)};
     `,
 };

@@ -7,7 +7,7 @@ type WordInputProps = {
     status: WordInputStatus;
     value: string;
     placeholder: string;
-    onChange: (e: ChangeEvent) => void;
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const WordInput = (props: WordInputProps) => {
