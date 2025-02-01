@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react";
 import S from "./WordInput.styled";
 
-export type WordInputStatus = "INITIAL" | "PRIMARY" | "OK" | "WARNING";
+export type WordInputStatus = "INITIAL" | "NEEDS-CORRECTION" | "OK-FIXED" | "LOADING";
 
 type WordInputProps = {
     status: WordInputStatus;
