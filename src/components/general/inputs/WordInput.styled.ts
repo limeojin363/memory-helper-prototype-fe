@@ -39,6 +39,10 @@ const getStyle = (status: WordInputStatus) =>
 
             animation: ${loading} 1s infinite;
         `,
+        DISABLED: css`
+            outline: 1px solid ${Colors["neutral-light-darkest"]};
+            background-color: ${Colors["neutral-light-light"]};
+        `,
     })[status];
 
 const S = {
