@@ -1,128 +1,12 @@
 import styled from "@emotion/styled";
-import { atom, useAtom } from "jotai";
 import _ from "lodash";
-import uuid from "react-uuid";
 import Icon from "../../general/icons/Icon";
 import Text from "../../general/texts/Text";
 import WordInput from "../../general/inputs/WordInput";
-import { ChangeEvent } from "react";
-
-type KorItemType = { korItemId: string; value: string };
-
-type WordInputPairListDataType = {
-    pairId: string;
-    engValue: string;
-    korItems: KorItemType[];
-};
-
-const makeNewKorItem = (): KorItemType => ({
-    korItemId: uuid(),
-    value: "",
-});
-
-const makeNewPairItem = (): WordInputPairListDataType => {
-    return {
-        pairId: uuid(),
-        engValue: "",
-        korItems: [makeNewKorItem()],
-    };
-};
-
-const listAtom = atom<WordInputPairListDataType[]>([makeNewPairItem()]);
-
-// props drilling 방지와 가독성 향상을 위함
-const useWordInputPairListState = () => {
-    const [pairList, setPairList] = useAtom(listAtom);
-
-    const addNewPairItem = () =>
-        setPairList((prev) => [...prev, makeNewPairItem()]);
-
-    const deletePairItem = (pairId: string) =>
-        setPairList((prev) => [
-            ...prev.filter((item) => item.pairId !== pairId),
-        ]);
-
-    const addNewKorItemToSpecificPair = (pairId: string) =>
-        setPairList((prev) => {
-            const next = _.cloneDeep(prev);
-            const selectedPair = next.find((item) => item.pairId === pairId)!;
-            selectedPair.korItems = [
-                ...selectedPair!.korItems,
-                makeNewKorItem(),
-            ];
-
-            console.log(selectedPair.korItems);
-
-            return next;
-        });
-
-    const deleteSingleKorItemOfSpecificPair = (
-        pairId: string,
-        korItemId: string,
-    ) =>
-        setPairList((prev) => {
-            const next = _.cloneDeep(prev);
-            const selectedPair = next.find((item) => item.pairId === pairId)!;
-            selectedPair.korItems = selectedPair.korItems.filter(
-                (item) => item.korItemId !== korItemId,
-            );
-
-            return next;
-        });
-
-    const setEngValueOfSpecificPair = (pairId: string, value: string) =>
-        setPairList((prev) => {
-            const next = _.cloneDeep(prev);
-
-            const selectedPair = next.find((item) => item.pairId === pairId)!;
-            selectedPair.engValue = value;
-
-            return next;
-        });
-
-    const setKorValueOfSpecificPair = (
-        pairId: string,
-        korItemId: string,
-        value: string,
-    ) =>
-        setPairList((prev) => {
-            const next = _.cloneDeep(prev);
-
-            const selectedPair = next.find((item) => item.pairId === pairId)!;
-            const selectedKorItem = selectedPair.korItems.find(
-                (item) => item.korItemId === korItemId,
-            )!;
-            selectedKorItem.value = value;
-
-            return next;
-        });
-
-    return {
-        pairList,
-        addNewPairItem,
-        getPairItemHandlers: (pairId: string) => ({
-            addKorItem: () => addNewKorItemToSpecificPair(pairId),
-            deleteThis: () => deletePairItem(pairId),
-            engValueHandler: (e: ChangeEvent<HTMLInputElement>) =>
-                setEngValueOfSpecificPair(pairId, e.target.value),
-            getKorItemHandlers: (korItemId: string) => ({
-                deleteKorItem: () =>
-                    deleteSingleKorItemOfSpecificPair(pairId, korItemId),
-                korItemValueHandler: (e: ChangeEvent<HTMLInputElement>) =>
-                    setKorValueOfSpecificPair(
-                        pairId,
-                        korItemId,
-                        e.target.value,
-                    ),
-            }),
-        }),
-        getPairItemData: (pairId: string) =>
-            pairList.find((item) => item.pairId === pairId)!,
-    };
-};
+import { usePairItem, usePairList } from "./useNewWordSetState";
 
 const NewWordsStep1 = () => {
-    const { pairList, addNewPairItem } = useWordInputPairListState();
+    const { pairList, addPairItem } = usePairList();
 
     return (
         <S.Root>
@@ -133,25 +17,29 @@ const NewWordsStep1 = () => {
                 colorName="neutral-dark-darkest"
                 iconName="plus"
                 size={30}
-                onClick={addNewPairItem}
+                onClick={addPairItem}
             />
         </S.Root>
     );
 };
 
 const WordInputPairItem = ({ pairId }: { pairId: string }) => {
-    const { getPairItemHandlers, getPairItemData } =
-        useWordInputPairListState();
-
-    const { addKorItem, deleteThis, engValueHandler, getKorItemHandlers } =
-        getPairItemHandlers(pairId);
-    const { engValue, korItems } = getPairItemData(pairId);
+    const {
+        // API 호출 직후 사용
+        // setKorItems,
+        item: { engValue, korItems },
+        setEngValue,
+        addKorItem,
+        deleteKorItem,
+        modifySingleKorItem,
+    } = usePairItem(pairId);
+    const { deletePairItem } = usePairList();
 
     return (
         <S.WordInputPairItemWrapper>
             <S.TrashWrapper>
                 <Icon
-                    onClick={deleteThis}
+                    onClick={() => deletePairItem(pairId)}
                     colorName="neutral-dark-darkest"
                     iconName="trash"
                     size={24}
@@ -161,9 +49,9 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                 <S.EngArea>
                     <Text fontStyle="heading-5" label="Eng" />
                     <WordInput
-                        placeholder="placeholder"
+                        placeholder="이곳에 단어를 입력하면 한국어 뜻을 추천해드려요"
                         value={engValue}
-                        onChange={engValueHandler}
+                        onChange={(e) => setEngValue(e.target.value)}
                         status="INITIAL"
                     />
                 </S.EngArea>
@@ -177,21 +65,26 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                             onClick={addKorItem}
                         />
                     </S.KorTopWrapper>
-                    {korItems.map((korItem) => {
-                        const { deleteKorItem, korItemValueHandler } =
-                            getKorItemHandlers(korItem.korItemId);
+                    {korItems?.map((korItem) => {
                         return (
                             <S.KorItemWrapper>
                                 <WordInput
-                                    placeholder="placeholder"
+                                    placeholder="영단어를 먼저 입력해주세요"
                                     value={korItem.value}
-                                    onChange={korItemValueHandler}
-                                    status="INITIAL"
+                                    onChange={(e) =>
+                                        modifySingleKorItem(
+                                            korItem.korItemId,
+                                            e.target.value,
+                                        )
+                                    }
+                                    status="DISABLED"
                                     key={korItem.korItemId}
                                 />
                                 <S.KorTrashWrapper>
                                     <Icon
-                                        onClick={deleteKorItem}
+                                        onClick={() =>
+                                            deleteKorItem(korItem.korItemId)
+                                        }
                                         colorName="neutral-dark-darkest"
                                         iconName="trash"
                                         size={16}
@@ -223,7 +116,9 @@ const S = {
     InputArea: styled.div`
         width: 100%;
         display: flex;
+        flex-direction: column;
         gap: 8px;
+
         padding: 4px;
         border: 1px solid;
     `,
