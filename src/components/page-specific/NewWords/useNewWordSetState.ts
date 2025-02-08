@@ -1,6 +1,8 @@
 import { atom, useAtom, SetStateAction } from "jotai";
 import uuid from "react-uuid";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import _ from "lodash";
+import { WordInputStatus } from "../../general/inputs/WordInput";
 
 // atom이 지원해야 할 연산
 // 1. 새로운 pair item 추가
@@ -10,27 +12,33 @@ import { useMemo } from "react";
 // 5. pair item의 korItem 삭제
 // 6. 개별 korItem의 value 변경
 
-type KorItemType = { korItemId: string; value: string };
+type KorItemType = {
+    korItemId: string;
+    value: string;
+    status: WordInputStatus;
+};
 
 type WordInputPairItemType = {
     pairId: string;
     engValue: string;
-    // API 요청 전에는 null인 상태
-    korItems: null | KorItemType[];
+    engStatus: WordInputStatus;
+    korItems: "INITIAL" | "LOADING" | KorItemType[];
 };
 
 const makeNewPairItem = (): WordInputPairItemType => ({
     pairId: uuid(),
+    engStatus: "INITIAL",
     engValue: "",
-    korItems: null,
+    korItems: "INITIAL",
 });
 
 const makeNewKorItem = (): KorItemType => ({
     korItemId: uuid(),
     value: "",
+    status: "INITIAL",
 });
 
-const newWordSetAtom = atom<WordInputPairItemType[]>([]);
+const newWordSetAtom = atom<WordInputPairItemType[]>([makeNewPairItem()]);
 
 const getDerivedAtomById = (pairId: string) =>
     atom(
@@ -83,13 +91,16 @@ export const usePairItem = (pairId: string) => {
 
     const isWaiting = item.korItems === null;
 
+    const fixEng = () => 
+        setItem((prev) => ({ ...prev, engStatus: "OK-FIXED" }));
+
     // engValue setter
     const setEngValue = (engValue: string) =>
         setItem((prev) => ({ ...prev, engValue }));
 
     // korItems setter
-    const setKorItems = (korItems: KorItemType[]) =>
-        setItem((prev) => ({ ...prev, korItems }));
+    const setKorItems = (value: WordInputPairItemType["korItems"]) =>
+        setItem((prev) => ({ ...prev, korItems: value }));
 
     // add new korItem
     const addKorItem = () => {
@@ -127,6 +138,26 @@ export const usePairItem = (pairId: string) => {
             }));
     };
 
+    // API call
+    const debouncedKorItemsSetter = useCallback(
+        _.debounce(() => {
+            setKorItems([
+                { korItemId: uuid(), value: "사과", status: "OK-FIXED" },
+                { korItemId: uuid(), value: "바나나", status: "OK-FIXED" },
+            ]);
+            fixEng();
+        }, 500),
+        [],
+    );
+
+    const callGetKorAPI = (engValue: string) => {
+        setKorItems("LOADING");
+
+        console.log({ engValue });
+
+        debouncedKorItemsSetter();
+    };
+
     return {
         item,
         setEngValue,
@@ -134,5 +165,6 @@ export const usePairItem = (pairId: string) => {
         addKorItem,
         deleteKorItem,
         modifySingleKorItem,
+        callGetKorAPI,
     };
 };

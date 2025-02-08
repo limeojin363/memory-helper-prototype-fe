@@ -10,13 +10,16 @@ export type WordInputStatus =
 
 type WordInputProps = {
     status: WordInputStatus;
-    value: string;
-    placeholder: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    value?: string;
+    placeholder?: string;
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const WordInput = (props: WordInputProps) => {
-    return <S.Input {...props} disabled={props.status === "DISABLED"} />;
+    const editable =
+        props.status === "INITIAL" || props.status === "NEEDS-CORRECTION";
+
+    return <S.Input {...props} disabled={!editable} />;
 };
 
 export default WordInput;
