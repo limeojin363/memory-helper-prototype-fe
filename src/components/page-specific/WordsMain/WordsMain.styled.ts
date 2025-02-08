@@ -24,7 +24,7 @@ const S = {
 
         position: fixed;
         bottom: 128px;
-        right: 48px;
+        right: 10%;
 
         z-index: 100;
     `,

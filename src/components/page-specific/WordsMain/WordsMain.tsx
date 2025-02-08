@@ -14,7 +14,7 @@ const WordsMain = () => {
                 <SearchBar value={value} onChange={onChange} />
                 <WordSetList />
             </S.MiddleArea>
-            <Link to="/words/new/1">
+            <Link to="/words/new">
                 <S.AddButton>
                     <Icon
                         iconName="plus"
