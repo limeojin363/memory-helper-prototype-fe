@@ -10,9 +10,9 @@ export type WordInputStatus =
 
 type WordInputProps = {
     status: WordInputStatus;
-    value: string;
-    placeholder: string;
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+    value?: string;
+    placeholder?: string;
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 const WordInput = (props: WordInputProps) => {
