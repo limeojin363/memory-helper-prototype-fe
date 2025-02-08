@@ -2,14 +2,14 @@ import styled from "@emotion/styled";
 import { usePairItem, usePairList } from "./useNewWordSetState";
 import Icon from "../../general/icons/Icon";
 import Text from "../../general/texts/Text";
-import WordInput from "../../general/inputs/WordInput";
+import WordInput, { WordInputStatus } from "../../general/inputs/WordInput";
 
 const WordInputPairItem = ({ pairId }: { pairId: string }) => {
     // props drilling 방지를 위해, global state를 통해 pair item의 value와 handler를 관리
     const {
         // API 호출 직후 사용
         // setKorItems,
-        item: { engValue, korItems },
+        item: { engValue, korItems, engStatus },
         setEngValue,
         addKorItem,
         callGetKorAPI,
@@ -33,10 +33,10 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                         placeholder="이곳에 단어를 입력하면 한국어 뜻을 추천해드려요"
                         value={engValue}
                         onChange={(e) => {
-                            callGetKorAPI(e.target.value);
                             setEngValue(e.target.value);
+                            callGetKorAPI(e.target.value);
                         }}
-                        status="INITIAL"
+                        status={engStatus}
                     />
                 </S.EngArea>
                 {korItems !== "INITIAL" && (
@@ -44,25 +44,37 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                         <S.KorArea>
                             <S.KorTopWrapper>
                                 <Text fontStyle="heading-5" label="Kor" />
-                                <Icon
-                                    colorName="neutral-dark-darkest"
-                                    iconName="plus"
-                                    size={0}
-                                    onClick={addKorItem}
-                                />
+                                {korItems !== "LOADING" && (
+                                    <Icon
+                                        colorName="neutral-dark-darkest"
+                                        iconName="plus"
+                                        size={12}
+                                        onClick={addKorItem}
+                                    />
+                                )}
                             </S.KorTopWrapper>
-                            {korItems === "LOADING"
-                                ? Array.from({ length: 3 }).map((_, idx) => (
-                                      <WordInput key={idx} status="LOADING" />
-                                  ))
-                                : korItems.map(({ korItemId, value }) => (
-                                      <KorItem
-                                          key={korItemId}
-                                          korItemId={korItemId}
-                                          value={value}
-                                          pairId={pairId}
-                                      />
-                                  ))}
+                            <S.KorItemsWrapper>
+                                {korItems === "LOADING"
+                                    ? Array.from({ length: 3 }).map(
+                                          (_, idx) => (
+                                              <WordInput
+                                                  key={idx}
+                                                  status="LOADING"
+                                              />
+                                          ),
+                                      )
+                                    : korItems.map(
+                                          ({ korItemId, value, status }) => (
+                                              <KorItem
+                                                  status={status}
+                                                  key={korItemId}
+                                                  korItemId={korItemId}
+                                                  value={value}
+                                                  pairId={pairId}
+                                              />
+                                          ),
+                                      )}
+                            </S.KorItemsWrapper>
                         </S.KorArea>
                     </>
                 )}
@@ -75,10 +87,12 @@ const KorItem = ({
     korItemId,
     value,
     pairId,
+    status,
 }: {
     korItemId: string;
     value: string;
     pairId: string;
+    status: WordInputStatus;
 }) => {
     const { deleteKorItem, modifySingleKorItem } = usePairItem(pairId);
 
@@ -90,7 +104,7 @@ const KorItem = ({
                 onChange={(e) => {
                     modifySingleKorItem(korItemId, e.target.value);
                 }}
-                status="DISABLED"
+                status={status}
                 key={korItemId}
             />
             <S.KorTrashWrapper>
@@ -140,6 +154,11 @@ const S = {
     KorTopWrapper: styled.div`
         display: flex;
         justify-content: space-between;
+    `,
+    KorItemsWrapper: styled.div`
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
     `,
     KorItemWrapper: styled.div`
         position: relative;

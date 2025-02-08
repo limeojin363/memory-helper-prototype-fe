@@ -16,7 +16,10 @@ type WordInputProps = {
 };
 
 const WordInput = (props: WordInputProps) => {
-    return <S.Input {...props} disabled={props.status === "DISABLED"} />;
+    const editable =
+        props.status === "INITIAL" || props.status === "NEEDS-CORRECTION";
+
+    return <S.Input {...props} disabled={!editable} />;
 };
 
 export default WordInput;

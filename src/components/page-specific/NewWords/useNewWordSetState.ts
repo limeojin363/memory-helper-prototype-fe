@@ -2,6 +2,7 @@ import { atom, useAtom, SetStateAction } from "jotai";
 import uuid from "react-uuid";
 import { useCallback, useMemo } from "react";
 import _ from "lodash";
+import { WordInputStatus } from "../../general/inputs/WordInput";
 
 // atom이 지원해야 할 연산
 // 1. 새로운 pair item 추가
@@ -11,16 +12,22 @@ import _ from "lodash";
 // 5. pair item의 korItem 삭제
 // 6. 개별 korItem의 value 변경
 
-type KorItemType = { korItemId: string; value: string };
+type KorItemType = {
+    korItemId: string;
+    value: string;
+    status: WordInputStatus;
+};
 
 type WordInputPairItemType = {
     pairId: string;
     engValue: string;
+    engStatus: WordInputStatus;
     korItems: "INITIAL" | "LOADING" | KorItemType[];
 };
 
 const makeNewPairItem = (): WordInputPairItemType => ({
     pairId: uuid(),
+    engStatus: "INITIAL",
     engValue: "",
     korItems: "INITIAL",
 });
@@ -28,6 +35,7 @@ const makeNewPairItem = (): WordInputPairItemType => ({
 const makeNewKorItem = (): KorItemType => ({
     korItemId: uuid(),
     value: "",
+    status: "INITIAL",
 });
 
 const newWordSetAtom = atom<WordInputPairItemType[]>([makeNewPairItem()]);
@@ -83,6 +91,9 @@ export const usePairItem = (pairId: string) => {
 
     const isWaiting = item.korItems === null;
 
+    const fixEng = () => 
+        setItem((prev) => ({ ...prev, engStatus: "OK-FIXED" }));
+
     // engValue setter
     const setEngValue = (engValue: string) =>
         setItem((prev) => ({ ...prev, engValue }));
@@ -129,14 +140,13 @@ export const usePairItem = (pairId: string) => {
 
     // API call
     const debouncedKorItemsSetter = useCallback(
-        _.debounce(
-            () =>
-                setKorItems([
-                    { korItemId: uuid(), value: "사과" },
-                    { korItemId: uuid(), value: "바나나" },
-                ]),
-            500,
-        ),
+        _.debounce(() => {
+            setKorItems([
+                { korItemId: uuid(), value: "사과", status: "OK-FIXED" },
+                { korItemId: uuid(), value: "바나나", status: "OK-FIXED" },
+            ]);
+            fixEng();
+        }, 500),
         [],
     );
 
