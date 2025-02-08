@@ -1,28 +1,37 @@
-import styled from "@emotion/styled";
-import _ from "lodash";
-import Icon from "../../general/icons/Icon";
-import Text from "../../general/texts/Text";
-import WordInput from "../../general/inputs/WordInput";
 import { usePairItem, usePairList } from "./useNewWordSetState";
+import { useNavigate } from "@tanstack/react-router";
+import styled from "@emotion/styled";
+import Header from "../../general/layouts/mobile/Header";
+import Icon from "../../general/icons/Icon";
+import WordInput from "../../general/inputs/WordInput";
+import Text from "../../general/texts/Text";
 
-const NewWordsStep1 = () => {
+const NewWord = () => {
+    const navigate = useNavigate();
+
+    const goBack = () => navigate({ to: "/words" });
+
     const { pairList, addPairItem } = usePairList();
 
     return (
-        <S.Root>
-            {pairList.map(({ pairId }) => (
-                <WordInputPairItem pairId={pairId} key={pairId} />
-            ))}
-            <Icon
-                colorName="neutral-dark-darkest"
-                iconName="plus"
-                size={30}
-                onClick={addPairItem}
-            />
-        </S.Root>
+        <>
+            <Header title="New Word Set Generating" goBack={goBack} />
+            <S.Root>
+                {pairList.map(({ pairId }) => (
+                    <WordInputPairItem pairId={pairId} key={pairId} />
+                ))}
+                <Icon
+                    colorName="neutral-dark-darkest"
+                    iconName="plus"
+                    size={30}
+                    onClick={addPairItem}
+                />
+            </S.Root>
+        </>
     );
 };
 
+// TODO: 컴포넌트와 파일 분리를 통한 가독성 개선
 const WordInputPairItem = ({ pairId }: { pairId: string }) => {
     const {
         // API 호출 직후 사용
@@ -99,13 +108,17 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
     );
 };
 
+export default NewWord;
+
 const S = {
     Root: styled.div`
-        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 8px;
         align-items: center;
+
+        width: calc(100% - 32px);
+        margin: 20px 16px 0;
     `,
     WordInputPairItemWrapper: styled.div`
         width: 100%;
@@ -160,5 +173,3 @@ const S = {
         border: 1px solid;
     `,
 };
-
-export default NewWordsStep1;
