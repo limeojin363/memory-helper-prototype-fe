@@ -1,6 +1,7 @@
 import { atom, useAtom, SetStateAction } from "jotai";
 import uuid from "react-uuid";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import _ from "lodash";
 
 // atom이 지원해야 할 연산
 // 1. 새로운 pair item 추가
@@ -15,14 +16,13 @@ type KorItemType = { korItemId: string; value: string };
 type WordInputPairItemType = {
     pairId: string;
     engValue: string;
-    // API 요청 전에는 null인 상태
-    korItems: null | KorItemType[];
+    korItems: "INITIAL" | "LOADING" | KorItemType[];
 };
 
 const makeNewPairItem = (): WordInputPairItemType => ({
     pairId: uuid(),
     engValue: "",
-    korItems: null,
+    korItems: "INITIAL",
 });
 
 const makeNewKorItem = (): KorItemType => ({
@@ -30,7 +30,7 @@ const makeNewKorItem = (): KorItemType => ({
     value: "",
 });
 
-const newWordSetAtom = atom<WordInputPairItemType[]>([]);
+const newWordSetAtom = atom<WordInputPairItemType[]>([makeNewPairItem()]);
 
 const getDerivedAtomById = (pairId: string) =>
     atom(
@@ -88,8 +88,8 @@ export const usePairItem = (pairId: string) => {
         setItem((prev) => ({ ...prev, engValue }));
 
     // korItems setter
-    const setKorItems = (korItems: KorItemType[]) =>
-        setItem((prev) => ({ ...prev, korItems }));
+    const setKorItems = (value: WordInputPairItemType["korItems"]) =>
+        setItem((prev) => ({ ...prev, korItems: value }));
 
     // add new korItem
     const addKorItem = () => {
@@ -127,6 +127,27 @@ export const usePairItem = (pairId: string) => {
             }));
     };
 
+    // API call
+    const debouncedKorItemsSetter = useCallback(
+        _.debounce(
+            () =>
+                setKorItems([
+                    { korItemId: uuid(), value: "사과" },
+                    { korItemId: uuid(), value: "바나나" },
+                ]),
+            500,
+        ),
+        [],
+    );
+
+    const callGetKorAPI = (engValue: string) => {
+        setKorItems("LOADING");
+
+        console.log({ engValue });
+
+        debouncedKorItemsSetter();
+    };
+
     return {
         item,
         setEngValue,
@@ -134,5 +155,6 @@ export const usePairItem = (pairId: string) => {
         addKorItem,
         deleteKorItem,
         modifySingleKorItem,
+        callGetKorAPI,
     };
 };

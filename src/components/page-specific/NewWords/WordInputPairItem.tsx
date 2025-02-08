@@ -12,6 +12,7 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
         item: { engValue, korItems },
         setEngValue,
         addKorItem,
+        callGetKorAPI,
     } = usePairItem(pairId);
     const { deletePairItem } = usePairList();
 
@@ -31,28 +32,40 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
                     <WordInput
                         placeholder="이곳에 단어를 입력하면 한국어 뜻을 추천해드려요"
                         value={engValue}
-                        onChange={(e) => setEngValue(e.target.value)}
+                        onChange={(e) => {
+                            callGetKorAPI(e.target.value);
+                            setEngValue(e.target.value);
+                        }}
                         status="INITIAL"
                     />
                 </S.EngArea>
-                <S.KorArea>
-                    <S.KorTopWrapper>
-                        <Text fontStyle="heading-5" label="Kor" />
-                        <Icon
-                            colorName="neutral-dark-darkest"
-                            iconName="plus"
-                            size={13.5}
-                            onClick={addKorItem}
-                        />
-                    </S.KorTopWrapper>
-                    {korItems?.map(({ korItemId, value }) => (
-                        <KorItem
-                            korItemId={korItemId}
-                            value={value}
-                            pairId={pairId}
-                        />
-                    ))}
-                </S.KorArea>
+                {korItems !== "INITIAL" && (
+                    <>
+                        <S.KorArea>
+                            <S.KorTopWrapper>
+                                <Text fontStyle="heading-5" label="Kor" />
+                                <Icon
+                                    colorName="neutral-dark-darkest"
+                                    iconName="plus"
+                                    size={0}
+                                    onClick={addKorItem}
+                                />
+                            </S.KorTopWrapper>
+                            {korItems === "LOADING"
+                                ? Array.from({ length: 3 }).map((_, idx) => (
+                                      <WordInput key={idx} status="LOADING" />
+                                  ))
+                                : korItems.map(({ korItemId, value }) => (
+                                      <KorItem
+                                          key={korItemId}
+                                          korItemId={korItemId}
+                                          value={value}
+                                          pairId={pairId}
+                                      />
+                                  ))}
+                        </S.KorArea>
+                    </>
+                )}
             </S.InputArea>
         </S.WordInputPairItemWrapper>
     );
@@ -74,7 +87,9 @@ const KorItem = ({
             <WordInput
                 placeholder="영단어를 먼저 입력해주세요"
                 value={value}
-                onChange={(e) => modifySingleKorItem(korItemId, e.target.value)}
+                onChange={(e) => {
+                    modifySingleKorItem(korItemId, e.target.value);
+                }}
                 status="DISABLED"
                 key={korItemId}
             />
