@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import NewWordLayout from "../components/page-specific/NewWords/NewWord";
+import NewWord from "../pages/GeneratingNewWordSetPage/components/GeneratingNewWordSetPage";
 
 export const Route = createFileRoute("/words_/new")({
-    component: () => <NewWordLayout />,
+    component: () => <NewWord />,
 });

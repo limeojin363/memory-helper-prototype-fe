@@ -1,29 +1,37 @@
-import { usePairList } from "./useNewWordSetState";
 import { useNavigate } from "@tanstack/react-router";
 import styled from "@emotion/styled";
-import Header from "../../general/layouts/mobile/Header";
-import Icon from "../../general/icons/Icon";
-import WordInputPairItem from "./WordInputPairItem";
+import Header from "../../../components/layouts/mobile/Header";
+import Icon from "../../../components/icons/Icon";
+import WordInputPairItem from "./InputPairItem";
+import {
+    makeNewPairItem,
+    useGenerateNewWordSetPageData,
+} from "../hooks/useGeneratingNewWordSetPageData";
 
 const NewWord = () => {
     const navigate = useNavigate();
 
     const goBack = () => navigate({ to: "/words" });
 
-    const { pairList, addPairItem } = usePairList();
+    const [page, setPage] = useGenerateNewWordSetPageData();
+
+    const insertPair = () =>
+        setPage((draft) => {
+            draft.push(makeNewPairItem());
+        });
 
     return (
         <>
             <Header title="New Word Set Generating" goBack={goBack} />
             <S.Root>
-                {pairList.map(({ pairId }) => (
-                    <WordInputPairItem pairId={pairId} key={pairId} />
+                {page.map((item) => (
+                    <WordInputPairItem key={item.id} pairId={item.id} />
                 ))}
                 <Icon
                     colorName="neutral-dark-darkest"
                     iconName="plus"
                     size={30}
-                    onClick={addPairItem}
+                    onClick={insertPair}
                 />
             </S.Root>
         </>

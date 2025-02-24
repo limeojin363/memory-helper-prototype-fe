@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Colors, ColorName } from "../../../designs/colors";
+import { Colors, ColorName } from "../../designs/colors";
 import { css } from "@emotion/react";
 import "@fontsource/inter/index.css"; // Defaults to weight 400
 
