@@ -1,7 +1,7 @@
 import { Link, ToOptions, useLocation } from "@tanstack/react-router";
 import S from "./StatusBar.styled";
 import Icon, { IconName } from "../../icons/Icon";
-import { ColorName } from "../../../../designs/colors";
+import { ColorName } from "../../../designs/colors";
 import Text, { FontStyleName } from "../../texts/Text";
 
 type ItemProps = {

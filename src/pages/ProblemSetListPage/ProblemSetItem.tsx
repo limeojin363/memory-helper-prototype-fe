@@ -1,8 +1,8 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import S from "./ProblemSetItem.styled";
-import Icon from "../../general/icons/Icon";
-import Text from "../../general/texts/Text";
+import Icon from "../../components/icons/Icon";
+import Text from "../../components/texts/Text";
 
 type ProblemSetItemProps = {
     id: string;

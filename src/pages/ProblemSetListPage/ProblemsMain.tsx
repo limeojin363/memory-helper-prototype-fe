@@ -1,5 +1,5 @@
-import useInput from "../../../hooks/useInput";
-import SearchBar from "../../general/layouts/mobile/SearchBar";
+import useInput from "../../hooks/useInput";
+import SearchBar from "../../components/layouts/mobile/SearchBar";
 import ProblemSetList from "./ProblemSetList";
 import S from "./ProblemsMain.styled";
 

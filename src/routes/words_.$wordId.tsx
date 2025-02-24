@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import WordSetDetail from "../components/page-specific/WordsDetail/WordsDetail";
+import WordSetDetail from "../pages/WordSetDetailPage/WordsDetail";
 
 export const Route = createFileRoute("/words_/$wordId")({
     component: () => {
