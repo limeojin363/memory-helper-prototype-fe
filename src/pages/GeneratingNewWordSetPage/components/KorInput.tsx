@@ -21,7 +21,7 @@ const KorInput = ({
     const editable = status === "INITIAL" || status === "NEEDS-CORRECTION";
 
     return (
-        <S.KorInput
+        <S.KorInputContainer
             {...{
                 status,
                 value,

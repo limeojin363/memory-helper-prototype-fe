@@ -28,7 +28,7 @@ export type EngInputObject = {
 
 export type InputPairObject = { id: string } & (
     | {
-          status: "INITIAL" | "REQUESTED-OPTIONS";
+          status: "INITIAL" | "REQUESTED-OPTIONS" | "REQUEST-FAILED";
           engInput: EngInputObject;
           korInputs: null;
       }

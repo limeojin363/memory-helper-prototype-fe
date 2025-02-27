@@ -24,20 +24,20 @@ const loading = keyframes`
 
 const KorStyleMap: { [key in KorInputStatus]: SerializedStyles } = {
     "NEEDS-CORRECTION": css`
-        outline: 2px solid ${Colors["support-error-dark"]};
+        box-shadow: 0 0 0 2px ${Colors["support-error-dark"]} inset;
     `,
     "SELECTABLE-UNSELECTED": css`
-        outline: 2px solid ${Colors["highlight-darkest"]};
+        box-shadow: 0 0 0 2px ${Colors["highlight-darkest"]} inset;
     `,
     INITIAL: css`
-        outline: 1px solid ${Colors["neutral-light-darkest"]};
+        box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
     `,
     DETERMINING: css`
         background-color: ${Colors["neutral-light-dark"]};
         animation: ${loading} 1s infinite;
     `,
     "SELECTABLE-SELECTED": css`
-        outline: 1px solid ${Colors["neutral-light-darkest"]};
+        box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
         background-color: ${Colors["neutral-light-darkest"]};
         :active {
             transform: scale(0.9);
@@ -46,7 +46,7 @@ const KorStyleMap: { [key in KorInputStatus]: SerializedStyles } = {
 };
 
 const S = {
-    KorInput: styled.input<SKorInputProps>`
+    KorInputContainer: styled.input<SKorInputProps>`
         all: unset;
         border-radius: 12px;
         padding: 12px 16px;
@@ -54,11 +54,13 @@ const S = {
 
         ${({ status }) => KorStyleMap[status]}
     `,
-    EngInput: styled.input<SEngInputProps>`
+    EngInputContainer: styled.input<SEngInputProps>`
         all: unset;
         border-radius: 12px;
         padding: 12px 16px;
         transition: transform 0.1s;
+
+        box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
     `,
 };
 

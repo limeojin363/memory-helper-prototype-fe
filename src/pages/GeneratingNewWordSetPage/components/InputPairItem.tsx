@@ -9,26 +9,28 @@ import {
     usePair,
 } from "../hooks/useGeneratingNewWordSetPageData";
 import EngInput from "./EngInput";
-import { ChangeEventHandler } from "react";
-import { EngInputStatus } from "../types";
+import useRequestKorOptions from "../hooks/useRequestKorOptions";
+import { Colors } from "../../../designs/colors";
 
-const EngArea = ({
-    value,
-    onChange,
-    status,
-}: {
-    onChange: ChangeEventHandler<HTMLInputElement>;
-    value: string;
-    status: EngInputStatus
-}) => {
+const EngArea = ({ pairId }: { pairId: string }) => {
+    const [pair, setPair] = usePair(pairId);
+
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+        setPair((draft) => {
+            draft!.engInput.value = e.target.value;
+        });
+
+    const requestOptions = useRequestKorOptions(pairId);
+
     return (
         <S.EngAreaContainer>
             <Text fontStyle="heading-5" label="Eng" />
             <EngInput
                 placeholder="Enter English word"
-                value={value}
+                value={pair!.engInput.value}
+                status={pair!.engInput.status}
                 onChange={onChange}
-                status={status}
+                onBlur={requestOptions}
             />
         </S.EngAreaContainer>
     );
@@ -60,22 +62,24 @@ const KorArea = ({ pairId }: { pairId: string }) => {
         <S.KorAreaContainer>
             <S.KorTopWrapper>
                 <Text fontStyle="heading-5" label="Kor" />
-                <Icon
-                    colorName="neutral-dark-darkest"
-                    iconName="plus"
-                    size={12}
-                    onClick={addCustomKorInput}
-                />
-                <S.KorItemsWrapper>
-                    {pair.korInputs!.map((korItem) => (
-                        <KorItem
-                            key={korItem.id}
-                            korItemId={korItem.id}
-                            pairId={pairId}
-                        />
-                    ))}
-                </S.KorItemsWrapper>
+                <S.IcButtonWrapper size={16}>
+                    <Icon
+                        colorName="neutral-dark-darkest"
+                        iconName="plus"
+                        size={12}
+                        onClick={addCustomKorInput}
+                    />
+                </S.IcButtonWrapper>
             </S.KorTopWrapper>
+            <S.KorItemsWrapper>
+                {pair.korInputs!.map((korItem) => (
+                    <KorItem
+                        key={korItem.id}
+                        pairId={pairId}
+                        korItemId={korItem.id}
+                    />
+                ))}
+            </S.KorItemsWrapper>
         </S.KorAreaContainer>
     );
 };
@@ -97,20 +101,16 @@ const WordInputPairItem = ({ pairId }: { pairId: string }) => {
 
     return (
         <S.WordInputPairItemWrapper>
-            <S.TrashWrapper>
+            <S.IcButtonWrapper size={28}>
                 <Icon
                     onClick={onClickDelete}
                     colorName="neutral-dark-darkest"
                     iconName="trash"
                     size={24}
                 />
-            </S.TrashWrapper>
+            </S.IcButtonWrapper>
             <S.InputArea>
-                <EngArea
-                    value={pair!.engInput.value}
-                    onChange={onChangeEngInput}
-                    status={engStatus}
-                />
+                <EngArea pairId={pairId} />
                 <KorArea pairId={pairId} />
             </S.InputArea>
         </S.WordInputPairItemWrapper>
@@ -135,27 +135,30 @@ const KorItem = ({
             );
         });
 
+    const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+        setKorInput((draft) => {
+            draft!.value = e.target.value;
+        });
+
     return (
         <S.KorItemWrapper>
             <KorInput
                 placeholder="영단어를 먼저 입력해주세요"
                 value={korInput!.value}
-                onChange={(e) =>
-                    setKorInput((draft) => {
-                        draft!.value = e.target.value;
-                    })
-                }
+                onChange={onChange}
                 status={korInput!.status}
                 key={korItemId}
             />
-            <S.KorTrashWrapper>
-                <Icon
-                    onClick={deleteThis}
-                    colorName="neutral-dark-darkest"
-                    iconName="trash"
-                    size={16}
-                />
-            </S.KorTrashWrapper>
+            <S.KorTrashPositioner>
+                <S.IcButtonWrapper size={24}>
+                    <Icon
+                        onClick={deleteThis}
+                        colorName="neutral-dark-darkest"
+                        iconName="trash"
+                        size={20}
+                    />
+                </S.IcButtonWrapper>
+            </S.KorTrashPositioner>
         </S.KorItemWrapper>
     );
 };
@@ -168,15 +171,19 @@ const S = {
         display: flex;
         flex-direction: column;
         gap: 4px;
+
+        padding: 4px;
+
+        box-shadow: 0 0 0 1px black inset;
+
+        border-radius: 10px;
     `,
     InputArea: styled.div`
-        width: 100%;
         display: flex;
         flex-direction: column;
         gap: 8px;
 
         padding: 4px;
-        border: 1px solid;
     `,
     EngAreaContainer: styled.div`
         flex: 1;
@@ -184,6 +191,19 @@ const S = {
         display: flex;
         flex-direction: column;
         gap: 2px;
+    `,
+    KorPlusWrapper: styled.div`
+        width: 16px;
+        height: 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid;
+        border-radius: 6px;
+
+        background-color: ${Colors["neutral-light-darkest"]};
     `,
     KorAreaContainer: styled.div`
         flex: 1;
@@ -203,21 +223,32 @@ const S = {
     `,
     KorItemWrapper: styled.div`
         position: relative;
+        display: flex;
+        flex-direction: column;
     `,
-    KorTrashWrapper: styled.div`
+    KorTrashPositioner: styled.div`
         position: absolute;
+
+        right: 4px;
+        bottom: calc(50%);
+        transform: translateY(50%);
+    `,
+    IcButtonWrapper: styled.div<{ size: number }>`
+        ${({ size }) => `
+            width: ${size}px;
+            height: ${size}px;
+        `}
 
         display: flex;
         align-items: center;
         justify-content: center;
 
-        right: 4px;
-        /* Icon size가 16px이므로 그 절반만큼 보정*/
-        bottom: calc(50% - 8px);
-    `,
-    TrashWrapper: styled.div`
-        width: 24px;
-        height: 24px;
-        border: 1px solid;
+        background-color: ${Colors["neutral-light-darkest"]};
+
+        border-radius: 30%;
+
+        :active {
+            transform: scale(0.9);
+        }
     `,
 };
