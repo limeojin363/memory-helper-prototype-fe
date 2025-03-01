@@ -8,6 +8,7 @@ import IcEnter from "../../assets/icons/enter.svg?react";
 import IcDragHandle from "../../assets/icons/drag-handle.svg?react";
 import IcPlus from "../../assets/icons/plus.svg?react";
 import IcTrash from "../../assets/icons/trash.svg?react";
+import IcSubmit from "../../assets/icons/submit.svg?react";
 import styled from "@emotion/styled";
 import { MouseEventHandler } from "react";
 
@@ -21,6 +22,7 @@ const RawIcons = {
     "drag-handle": IcDragHandle,
     plus: IcPlus,
     trash: IcTrash,
+    submit: IcSubmit,
 } as const;
 
 export type IconName = keyof typeof RawIcons;
