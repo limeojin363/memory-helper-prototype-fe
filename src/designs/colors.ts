@@ -14,9 +14,12 @@ export const Colors = {
     "neutral-dark-medium": "#494A50",
     "neutral-dark-light": "#71727A",
     "neutral-dark-lightest": "#8F9098",
-    "support-error-dark": "#ED3241",
-    "support-error-medium": "#FF616D",
-    "support-error-light": "#FFE2E5",
+    "support-red-dark": "#ED3241",
+    "support-red-medium": "#FF616D",
+    "support-red-light": "#FFE2E5",
+    "support-green-dark": "#298267",
+    "support-green-medium": "#3AC0A0",
+    "support-green-light": "#E7F4E8",
 } as const;
 
 export type ColorName = keyof typeof Colors;
