@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import { Colors } from "../../../designs/colors";
 import { css, keyframes, SerializedStyles } from "@emotion/react";
-import { EngInputStatus, KorInputStatus } from "../types";
+import { EngInputStatus, InputPairStatus, KorInputStatus } from "../types";
 
 interface SKorInputProps {
     status: KorInputStatus;
@@ -45,7 +45,6 @@ const KorStyleMap: { [key in KorInputStatus]: SerializedStyles } = {
     `,
     DETERMINING: css`
         background-color: ${Colors["neutral-light-dark"]};
-        animation: ${loading} 1s infinite;
     `,
 };
 
@@ -54,8 +53,8 @@ const EngStyleMap: { [key in EngInputStatus]: SerializedStyles } = {
         box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
     `,
     OK: css`
-        box-shadow: 0 0 0 2px ${Colors["support-green-dark"]} inset;
-        background-color: ${Colors["support-green-medium"]};
+        box-shadow: 0 0 0 2px ${Colors["highlight-darkest"]} inset;
+        background-color: ${Colors["highlight-light"]};
     `,
     INITIAL: css`
         box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
@@ -63,6 +62,24 @@ const EngStyleMap: { [key in EngInputStatus]: SerializedStyles } = {
     DETERMINING: css`
         background-color: ${Colors["neutral-light-dark"]};
         /* animation: ${loading} 1s infinite; */
+    `,
+};
+
+const PairStyleMap: { [key in InputPairStatus]: SerializedStyles } = {
+    INITIAL: css`
+        box-shadow: 0 0 0 2px ${Colors["neutral-light-darkest"]} inset;
+    `,
+    "REQUESTED-OPTIONS": css`
+        box-shadow: 0 0 0 2px ${Colors["neutral-light-darkest"]} inset;
+    `,
+    "REQUEST-FAILED": css`
+        box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
+    `,
+    SELECTING: css`
+        box-shadow: 0 0 0 2px ${Colors["neutral-light-darkest"]} inset;
+    `,
+    USABLE: css`
+        box-shadow: 0 0 0 3px ${Colors["highlight-darkest"]} inset;
     `,
 };
 
@@ -94,15 +111,17 @@ const S = {
 
         position: relative;
     `,
-    WordInputPairItemWrapper: styled.div`
+    WordInputPairItemWrapper: styled.div<{
+        pairStatus: InputPairStatus;
+    }>`
+        ${({ pairStatus }) => PairStyleMap[pairStatus]}
+
         width: 100%;
         display: flex;
         flex-direction: column;
         gap: 4px;
 
         padding: 4px;
-
-        box-shadow: 0 0 0 1px black inset;
 
         border-radius: 10px;
     `,

@@ -27,6 +27,35 @@ const rootAtom = withImmer(atom([makeNewPairItem()]));
 
 export const useGenerateNewWordSetPageData = () => useAtom(rootAtom);
 
+// "INITIAL" | "REQUESTED-OPTIONS" | "REQUEST-FAILED" | "SELECTING" | "USABLE"
+
+export const useUpdatePairStatus = (pairId: string) => {
+    const [pair, setPair] = usePair(pairId);
+
+    const updatePairStatus = () =>
+        setPair((draft) => {
+            draft!.status = (() => {
+                if (pair!.engInput.status === "OK") {
+                    if (
+                        pair!.korInputs!.some(
+                            (item) => item.status === "SELECTABLE-SELECTED",
+                        ) &&
+                        pair!.korInputs!.every(
+                            (item) => item.status !== "NEEDS-CORRECTION",
+                        )
+                    )
+                        return "USABLE";
+
+                    return "SELECTING";
+                }
+                // 호출되면 안됨..
+                return "INITIAL";
+            })();
+        });
+
+    return updatePairStatus;
+};
+
 export const usePair = (pairId: string) =>
     useAtom(
         useMemo(
