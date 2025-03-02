@@ -9,8 +9,39 @@ import {
 } from "../hooks/useGeneratingNewWordSetPageData";
 import useSubmitCustomKorInput from "../hooks/useSubmitKorInput";
 import useToggleKorOption from "../hooks/useToggleKorOption";
-import KorInput from "./KorInput";
 import S from "./styled";
+import { KorInputStatus } from "../types";
+
+interface KorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+    status: KorInputStatus;
+    value?: string;
+    placeholder?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const KorInput = ({
+    status,
+    onChange,
+    placeholder,
+    value,
+    ...props
+}: KorInputProps) => {
+    // 초기 or 정정 필요한 경우에만 편집 가능
+    const editable = status === "INITIAL" || status === "NEEDS-CORRECTION";
+
+    return (
+        <S.KorInputContainer
+            {...{
+                status,
+                value,
+                placeholder,
+                onChange,
+            }}
+            {...props}
+            readOnly={!editable}
+        />
+    );
+};
 
 const KorArea = ({ pairId }: { pairId: string }) => {
     const [pair, setPair] = usePair(pairId);
