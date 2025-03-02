@@ -10,6 +10,7 @@ interface SKorInputProps {
 interface SEngInputProps {
     status: EngInputStatus;
 }
+
 const loading = keyframes`
   0% {
     filter: brightness(0.8);
@@ -24,33 +25,53 @@ const loading = keyframes`
 
 const KorStyleMap: { [key in KorInputStatus]: SerializedStyles } = {
     "NEEDS-CORRECTION": css`
-        outline: 2px solid ${Colors["support-error-dark"]};
+        box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
     `,
     "SELECTABLE-UNSELECTED": css`
-        outline: 2px solid ${Colors["highlight-darkest"]};
+        box-shadow: 0 0 0 2px ${Colors["highlight-darkest"]} inset;
+        :active {
+            transform: scale(0.97);
+        }
+    `,
+    "SELECTABLE-SELECTED": css`
+        box-shadow: 0 0 0 2px ${Colors["highlight-darkest"]} inset;
+        :active {
+            transform: scale(0.97);
+        }
+        background-color: ${Colors["highlight-light"]};
     `,
     INITIAL: css`
-        outline: 1px solid ${Colors["neutral-light-darkest"]};
+        box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
     `,
     DETERMINING: css`
         background-color: ${Colors["neutral-light-dark"]};
         animation: ${loading} 1s infinite;
     `,
-    "SELECTABLE-SELECTED": css`
-        outline: 1px solid ${Colors["neutral-light-darkest"]};
-        background-color: ${Colors["neutral-light-darkest"]};
-        :active {
-            transform: scale(0.9);
-        }
+};
+
+const EngStyleMap: { [key in EngInputStatus]: SerializedStyles } = {
+    "NEEDS-CORRECTION": css`
+        box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
+    `,
+    OK: css`
+        box-shadow: 0 0 0 2px ${Colors["support-green-dark"]} inset;
+        background-color: ${Colors["support-green-medium"]};
+    `,
+    INITIAL: css`
+        box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
+    `,
+    DETERMINING: css`
+        background-color: ${Colors["neutral-light-dark"]};
+        /* animation: ${loading} 1s infinite; */
     `,
 };
 
 const S = {
-    KorInput: styled.input<SKorInputProps>`
+    KorInputContainer: styled.input<SKorInputProps>`
         all: unset;
         border-radius: 12px;
         padding: 12px 16px;
-        transition: transform 0.1s;
+        transition: all 0.1s;
 
         ${({ status }) => KorStyleMap[status]}
     `,
@@ -58,7 +79,106 @@ const S = {
         all: unset;
         border-radius: 12px;
         padding: 12px 16px;
-        transition: transform 0.1s;
+        transition: all 0.1s;
+
+        width: 100%;
+
+        ${({ status }) => EngStyleMap[status]}
+    `,
+    EngAreaContainer: styled.div`
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        position: relative;
+    `,
+    WordInputPairItemWrapper: styled.div`
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        padding: 4px;
+
+        box-shadow: 0 0 0 1px black inset;
+
+        border-radius: 10px;
+    `,
+    InputArea: styled.div`
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        padding: 4px;
+    `,
+    KorPlusWrapper: styled.div`
+        width: 16px;
+        height: 16px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 1px solid;
+        border-radius: 6px;
+
+        background-color: ${Colors["neutral-light-darkest"]};
+    `,
+    KorAreaContainer: styled.div`
+        flex: 1;
+
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    `,
+    KorTopWrapper: styled.div`
+        display: flex;
+        justify-content: space-between;
+    `,
+    KorItemsWrapper: styled.div`
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    `,
+    KorItemWrapper: styled.div`
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    `,
+    EngInputWrapper: styled.div`
+        position: relative;
+        width: 100%;
+
+        display: flex;
+    `,
+    SideIconPositionor: styled.div<{ right: number }>`
+        position: absolute;
+
+        right: ${({ right }) => right}px;
+        bottom: calc(50%);
+        transform: translateY(50%);
+
+        transition: all 0.2s ease-in-out;
+    `,
+    IcButtonWrapper: styled.div<{ size: number }>`
+        ${({ size }) => `
+            width: ${size}px;
+            height: ${size}px;
+        `}
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        background-color: ${Colors["neutral-light-darkest"]};
+
+        border-radius: 30%;
+
+        :active {
+            transform: scale(0.9);
+        }
     `,
 };
 

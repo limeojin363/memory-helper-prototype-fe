@@ -5,7 +5,11 @@ export type KorInputStatus =
     | "SELECTABLE-SELECTED" // 편집 불가능, 선택됐음을 알리는 두꺼운 테두리
     | "DETERMINING"; // 쓸 만한 놈인지 판단 중
 
-export type EngInputStatus = "INITIAL" | "OK" | "NEEDS-CORRECTION";
+export type EngInputStatus =
+    | "INITIAL"
+    | "OK"
+    | "NEEDS-CORRECTION"
+    | "DETERMINING";
 
 export type KorInputObject = { id: string; value: string } & (
     | {
@@ -28,7 +32,7 @@ export type EngInputObject = {
 
 export type InputPairObject = { id: string } & (
     | {
-          status: "INITIAL" | "REQUESTED-OPTIONS";
+          status: "INITIAL" | "REQUESTED-OPTIONS" | "REQUEST-FAILED";
           engInput: EngInputObject;
           korInputs: null;
       }
@@ -40,4 +44,3 @@ export type InputPairObject = { id: string } & (
 );
 
 export type InputPairStatus = InputPairObject["status"];
-
