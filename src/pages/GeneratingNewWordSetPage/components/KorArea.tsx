@@ -106,12 +106,10 @@ const KorItem = ({
     const { toggleKorOption } = useToggleKorOption(pairId, korItemId);
 
     const onClickKorItem = () => {
-        console.log();
         if (
             status === "SELECTABLE-SELECTED" ||
             status === "SELECTABLE-UNSELECTED"
         ) {
-            console.log(1);
             toggleKorOption();
         }
     };
@@ -129,8 +127,6 @@ const KorItem = ({
         status !== "SELECTABLE-UNSELECTED";
     const showSubmitButton = value !== "" && status === "INITIAL";
     const showLoader = status === "DETERMINING";
-
-    console.log({ status });
 
     return (
         <S.KorItemWrapper>

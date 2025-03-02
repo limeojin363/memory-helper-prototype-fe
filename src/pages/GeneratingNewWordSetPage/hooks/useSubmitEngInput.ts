@@ -49,6 +49,7 @@ const useSubmitEngInput = (pairId: string) => {
         },
         onError: () => {
             setPair((draft) => {
+                draft!.engInput.status = "NEEDS-CORRECTION";
                 draft!.status = "REQUEST-FAILED";
             });
         },
