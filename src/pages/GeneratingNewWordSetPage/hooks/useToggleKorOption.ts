@@ -1,8 +1,16 @@
 import { useMutation } from "@tanstack/react-query";
-import { usePair } from "./useGeneratingNewWordSetPageData";
+import { useKorInput } from "./useGeneratingNewWordSetPageData";
 
 const useToggleKorOption = (pairId: string, korInputId: string) => {
-    const [pair, setPair] = usePair(pairId);
+    const [korInput, setKorInput] = useKorInput(pairId, korInputId);
+
+    const toggleClientState = () =>
+        setKorInput((draft) => {
+            draft!.status =
+                draft!.status === "SELECTABLE-UNSELECTED"
+                    ? "SELECTABLE-SELECTED"
+                    : "SELECTABLE-UNSELECTED";
+        });
 
     const { mutate: toggleKorOption } = useMutation({
         mutationFn: async () => {
@@ -11,45 +19,15 @@ const useToggleKorOption = (pairId: string, korInputId: string) => {
             } catch (error) {}
         },
         onMutate: () => {
-            // optimistic update
-            const nextKorInputs = pair!.korInputs!.map((item) => {
-                if (item.id === korInputId) {
-                    item.status =
-                        item.status === "SELECTABLE-UNSELECTED"
-                            ? "SELECTABLE-SELECTED"
-                            : "SELECTABLE-UNSELECTED";
-                }
-                return item;
-            });
-
-            setPair((draft) => {
-                draft!.korInputs = nextKorInputs;
-            });
-
-            return { nextKorInputs };
+            toggleClientState();
         },
-        onError: (_, __, context) => {
+        onError: () => {
             // optimistic update rollback
-            if (context === undefined) return;
-
-            const rollbackedKorInputs = context.nextKorInputs.map((item) => {
-                if (item.id === korInputId) {
-                    item.status =
-                        item.status === "SELECTABLE-UNSELECTED"
-                            ? "SELECTABLE-SELECTED"
-                            : "SELECTABLE-UNSELECTED";
-                }
-                return item;
-            });
-
-            setPair((draft) => {
-                draft!.status = "REQUEST-FAILED";
-                draft!.korInputs = rollbackedKorInputs;
-            });
+            toggleClientState();
         },
     });
 
-    return { toggleKorOption };
+    return { toggleKorOption: () => toggleKorOption() };
 };
 
 export default useToggleKorOption;

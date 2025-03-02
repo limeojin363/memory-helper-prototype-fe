@@ -1,34 +1,40 @@
 import { useMutation } from "@tanstack/react-query";
 import { usePair } from "./useGeneratingNewWordSetPageData";
 
-const useRequestKorOptions = (pairId: string) => {
-    const [, setPair] = usePair(pairId);
+const useSubmitEngInput = (pairId: string) => {
+    const [pair, setPair] = usePair(pairId);
 
     const { mutate } = useMutation({
         mutationFn: async () => {
-            try {
-            } catch (error) {}
+            const engInput = pair!.engInput.value;
+            if (engInput === "") return;
+
+            const res = {
+                result: "SUCCESS",
+                data: [
+                    {
+                        id: "1",
+                        value: "이것",
+                    },
+                    {
+                        id: "2",
+                        value: "저것",
+                    },
+                ],
+            };
+
+            return res;
         },
         onMutate: () => {
             setPair((draft) => {
                 draft!.status = "REQUESTED-OPTIONS";
+                draft!.engInput.status = "DETERMINING";
             });
         },
-        onSettled: () => {
+        onSuccess: (res) => {
             setTimeout(() => {
-                const res = {
-                    result: "SUCCESS",
-                    data: [
-                        {
-                            id: "1",
-                            value: "이것",
-                        },
-                        {
-                            id: "2",
-                            value: "저것",
-                        },
-                    ],
-                };
+                if (!res) return;
+
                 setPair((draft) => {
                     draft!.status = "SELECTING";
                     draft!.korInputs = res.data.map((item) => ({
@@ -37,6 +43,7 @@ const useRequestKorOptions = (pairId: string) => {
                         status: "SELECTABLE-UNSELECTED",
                         sourceType: "OFFERED",
                     }));
+                    draft!.engInput.status = "OK";
                 });
             }, 1000);
         },
@@ -50,4 +57,4 @@ const useRequestKorOptions = (pairId: string) => {
     return () => mutate();
 };
 
-export default useRequestKorOptions;
+export default useSubmitEngInput;
