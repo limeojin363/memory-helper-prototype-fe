@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
+import { ComponentViewDataItem } from "../components/WordSetList";
 
-type CreatedPairType = {
+type ApiResponseType = {
     id: number;
     word: string;
     noun: string[];
@@ -9,11 +10,30 @@ type CreatedPairType = {
     adverb: string[];
     createdAt: string;
     gpt: boolean;
-};
+}[];
 
-type ResponseType = CreatedPairType[];
+const typeList = ["noun", "verb", "adjective", "adverb"] as const;
 
-const mockedApiCall = async (id: string): Promise<ResponseType> => {
+class ConvetedWordSetData {
+    createdAt: Date;
+    list: ComponentViewDataItem[];
+
+    constructor(data: ApiResponseType) {
+        this.createdAt = new Date(data[0].createdAt);
+        this.list = data
+            .map((item) =>
+                typeList.map((type) => {
+                    return {
+                        engWord: item.word,
+                        korWords: item[type].map((word) => ({ word, type })),
+                    };
+                }),
+            )
+            .flat();
+    }
+}
+
+const mockedApiCall = async (id: string): Promise<ApiResponseType> => {
     const response = await fetch(`/api/wordSet/${id}`);
     return [
         {
@@ -32,8 +52,9 @@ const mockedApiCall = async (id: string): Promise<ResponseType> => {
 const useWordSetDetailData = (wordSetId: string) => {
     const { data, isPending, isError } = useQuery({
         queryKey: ["wordSetDetail", wordSetId],
-        queryFn: () => {
-            return mockedApiCall(wordSetId);
+        queryFn: async () => {
+            const responseData = await mockedApiCall(wordSetId);
+            return new ConvetedWordSetData(responseData);
         },
     });
 

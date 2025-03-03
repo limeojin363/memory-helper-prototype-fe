@@ -18,42 +18,6 @@ const formatDate = (date: Date) => {
     return `${year}-${month}-${day}`;
 };
 
-const mockecData: Data = {
-    createdAt: new Date(),
-    list: [
-        {
-            engWord: "string",
-            korWords: [
-                {
-                    word: "string",
-                    type: "noun",
-                },
-                {
-                    word: "string",
-                    type: "verb",
-                },
-                {
-                    word: "string",
-                    type: "adjective",
-                },
-                {
-                    word: "string",
-                    type: "adverb",
-                }
-            ],
-        },
-        {
-            engWord: "string",
-            korWords: [
-                {
-                    word: "string",
-                    type: "noun",
-                },
-            ],
-        },
-    ],
-};
-
 const WordSetDetail = ({ wordsetId }: { wordsetId: string }) => {
     const { data, isPending, isError } = useWordSetDetailData(wordsetId);
 
@@ -79,11 +43,11 @@ const WordSetDetail = ({ wordsetId }: { wordsetId: string }) => {
             <Header title="단어 세트 보기" />
             <S.DateWrapper>
                 <Text
-                    label={formatDate(mockecData.createdAt)}
+                    label={formatDate(data.createdAt)}
                     fontStyle="caption-md"
                 />
             </S.DateWrapper>
-            <WordSetList list={mockecData.list} />
+            <WordSetList list={data.list} />
         </S.PageWrapper>
     );
 };
