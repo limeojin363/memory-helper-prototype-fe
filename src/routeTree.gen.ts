@@ -14,7 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as WithStatusBarImport } from './routes/_with-status-bar'
 import { Route as IndexImport } from './routes/index'
 import { Route as WordsNewImport } from './routes/words_.new'
-import { Route as WordsWordIdImport } from './routes/words_.$wordId'
+import { Route as WordsWordSetIdImport } from './routes/words_.$wordSetId'
 import { Route as ProblemsProblemIdImport } from './routes/problems_.$problemId'
 import { Route as WithStatusBarWordsImport } from './routes/_with-status-bar.words'
 import { Route as WithStatusBarSettingsImport } from './routes/_with-status-bar.settings'
@@ -39,9 +39,9 @@ const WordsNewRoute = WordsNewImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const WordsWordIdRoute = WordsWordIdImport.update({
-  id: '/words_/$wordId',
-  path: '/words/$wordId',
+const WordsWordSetIdRoute = WordsWordSetIdImport.update({
+  id: '/words_/$wordSetId',
+  path: '/words/$wordSetId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -115,11 +115,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProblemsProblemIdImport
       parentRoute: typeof rootRoute
     }
-    '/words_/$wordId': {
-      id: '/words_/$wordId'
-      path: '/words/$wordId'
-      fullPath: '/words/$wordId'
-      preLoaderRoute: typeof WordsWordIdImport
+    '/words_/$wordSetId': {
+      id: '/words_/$wordSetId'
+      path: '/words/$wordSetId'
+      fullPath: '/words/$wordSetId'
+      preLoaderRoute: typeof WordsWordSetIdImport
       parentRoute: typeof rootRoute
     }
     '/words_/new': {
@@ -157,7 +157,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof WithStatusBarSettingsRoute
   '/words': typeof WithStatusBarWordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
-  '/words/$wordId': typeof WordsWordIdRoute
+  '/words/$wordSetId': typeof WordsWordSetIdRoute
   '/words/new': typeof WordsNewRoute
 }
 
@@ -168,7 +168,7 @@ export interface FileRoutesByTo {
   '/settings': typeof WithStatusBarSettingsRoute
   '/words': typeof WithStatusBarWordsRoute
   '/problems/$problemId': typeof ProblemsProblemIdRoute
-  '/words/$wordId': typeof WordsWordIdRoute
+  '/words/$wordSetId': typeof WordsWordSetIdRoute
   '/words/new': typeof WordsNewRoute
 }
 
@@ -180,7 +180,7 @@ export interface FileRoutesById {
   '/_with-status-bar/settings': typeof WithStatusBarSettingsRoute
   '/_with-status-bar/words': typeof WithStatusBarWordsRoute
   '/problems_/$problemId': typeof ProblemsProblemIdRoute
-  '/words_/$wordId': typeof WordsWordIdRoute
+  '/words_/$wordSetId': typeof WordsWordSetIdRoute
   '/words_/new': typeof WordsNewRoute
 }
 
@@ -193,7 +193,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/words'
     | '/problems/$problemId'
-    | '/words/$wordId'
+    | '/words/$wordSetId'
     | '/words/new'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -203,7 +203,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/words'
     | '/problems/$problemId'
-    | '/words/$wordId'
+    | '/words/$wordSetId'
     | '/words/new'
   id:
     | '__root__'
@@ -213,7 +213,7 @@ export interface FileRouteTypes {
     | '/_with-status-bar/settings'
     | '/_with-status-bar/words'
     | '/problems_/$problemId'
-    | '/words_/$wordId'
+    | '/words_/$wordSetId'
     | '/words_/new'
   fileRoutesById: FileRoutesById
 }
@@ -222,7 +222,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WithStatusBarRoute: typeof WithStatusBarRouteWithChildren
   ProblemsProblemIdRoute: typeof ProblemsProblemIdRoute
-  WordsWordIdRoute: typeof WordsWordIdRoute
+  WordsWordSetIdRoute: typeof WordsWordSetIdRoute
   WordsNewRoute: typeof WordsNewRoute
 }
 
@@ -230,7 +230,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WithStatusBarRoute: WithStatusBarRouteWithChildren,
   ProblemsProblemIdRoute: ProblemsProblemIdRoute,
-  WordsWordIdRoute: WordsWordIdRoute,
+  WordsWordSetIdRoute: WordsWordSetIdRoute,
   WordsNewRoute: WordsNewRoute,
 }
 
@@ -247,7 +247,7 @@ export const routeTree = rootRoute
         "/",
         "/_with-status-bar",
         "/problems_/$problemId",
-        "/words_/$wordId",
+        "/words_/$wordSetId",
         "/words_/new"
       ]
     },
@@ -277,8 +277,8 @@ export const routeTree = rootRoute
     "/problems_/$problemId": {
       "filePath": "problems_.$problemId.tsx"
     },
-    "/words_/$wordId": {
-      "filePath": "words_.$wordId.tsx"
+    "/words_/$wordSetId": {
+      "filePath": "words_.$wordSetId.tsx"
     },
     "/words_/new": {
       "filePath": "words_.new.tsx"
