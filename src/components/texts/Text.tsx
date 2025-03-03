@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import { Colors, ColorName } from "../../designs/colors";
 import { css } from "@emotion/react";
 import "@fontsource/inter/index.css"; // Defaults to weight 400
+import React from "react";
 
 export const FontStyleMap = {
     "heading-1": css`
@@ -117,15 +118,21 @@ type TextProps = {
     label: string;
     fontStyle: FontStyleName;
     colorName?: ColorName;
-};
+    userSelect?: "none" | "auto";
+} & React.HTMLAttributes<HTMLDivElement>;
 
 const Text = ({
     label,
     fontStyle,
     colorName = "neutral-dark-dark",
+    userSelect = "none",
 }: TextProps) => {
     return (
-        <S.Text colorName={colorName} fontStyle={fontStyle}>
+        <S.Text
+            colorName={colorName}
+            fontStyle={fontStyle}
+            userSelect={userSelect}
+        >
             {label}
         </S.Text>
     );
@@ -137,8 +144,10 @@ const S = {
     Text: styled.div<{
         fontStyle: keyof typeof FontStyleMap;
         colorName: ColorName;
+        userSelect: "none" | "auto";
     }>`
         ${({ fontStyle }) => FontStyleMap[fontStyle]}
         color: ${({ colorName }) => Colors[colorName]};
+        user-select: ${({ userSelect }) => userSelect};
     `,
 };
