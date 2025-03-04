@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
 import { Route as WithStatusBarImport } from './routes/_with-status-bar'
 import { Route as IndexImport } from './routes/index'
 import { Route as WordsNewImport } from './routes/words_.new'
@@ -21,6 +22,12 @@ import { Route as WithStatusBarSettingsImport } from './routes/_with-status-bar.
 import { Route as WithStatusBarProblemsImport } from './routes/_with-status-bar.problems'
 
 // Create/Update Routes
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const WithStatusBarRoute = WithStatusBarImport.update({
   id: '/_with-status-bar',
@@ -85,6 +92,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: ''
       preLoaderRoute: typeof WithStatusBarImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/_with-status-bar/problems': {
@@ -153,6 +167,7 @@ const WithStatusBarRouteWithChildren = WithStatusBarRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof WithStatusBarRouteWithChildren
+  '/login': typeof LoginRoute
   '/problems': typeof WithStatusBarProblemsRoute
   '/settings': typeof WithStatusBarSettingsRoute
   '/words': typeof WithStatusBarWordsRoute
@@ -164,6 +179,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof WithStatusBarRouteWithChildren
+  '/login': typeof LoginRoute
   '/problems': typeof WithStatusBarProblemsRoute
   '/settings': typeof WithStatusBarSettingsRoute
   '/words': typeof WithStatusBarWordsRoute
@@ -176,6 +192,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_with-status-bar': typeof WithStatusBarRouteWithChildren
+  '/login': typeof LoginRoute
   '/_with-status-bar/problems': typeof WithStatusBarProblemsRoute
   '/_with-status-bar/settings': typeof WithStatusBarSettingsRoute
   '/_with-status-bar/words': typeof WithStatusBarWordsRoute
@@ -189,6 +206,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/login'
     | '/problems'
     | '/settings'
     | '/words'
@@ -199,6 +217,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | ''
+    | '/login'
     | '/problems'
     | '/settings'
     | '/words'
@@ -209,6 +228,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_with-status-bar'
+    | '/login'
     | '/_with-status-bar/problems'
     | '/_with-status-bar/settings'
     | '/_with-status-bar/words'
@@ -221,6 +241,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   WithStatusBarRoute: typeof WithStatusBarRouteWithChildren
+  LoginRoute: typeof LoginRoute
   ProblemsProblemIdRoute: typeof ProblemsProblemIdRoute
   WordsWordSetIdRoute: typeof WordsWordSetIdRoute
   WordsNewRoute: typeof WordsNewRoute
@@ -229,6 +250,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   WithStatusBarRoute: WithStatusBarRouteWithChildren,
+  LoginRoute: LoginRoute,
   ProblemsProblemIdRoute: ProblemsProblemIdRoute,
   WordsWordSetIdRoute: WordsWordSetIdRoute,
   WordsNewRoute: WordsNewRoute,
@@ -246,6 +268,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_with-status-bar",
+        "/login",
         "/problems_/$problemId",
         "/words_/$wordSetId",
         "/words_/new"
@@ -261,6 +284,9 @@ export const routeTree = rootRoute
         "/_with-status-bar/settings",
         "/_with-status-bar/words"
       ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/_with-status-bar/problems": {
       "filePath": "_with-status-bar.problems.tsx",
