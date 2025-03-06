@@ -12,14 +12,15 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
-import { Route as WithStatusBarImport } from './routes/_with-status-bar'
+import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as WordsNewImport } from './routes/words_.new'
-import { Route as WordsWordSetIdImport } from './routes/words_.$wordSetId'
-import { Route as ProblemsProblemIdImport } from './routes/problems_.$problemId'
-import { Route as WithStatusBarWordsImport } from './routes/_with-status-bar.words'
-import { Route as WithStatusBarSettingsImport } from './routes/_with-status-bar.settings'
-import { Route as WithStatusBarProblemsImport } from './routes/_with-status-bar.problems'
+import { Route as AuthenticatedWordsImport } from './routes/_authenticated/words'
+import { Route as AuthenticatedWithStatusBarImport } from './routes/_authenticated/_with-status-bar'
+import { Route as AuthenticatedWordsNewImport } from './routes/_authenticated/words_.new'
+import { Route as AuthenticatedWordsWordSetIdImport } from './routes/_authenticated/words_.$wordSetId'
+import { Route as AuthenticatedWithStatusBarSettingsImport } from './routes/_authenticated/_with-status-bar/settings'
+import { Route as AuthenticatedWithStatusBarProblemsImport } from './routes/_authenticated/_with-status-bar/problems'
+import { Route as AuthenticatedWithStatusBarProblemsProblemIdImport } from './routes/_authenticated/_with-status-bar/problems_.$problemId'
 
 // Create/Update Routes
 
@@ -29,8 +30,8 @@ const LoginRoute = LoginImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const WithStatusBarRoute = WithStatusBarImport.update({
-  id: '/_with-status-bar',
+const AuthenticatedRoute = AuthenticatedImport.update({
+  id: '/_authenticated',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -40,41 +41,52 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const WordsNewRoute = WordsNewImport.update({
-  id: '/words_/new',
-  path: '/words/new',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const WordsWordSetIdRoute = WordsWordSetIdImport.update({
-  id: '/words_/$wordSetId',
-  path: '/words/$wordSetId',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const ProblemsProblemIdRoute = ProblemsProblemIdImport.update({
-  id: '/problems_/$problemId',
-  path: '/problems/$problemId',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const WithStatusBarWordsRoute = WithStatusBarWordsImport.update({
+const AuthenticatedWordsRoute = AuthenticatedWordsImport.update({
   id: '/words',
   path: '/words',
-  getParentRoute: () => WithStatusBarRoute,
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const WithStatusBarSettingsRoute = WithStatusBarSettingsImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => WithStatusBarRoute,
+const AuthenticatedWithStatusBarRoute = AuthenticatedWithStatusBarImport.update(
+  {
+    id: '/_with-status-bar',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any,
+)
+
+const AuthenticatedWordsNewRoute = AuthenticatedWordsNewImport.update({
+  id: '/words_/new',
+  path: '/words/new',
+  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
-const WithStatusBarProblemsRoute = WithStatusBarProblemsImport.update({
-  id: '/problems',
-  path: '/problems',
-  getParentRoute: () => WithStatusBarRoute,
-} as any)
+const AuthenticatedWordsWordSetIdRoute =
+  AuthenticatedWordsWordSetIdImport.update({
+    id: '/words_/$wordSetId',
+    path: '/words/$wordSetId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedWithStatusBarSettingsRoute =
+  AuthenticatedWithStatusBarSettingsImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AuthenticatedWithStatusBarRoute,
+  } as any)
+
+const AuthenticatedWithStatusBarProblemsRoute =
+  AuthenticatedWithStatusBarProblemsImport.update({
+    id: '/problems',
+    path: '/problems',
+    getParentRoute: () => AuthenticatedWithStatusBarRoute,
+  } as any)
+
+const AuthenticatedWithStatusBarProblemsProblemIdRoute =
+  AuthenticatedWithStatusBarProblemsProblemIdImport.update({
+    id: '/problems_/$problemId',
+    path: '/problems/$problemId',
+    getParentRoute: () => AuthenticatedWithStatusBarRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -87,11 +99,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/_with-status-bar': {
-      id: '/_with-status-bar'
+    '/_authenticated': {
+      id: '/_authenticated'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof WithStatusBarImport
+      preLoaderRoute: typeof AuthenticatedImport
       parentRoute: typeof rootRoute
     }
     '/login': {
@@ -101,104 +113,135 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
-    '/_with-status-bar/problems': {
-      id: '/_with-status-bar/problems'
-      path: '/problems'
-      fullPath: '/problems'
-      preLoaderRoute: typeof WithStatusBarProblemsImport
-      parentRoute: typeof WithStatusBarImport
+    '/_authenticated/_with-status-bar': {
+      id: '/_authenticated/_with-status-bar'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthenticatedWithStatusBarImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/_with-status-bar/settings': {
-      id: '/_with-status-bar/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof WithStatusBarSettingsImport
-      parentRoute: typeof WithStatusBarImport
-    }
-    '/_with-status-bar/words': {
-      id: '/_with-status-bar/words'
+    '/_authenticated/words': {
+      id: '/_authenticated/words'
       path: '/words'
       fullPath: '/words'
-      preLoaderRoute: typeof WithStatusBarWordsImport
-      parentRoute: typeof WithStatusBarImport
+      preLoaderRoute: typeof AuthenticatedWordsImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/problems_/$problemId': {
-      id: '/problems_/$problemId'
-      path: '/problems/$problemId'
-      fullPath: '/problems/$problemId'
-      preLoaderRoute: typeof ProblemsProblemIdImport
-      parentRoute: typeof rootRoute
+    '/_authenticated/_with-status-bar/problems': {
+      id: '/_authenticated/_with-status-bar/problems'
+      path: '/problems'
+      fullPath: '/problems'
+      preLoaderRoute: typeof AuthenticatedWithStatusBarProblemsImport
+      parentRoute: typeof AuthenticatedWithStatusBarImport
     }
-    '/words_/$wordSetId': {
-      id: '/words_/$wordSetId'
+    '/_authenticated/_with-status-bar/settings': {
+      id: '/_authenticated/_with-status-bar/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof AuthenticatedWithStatusBarSettingsImport
+      parentRoute: typeof AuthenticatedWithStatusBarImport
+    }
+    '/_authenticated/words_/$wordSetId': {
+      id: '/_authenticated/words_/$wordSetId'
       path: '/words/$wordSetId'
       fullPath: '/words/$wordSetId'
-      preLoaderRoute: typeof WordsWordSetIdImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedWordsWordSetIdImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/words_/new': {
-      id: '/words_/new'
+    '/_authenticated/words_/new': {
+      id: '/_authenticated/words_/new'
       path: '/words/new'
       fullPath: '/words/new'
-      preLoaderRoute: typeof WordsNewImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthenticatedWordsNewImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/_with-status-bar/problems_/$problemId': {
+      id: '/_authenticated/_with-status-bar/problems_/$problemId'
+      path: '/problems/$problemId'
+      fullPath: '/problems/$problemId'
+      preLoaderRoute: typeof AuthenticatedWithStatusBarProblemsProblemIdImport
+      parentRoute: typeof AuthenticatedWithStatusBarImport
     }
   }
 }
 
 // Create and export the route tree
 
-interface WithStatusBarRouteChildren {
-  WithStatusBarProblemsRoute: typeof WithStatusBarProblemsRoute
-  WithStatusBarSettingsRoute: typeof WithStatusBarSettingsRoute
-  WithStatusBarWordsRoute: typeof WithStatusBarWordsRoute
+interface AuthenticatedWithStatusBarRouteChildren {
+  AuthenticatedWithStatusBarProblemsRoute: typeof AuthenticatedWithStatusBarProblemsRoute
+  AuthenticatedWithStatusBarSettingsRoute: typeof AuthenticatedWithStatusBarSettingsRoute
+  AuthenticatedWithStatusBarProblemsProblemIdRoute: typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
 }
 
-const WithStatusBarRouteChildren: WithStatusBarRouteChildren = {
-  WithStatusBarProblemsRoute: WithStatusBarProblemsRoute,
-  WithStatusBarSettingsRoute: WithStatusBarSettingsRoute,
-  WithStatusBarWordsRoute: WithStatusBarWordsRoute,
+const AuthenticatedWithStatusBarRouteChildren: AuthenticatedWithStatusBarRouteChildren =
+  {
+    AuthenticatedWithStatusBarProblemsRoute:
+      AuthenticatedWithStatusBarProblemsRoute,
+    AuthenticatedWithStatusBarSettingsRoute:
+      AuthenticatedWithStatusBarSettingsRoute,
+    AuthenticatedWithStatusBarProblemsProblemIdRoute:
+      AuthenticatedWithStatusBarProblemsProblemIdRoute,
+  }
+
+const AuthenticatedWithStatusBarRouteWithChildren =
+  AuthenticatedWithStatusBarRoute._addFileChildren(
+    AuthenticatedWithStatusBarRouteChildren,
+  )
+
+interface AuthenticatedRouteChildren {
+  AuthenticatedWithStatusBarRoute: typeof AuthenticatedWithStatusBarRouteWithChildren
+  AuthenticatedWordsRoute: typeof AuthenticatedWordsRoute
+  AuthenticatedWordsWordSetIdRoute: typeof AuthenticatedWordsWordSetIdRoute
+  AuthenticatedWordsNewRoute: typeof AuthenticatedWordsNewRoute
 }
 
-const WithStatusBarRouteWithChildren = WithStatusBarRoute._addFileChildren(
-  WithStatusBarRouteChildren,
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedWithStatusBarRoute: AuthenticatedWithStatusBarRouteWithChildren,
+  AuthenticatedWordsRoute: AuthenticatedWordsRoute,
+  AuthenticatedWordsWordSetIdRoute: AuthenticatedWordsWordSetIdRoute,
+  AuthenticatedWordsNewRoute: AuthenticatedWordsNewRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
 )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '': typeof WithStatusBarRouteWithChildren
+  '': typeof AuthenticatedWithStatusBarRouteWithChildren
   '/login': typeof LoginRoute
-  '/problems': typeof WithStatusBarProblemsRoute
-  '/settings': typeof WithStatusBarSettingsRoute
-  '/words': typeof WithStatusBarWordsRoute
-  '/problems/$problemId': typeof ProblemsProblemIdRoute
-  '/words/$wordSetId': typeof WordsWordSetIdRoute
-  '/words/new': typeof WordsNewRoute
+  '/words': typeof AuthenticatedWordsRoute
+  '/problems': typeof AuthenticatedWithStatusBarProblemsRoute
+  '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
+  '/words/$wordSetId': typeof AuthenticatedWordsWordSetIdRoute
+  '/words/new': typeof AuthenticatedWordsNewRoute
+  '/problems/$problemId': typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '': typeof WithStatusBarRouteWithChildren
+  '': typeof AuthenticatedWithStatusBarRouteWithChildren
   '/login': typeof LoginRoute
-  '/problems': typeof WithStatusBarProblemsRoute
-  '/settings': typeof WithStatusBarSettingsRoute
-  '/words': typeof WithStatusBarWordsRoute
-  '/problems/$problemId': typeof ProblemsProblemIdRoute
-  '/words/$wordSetId': typeof WordsWordSetIdRoute
-  '/words/new': typeof WordsNewRoute
+  '/words': typeof AuthenticatedWordsRoute
+  '/problems': typeof AuthenticatedWithStatusBarProblemsRoute
+  '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
+  '/words/$wordSetId': typeof AuthenticatedWordsWordSetIdRoute
+  '/words/new': typeof AuthenticatedWordsNewRoute
+  '/problems/$problemId': typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/_with-status-bar': typeof WithStatusBarRouteWithChildren
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
-  '/_with-status-bar/problems': typeof WithStatusBarProblemsRoute
-  '/_with-status-bar/settings': typeof WithStatusBarSettingsRoute
-  '/_with-status-bar/words': typeof WithStatusBarWordsRoute
-  '/problems_/$problemId': typeof ProblemsProblemIdRoute
-  '/words_/$wordSetId': typeof WordsWordSetIdRoute
-  '/words_/new': typeof WordsNewRoute
+  '/_authenticated/_with-status-bar': typeof AuthenticatedWithStatusBarRouteWithChildren
+  '/_authenticated/words': typeof AuthenticatedWordsRoute
+  '/_authenticated/_with-status-bar/problems': typeof AuthenticatedWithStatusBarProblemsRoute
+  '/_authenticated/_with-status-bar/settings': typeof AuthenticatedWithStatusBarSettingsRoute
+  '/_authenticated/words_/$wordSetId': typeof AuthenticatedWordsWordSetIdRoute
+  '/_authenticated/words_/new': typeof AuthenticatedWordsNewRoute
+  '/_authenticated/_with-status-bar/problems_/$problemId': typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
 }
 
 export interface FileRouteTypes {
@@ -207,53 +250,48 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/login'
+    | '/words'
     | '/problems'
     | '/settings'
-    | '/words'
-    | '/problems/$problemId'
     | '/words/$wordSetId'
     | '/words/new'
+    | '/problems/$problemId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/login'
+    | '/words'
     | '/problems'
     | '/settings'
-    | '/words'
-    | '/problems/$problemId'
     | '/words/$wordSetId'
     | '/words/new'
+    | '/problems/$problemId'
   id:
     | '__root__'
     | '/'
-    | '/_with-status-bar'
+    | '/_authenticated'
     | '/login'
-    | '/_with-status-bar/problems'
-    | '/_with-status-bar/settings'
-    | '/_with-status-bar/words'
-    | '/problems_/$problemId'
-    | '/words_/$wordSetId'
-    | '/words_/new'
+    | '/_authenticated/_with-status-bar'
+    | '/_authenticated/words'
+    | '/_authenticated/_with-status-bar/problems'
+    | '/_authenticated/_with-status-bar/settings'
+    | '/_authenticated/words_/$wordSetId'
+    | '/_authenticated/words_/new'
+    | '/_authenticated/_with-status-bar/problems_/$problemId'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  WithStatusBarRoute: typeof WithStatusBarRouteWithChildren
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
-  ProblemsProblemIdRoute: typeof ProblemsProblemIdRoute
-  WordsWordSetIdRoute: typeof WordsWordSetIdRoute
-  WordsNewRoute: typeof WordsNewRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  WithStatusBarRoute: WithStatusBarRouteWithChildren,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
-  ProblemsProblemIdRoute: ProblemsProblemIdRoute,
-  WordsWordSetIdRoute: WordsWordSetIdRoute,
-  WordsNewRoute: WordsNewRoute,
 }
 
 export const routeTree = rootRoute
@@ -267,47 +305,57 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_with-status-bar",
-        "/login",
-        "/problems_/$problemId",
-        "/words_/$wordSetId",
-        "/words_/new"
+        "/_authenticated",
+        "/login"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/_with-status-bar": {
-      "filePath": "_with-status-bar.tsx",
+    "/_authenticated": {
+      "filePath": "_authenticated.tsx",
       "children": [
-        "/_with-status-bar/problems",
-        "/_with-status-bar/settings",
-        "/_with-status-bar/words"
+        "/_authenticated/_with-status-bar",
+        "/_authenticated/words",
+        "/_authenticated/words_/$wordSetId",
+        "/_authenticated/words_/new"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
     },
-    "/_with-status-bar/problems": {
-      "filePath": "_with-status-bar.problems.tsx",
-      "parent": "/_with-status-bar"
+    "/_authenticated/_with-status-bar": {
+      "filePath": "_authenticated/_with-status-bar.tsx",
+      "parent": "/_authenticated",
+      "children": [
+        "/_authenticated/_with-status-bar/problems",
+        "/_authenticated/_with-status-bar/settings",
+        "/_authenticated/_with-status-bar/problems_/$problemId"
+      ]
     },
-    "/_with-status-bar/settings": {
-      "filePath": "_with-status-bar.settings.tsx",
-      "parent": "/_with-status-bar"
+    "/_authenticated/words": {
+      "filePath": "_authenticated/words.tsx",
+      "parent": "/_authenticated"
     },
-    "/_with-status-bar/words": {
-      "filePath": "_with-status-bar.words.tsx",
-      "parent": "/_with-status-bar"
+    "/_authenticated/_with-status-bar/problems": {
+      "filePath": "_authenticated/_with-status-bar/problems.tsx",
+      "parent": "/_authenticated/_with-status-bar"
     },
-    "/problems_/$problemId": {
-      "filePath": "problems_.$problemId.tsx"
+    "/_authenticated/_with-status-bar/settings": {
+      "filePath": "_authenticated/_with-status-bar/settings.tsx",
+      "parent": "/_authenticated/_with-status-bar"
     },
-    "/words_/$wordSetId": {
-      "filePath": "words_.$wordSetId.tsx"
+    "/_authenticated/words_/$wordSetId": {
+      "filePath": "_authenticated/words_.$wordSetId.tsx",
+      "parent": "/_authenticated"
     },
-    "/words_/new": {
-      "filePath": "words_.new.tsx"
+    "/_authenticated/words_/new": {
+      "filePath": "_authenticated/words_.new.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/_with-status-bar/problems_/$problemId": {
+      "filePath": "_authenticated/_with-status-bar/problems_.$problemId.tsx",
+      "parent": "/_authenticated/_with-status-bar"
     }
   }
 }

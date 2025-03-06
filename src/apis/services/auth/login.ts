@@ -1,11 +1,21 @@
+import { ResponsePromise } from "ky";
 import KyInstance from "../../core/ky";
+import { WrappedObject } from "../../core/type";
 
 type LoginBody = {
-    username: string;
+    email: string;
     password: string;
 };
 
-const LoginRequest = (body: LoginBody) =>
+type LoginResponse = {
+    username: string;
+    accessToken: string;
+    refreshToken: string;
+};
+
+const LoginRequest = (
+    body: LoginBody,
+): ResponsePromise<WrappedObject<LoginResponse>> =>
     KyInstance.post("auth/login", { json: body });
 
 export default LoginRequest;

@@ -16,6 +16,7 @@ const KyInstance = ky.create({
     prefixUrl: HOST + PATHNAME_POSTFIX,
     headers: {
         "content-type": "application/json",
+        
     },
     hooks: {
         beforeRequest: [setAuthorizationHeader],
