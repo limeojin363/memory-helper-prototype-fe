@@ -25,6 +25,7 @@
     "jotai": "^2.11.1",
     "jotai-immer": "^0.4.1",
     "jotai-optics": "^0.4.0",
+    "ky": "^1.7.5",
     "optics-ts": "^2.4.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",

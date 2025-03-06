@@ -3654,6 +3654,11 @@ knitwork@^1.0.0, knitwork@^1.1.0, knitwork@^1.2.0:
   resolved "https://registry.yarnpkg.com/knitwork/-/knitwork-1.2.0.tgz#3cc92e76249aeb35449cfbed3f31c6df8444db3f"
   integrity sha512-xYSH7AvuQ6nXkq42x0v5S8/Iry+cfulBz/DJQzhIyESdLD7425jXsPy4vn5cCXU+HhRN2kVw51Vd1K6/By4BQg==
 
+ky@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/ky/-/ky-1.7.5.tgz#69c9b70ff818fd6108fc04a89c1454412c11dfce"
+  integrity sha512-HzhziW6sc5m0pwi5M196+7cEBtbt0lCYi67wNsiwMUmz833wloE0gbzJPWKs1gliFKQb34huItDQX97LyOdPdA==
+
 lazystream@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/lazystream/-/lazystream-1.0.1.tgz#494c831062f1f9408251ec44db1cba29242a2638"
