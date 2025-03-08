@@ -3,35 +3,25 @@ import styled from "@emotion/styled";
 import Header from "../../../components/layouts/mobile/Header";
 import Icon from "../../../components/icons/Icon";
 import WordInputPairItem from "./InputPairItem";
-import {
-    makeNewPairItem,
-    useGenerateNewWordSetPageData,
-} from "../hooks/useGeneratingNewWordSetPageData";
+import { usePageState } from "../hooks/states/usePageStateNew";
 
 const NewWord = () => {
-    const navigate = useNavigate();
+    const goBack = () => useNavigate()({ to: "/words" });
 
-    const goBack = () => navigate({ to: "/words" });
-
-    const [page, setPage] = useGenerateNewWordSetPageData();
-
-    const insertPair = () =>
-        setPage((draft) => {
-            draft.push(makeNewPairItem());
-        });
+    const { addNewPair, pairIdList } = usePageState();
 
     return (
         <>
             <Header title="New Word Set Generating" goBack={goBack} />
             <S.Root>
-                {page.map((item) => (
-                    <WordInputPairItem key={item.id} pairId={item.id} />
+                {pairIdList.map((pairId) => (
+                    <WordInputPairItem key={pairId} pairId={pairId} />
                 ))}
                 <Icon
                     colorName="neutral-dark-darkest"
                     iconName="plus"
                     size={30}
-                    onClick={insertPair}
+                    onClick={addNewPair}
                 />
             </S.Root>
         </>
