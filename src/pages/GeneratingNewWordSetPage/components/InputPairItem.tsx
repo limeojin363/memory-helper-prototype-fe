@@ -1,21 +1,16 @@
 import S from "./styled";
 import Icon from "../../../components/icons/Icon";
-import {
-    useGenerateNewWordSetPageData,
-    usePair,
-} from "../hooks/useGeneratingNewWordSetPageData";
 import EngArea from "./EngArea";
 import KorArea from "./KorArea";
+import { usePageState } from "../hooks/states/usePageStateNew";
+import usePairStatus from "../hooks/states/usePairStatus";
 
 const WordInputPairItem = ({ pairId }: { pairId: string }) => {
-    const [, setRoot] = useGenerateNewWordSetPageData();
+    const { deletePair } = usePageState();
 
-    const onClickDelete = () =>
-        setRoot((draft) => draft.filter((pairItem) => pairItem.id !== pairId));
+    const onClickDelete = () => deletePair(pairId);
 
-    const [pair] = usePair(pairId);
-
-    const pairStatus = pair!.status;
+    const pairStatus = usePairStatus(pairId);
 
     return (
         <S.WordInputPairItemWrapper pairStatus={pairStatus}>

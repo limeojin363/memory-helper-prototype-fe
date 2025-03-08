@@ -1,14 +1,14 @@
 import styled from "@emotion/styled";
 import { Colors } from "../../../designs/colors";
 import { css, keyframes, SerializedStyles } from "@emotion/react";
-import { EngInputStatus, InputPairStatus, KorInputStatus } from "../types";
+import { EngStatus, KorStatus, PairStatus } from "../types";
 
 interface SKorInputProps {
-    status: KorInputStatus;
+    status: KorStatus;
 }
 
 interface SEngInputProps {
-    status: EngInputStatus;
+    status: EngStatus;
 }
 
 const loading = keyframes`
@@ -23,7 +23,7 @@ const loading = keyframes`
   }
 `;
 
-const KorStyleMap: { [key in KorInputStatus]: SerializedStyles } = {
+const KorStyleMap: { [key in KorStatus]: SerializedStyles } = {
     "NEEDS-CORRECTION": css`
         box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
     `,
@@ -43,12 +43,12 @@ const KorStyleMap: { [key in KorInputStatus]: SerializedStyles } = {
     INITIAL: css`
         box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
     `,
-    DETERMINING: css`
+    WAITING: css`
         background-color: ${Colors["neutral-light-dark"]};
     `,
 };
 
-const EngStyleMap: { [key in EngInputStatus]: SerializedStyles } = {
+const EngStyleMap: { [key in EngStatus]: SerializedStyles } = {
     "NEEDS-CORRECTION": css`
         box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
     `,
@@ -59,23 +59,23 @@ const EngStyleMap: { [key in EngInputStatus]: SerializedStyles } = {
     INITIAL: css`
         box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
     `,
-    DETERMINING: css`
+    WAITING: css`
         background-color: ${Colors["neutral-light-dark"]};
         /* animation: ${loading} 1s infinite; */
     `,
 };
 
-const PairStyleMap: { [key in InputPairStatus]: SerializedStyles } = {
+const PairStyleMap: { [key in PairStatus]: SerializedStyles } = {
     INITIAL: css`
         box-shadow: 0 0 0 2px ${Colors["neutral-light-darkest"]} inset;
     `,
-    "REQUESTED-OPTIONS": css`
+    WAITING: css`
         box-shadow: 0 0 0 2px ${Colors["neutral-light-darkest"]} inset;
     `,
-    "REQUEST-FAILED": css`
+    "ENG-ERROR": css`
         box-shadow: 0 0 0 2px ${Colors["support-red-dark"]} inset;
     `,
-    SELECTING: css`
+    "SELECTING-KOR": css`
         box-shadow: 0 0 0 2px ${Colors["neutral-light-darkest"]} inset;
     `,
     USABLE: css`
@@ -112,7 +112,7 @@ const S = {
         position: relative;
     `,
     WordInputPairItemWrapper: styled.div<{
-        pairStatus: InputPairStatus;
+        pairStatus: PairStatus;
     }>`
         ${({ pairStatus }) => PairStyleMap[pairStatus]}
 

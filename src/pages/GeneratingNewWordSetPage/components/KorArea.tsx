@@ -2,21 +2,20 @@ import { ClipLoader } from "react-spinners";
 import Icon from "../../../components/icons/Icon";
 import Text from "../../../components/texts/Text";
 import { Colors } from "../../../designs/colors";
-import {
-    makeNewCustomKorItem,
-    useKorInput,
-    usePair,
-} from "../hooks/useGeneratingNewWordSetPageData";
-import useSubmitCustomKorInput from "../hooks/useSubmitKorInput";
-import useToggleKorOption from "../hooks/useToggleKorOption";
+import useSubmitCustomKorInput from "../hooks/handlers/useSubmitKorInput";
+import useToggleKorOption from "../hooks/handlers/useToggleKorOption";
 import S from "./styled";
-import { KorInputStatus } from "../types";
-
+import { KorStatus } from "../types";
+import { useAtomValue } from "jotai";
+import { getPairStatusAtom } from "../hooks/states/atoms";
+import { useEffect, useMemo } from "react";
+import { useKorInput } from "../hooks/states/useKorInput";
+import { usePair } from "../hooks/states/usePair";
 interface KorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    status: KorInputStatus;
-    value?: string;
-    placeholder?: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    status: KorStatus;
+    value: string;
+    placeholder: string;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const KorInput = ({
@@ -44,18 +43,19 @@ const KorInput = ({
 };
 
 const KorArea = ({ pairId }: { pairId: string }) => {
-    const [pair, setPair] = usePair(pairId);
+    const { pair, addNewKor } = usePair(pairId);
+    const pairStatus = useAtomValue(
+        useMemo(() => getPairStatusAtom(pairId), [pairId]),
+    );
 
-    if (!pair) return null;
+    useEffect(() => {
+        console.log("pairId", pairId);
+        console.log("pair", pair);
+    }, [pair, pairId]);
 
-    if (pair.status === "INITIAL") return null;
+    if (pairStatus === "INITIAL") return null;
 
-    if (pair.status === "REQUESTED-OPTIONS") return null;
-
-    const addCustomKorInput = () =>
-        setPair((draft) => {
-            draft!.korInputs!.push(makeNewCustomKorItem());
-        });
+    if (pairStatus === "WAITING") return null;
 
     return (
         <S.KorAreaContainer>
@@ -66,44 +66,26 @@ const KorArea = ({ pairId }: { pairId: string }) => {
                         colorName="neutral-dark-darkest"
                         iconName="plus"
                         size={12}
-                        onClick={addCustomKorInput}
+                        onClick={addNewKor}
                     />
                 </S.IcButtonWrapper>
             </S.KorTopWrapper>
             <S.KorItemsWrapper>
-                {pair.korInputs!.map((korItem) => (
-                    <KorItem
-                        key={korItem.id}
-                        pairId={pairId}
-                        korItemId={korItem.id}
-                    />
+                {pair.korIds.map((korId) => (
+                    <KorItem key={korId} korId={korId} pairId={pairId} />
                 ))}
             </S.KorItemsWrapper>
         </S.KorAreaContainer>
     );
 };
 
-const KorItem = ({
-    korItemId,
-    pairId,
-}: {
-    korItemId: string;
-    pairId: string;
-}) => {
-    const [korInput, setKorInput] = useKorInput(pairId, korItemId);
+const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
+    const { korInput, setKorInput } = useKorInput(korId);
+    const { value, status, sourceType } = korInput;
+    const { toggleKorOption } = useToggleKorOption(korId);
+    const { setPair } = usePair(pairId);
 
-    const { value, status, sourceType } = korInput!;
-
-    const [, setPair] = usePair(pairId);
-
-    const onClickDelete = () =>
-        setPair((draft) => {
-            draft!.korInputs = draft!.korInputs!.filter(
-                (item) => item.id !== korItemId,
-            );
-        });
-
-    const { toggleKorOption } = useToggleKorOption(pairId, korItemId);
+    const onClickDelete = () => setPair((prev) => ({ ...prev }));
 
     const onClickKorItem = () => {
         if (
@@ -114,19 +96,20 @@ const KorItem = ({
         }
     };
 
-    const onClickCustomItemSubmit = useSubmitCustomKorInput(pairId, korItemId);
+    const onClickCustomItemSubmit = useSubmitCustomKorInput(korId);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setKorInput((draft) => {
-            draft!.value = e.target.value;
-        });
+        // setKorInput((draft) => {
+        //     draft!.value = e.target.value;
+        // });
+        setKorInput((prev) => ({ ...prev, value: e.target.value }));
 
     const showDeleteButton =
         sourceType === "CUSTOM" &&
         status !== "SELECTABLE-SELECTED" &&
         status !== "SELECTABLE-UNSELECTED";
     const showSubmitButton = value !== "" && status === "INITIAL";
-    const showLoader = status === "DETERMINING";
+    const showLoader = status === "WAITING";
 
     return (
         <S.KorItemWrapper>
@@ -136,7 +119,7 @@ const KorItem = ({
                 value={value}
                 onChange={onChange}
                 status={status}
-                key={korItemId}
+                key={korId}
             />
             {showSubmitButton && (
                 <S.SideIconPositionor right={4}>

@@ -1,37 +1,35 @@
 import S from "./styled";
 import Text from "../../../components/texts/Text";
-import { usePair } from "../hooks/useGeneratingNewWordSetPageData";
-import useSubmitEngInput from "../hooks/useSubmitEngInput";
+import useSubmitEngInput from "../hooks/handlers/useSubmitEngInput";
 import Icon from "../../../components/icons/Icon";
-import { ClipLoader, MoonLoader, SyncLoader } from "react-spinners";
+import { ClipLoader } from "react-spinners";
 import { Colors } from "../../../designs/colors";
+import { usePair } from "../hooks/states/usePair";
 
 const EngArea = ({ pairId }: { pairId: string }) => {
-    const [pair, setPair] = usePair(pairId);
+    const { pair, setPair } = usePair(pairId);
+
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setPair((draft) => {
-            draft!.engInput.value = e.target.value;
-        });
+        setPair((prev) => ({ ...prev, engValue: e.target.value }));
 
     const submitEngInput = useSubmitEngInput(pairId);
 
-    const value = pair!.engInput.value;
-    const status = pair!.engInput.status;
+    const editable =
+        pair.engStatus === "INITIAL" || pair.engStatus === "NEEDS-CORRECTION";
 
-    const editable = status === "INITIAL" || status === "NEEDS-CORRECTION";
+    const showSubmitButton =
+        pair.engValue !== "" && pair.engStatus === "INITIAL";
 
-    const showSubmitButton = value !== "" && status === "INITIAL";
-
-    const isDetermining = status === "DETERMINING";
+    const isDetermining = pair.engStatus === "WAITING";
 
     return (
         <S.EngAreaContainer>
             <Text fontStyle="heading-5" label="Eng" />
             <S.EngInputWrapper>
                 <S.EngInput
-                    value={value}
-                    status={status}
+                    value={pair.engValue}
+                    status={pair.engStatus}
                     onChange={onChange}
                     disabled={!editable}
                 />
@@ -52,7 +50,6 @@ const EngArea = ({ pairId }: { pairId: string }) => {
                         <ClipLoader
                             size={12}
                             color={Colors["neutral-dark-darkest"]}
-                            
                         />
                     </S.SideIconPositionor>
                 )}
