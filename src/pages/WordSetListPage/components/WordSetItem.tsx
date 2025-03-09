@@ -1,7 +1,7 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import Icon from "../icons/Icon";
-import Text from "../texts/Text";
+import Icon from "../../../components/icons/Icon";
+import Text from "../../../components/texts/Text";
 import S from "./WordSetItem.styled";
 
 type WordSetItemProps = {

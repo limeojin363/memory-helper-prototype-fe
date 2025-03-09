@@ -23,18 +23,20 @@ import {
     restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
 
+const DUMMY_DATA = [
+    { name: "3", createdAt: new Date(), problemSetCount: 1, id: "1" },
+    { name: "34", createdAt: new Date(), problemSetCount: 4, id: "2" },
+    { name: "534", createdAt: new Date(), problemSetCount: 4, id: "3" },
+];
+
 const WordSetList = () => {
-    const [wordSetsData, setWordSetsData] = useState([
-        { name: "3", createdAt: new Date(), problemSetCount: 1, id: "1" },
-        { name: "34", createdAt: new Date(), problemSetCount: 4, id: "2" },
-        { name: "534", createdAt: new Date(), problemSetCount: 4, id: "3" },
-    ]);
+    const [wordSetsData, setWordSetsData] = useState(DUMMY_DATA);
 
     const sensors = useSensors(
         useSensor(MouseSensor),
         useSensor(TouchSensor),
         useSensor(KeyboardSensor),
-        );
+    );
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event;
