@@ -2,8 +2,13 @@ import { useState } from "react";
 import useLogin from "../hooks/useLogin";
 import S from "./styled";
 import Header from "../../../components/layouts/mobile/Header";
+import { NavigateOptions } from "@tanstack/react-router";
 
-const LoginPage = () => {
+const LoginPage = ({
+    navigateOptionAfterSuccessfullyLoggedIn = { to: "/words" },
+}: {
+    navigateOptionAfterSuccessfullyLoggedIn?: NavigateOptions;
+}) => {
     const [userInputs, setUserInputs] = useState({
         email: "",
         password: "",
@@ -12,7 +17,7 @@ const LoginPage = () => {
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setUserInputs((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
-    const login = useLogin();
+    const login = useLogin({ navigateOptionAfterSuccessfullyLoggedIn });
 
     return (
         <S.PageWrapper>
