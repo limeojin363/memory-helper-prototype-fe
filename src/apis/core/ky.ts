@@ -6,17 +6,17 @@ const HOST =
 const PATHNAME_POSTFIX = "/api";
 
 const setAuthorizationHeader: BeforeRequestHook = (request) => {
-    const accessToken = localStorage.getItem("accessToken");
+    const rawAccessToken = localStorage.getItem("accessToken");
+    if (!rawAccessToken) return;
 
-    if (!accessToken) return;
-    request.headers.set("Authorization", `Bearer ${accessToken}`);
+    const parsedAccessToken = JSON.parse(rawAccessToken);
+    request.headers.set("Authorization", `Bearer ${parsedAccessToken}`);
 };
 
 const KyInstance = ky.create({
     prefixUrl: HOST + PATHNAME_POSTFIX,
     headers: {
         "content-type": "application/json",
-        
     },
     hooks: {
         beforeRequest: [setAuthorizationHeader],
