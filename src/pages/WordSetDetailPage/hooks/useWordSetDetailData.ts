@@ -1,16 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ComponentViewDataItem } from "../components/WordSetList";
-
-type ApiResponseType = {
-    id: number;
-    word: string;
-    noun: string[];
-    verb: string[];
-    adjective: string[];
-    adverb: string[];
-    createdAt: string;
-    gpt: boolean;
-}[];
+import HTTPWordSetRequest from "../../../apis/services/word-set";
+import { PairItem } from "../../../apis/services/word-set/getMyWordSetDetail";
 
 const typeList = ["noun", "verb", "adjective", "adverb"] as const;
 
@@ -18,8 +9,8 @@ class ConvetedWordSetData {
     createdAt: Date;
     list: ComponentViewDataItem[];
 
-    constructor(data: ApiResponseType) {
-        this.createdAt = new Date(data[0].createdAt);
+    constructor(data: PairItem[]) {
+        this.createdAt = data[0] ? new Date(data[0].createdAt) : new Date();
         this.list = data
             .map((item) =>
                 typeList.map((type) => {
@@ -33,28 +24,23 @@ class ConvetedWordSetData {
     }
 }
 
-const mockedApiCall = async (id: string): Promise<ApiResponseType> => {
-    const response = await fetch(`/api/wordSet/${id}`);
-    return [
-        {
-            id: 0,
-            word: "string",
-            noun: ["string"],
-            verb: ["string"],
-            adjective: ["string"],
-            adverb: ["string"],
-            createdAt: "2025-03-03T01:39:42.002Z",
-            gpt: true,
-        },
-    ];
-};
-
 const useWordSetDetailData = (wordSetId: string) => {
     const { data, isPending, isError } = useQuery({
         queryKey: ["wordSetDetail", wordSetId],
         queryFn: async () => {
-            const responseData = await mockedApiCall(wordSetId);
-            return new ConvetedWordSetData(responseData);
+            try {
+                const { data } = await (
+                    await HTTPWordSetRequest.GetMyWordSetDetail(wordSetId)
+                ).json();
+
+                const converted = new ConvetedWordSetData(data);
+                console.log(converted);
+
+                return converted;
+            } catch (error) {
+                console.error(error);
+                return null;
+            }
         },
     });
 

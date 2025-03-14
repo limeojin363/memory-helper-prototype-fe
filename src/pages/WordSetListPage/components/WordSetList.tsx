@@ -22,6 +22,7 @@ import {
     restrictToParentElement,
     restrictToVerticalAxis,
 } from "@dnd-kit/modifiers";
+import useWordSetListData from "../hooks/useWordSetListData";
 
 const DUMMY_DATA = [
     { name: "3", createdAt: new Date(), problemSetCount: 1, id: "1" },
@@ -31,6 +32,8 @@ const DUMMY_DATA = [
 
 const WordSetList = () => {
     const [wordSetsData, setWordSetsData] = useState(DUMMY_DATA);
+
+    const data = useWordSetListData();
 
     const sensors = useSensors(
         useSensor(MouseSensor),
@@ -67,15 +70,17 @@ const WordSetList = () => {
                 strategy={verticalListSortingStrategy}
             >
                 <S.Root>
-                    {wordSetsData.map((wordSet) => (
-                        <WordSetItem
-                            id={wordSet.id}
-                            key={wordSet.id}
-                            name={wordSet.name}
-                            createdAt={wordSet.createdAt}
-                            problemSetCount={wordSet.problemSetCount}
-                        />
-                    ))}
+                    {data?.map(
+                        ({ createdAt, problemSetCount, setId, setName }) => (
+                            <WordSetItem
+                                id={String(setId)}
+                                key={setId}
+                                name={setName}
+                                createdAt={new Date(createdAt)}
+                                problemSetCount={1}
+                            />
+                        ),
+                    )}
                 </S.Root>
             </SortableContext>
         </DndContext>
