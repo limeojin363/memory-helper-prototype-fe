@@ -6,8 +6,14 @@ type UserInfo = {
     email: string;
 };
 
-const accessTokenAtom = atomWithStorage<null | string>("accessToken", null);
-const refreshTokenAtom = atomWithStorage<null | string>("refreshToken", null);
+const accessTokenAtom = atomWithStorage<null | string>(
+    "accessToken",
+    localStorage.getItem("accessToken"),
+);
+const refreshTokenAtom = atomWithStorage<null | string>(
+    "refreshToken",
+    localStorage.getItem("refreshToken"),
+);
 const userInfoAtom = atomWithStorage<null | UserInfo>("userInfo", null);
 
 const useAuth = () => {
@@ -15,7 +21,7 @@ const useAuth = () => {
     const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
     const [userInfo, setUserInfo] = useAtom(userInfoAtom);
 
-    const isLoginned = !!accessToken;
+    const isLoggedIn = !!accessToken;
 
     return {
         accessToken,
@@ -24,7 +30,7 @@ const useAuth = () => {
         setRefreshToken,
         userInfo,
         setUserInfo,
-        isLoginned,
+        isLoginned: isLoggedIn,
     };
 };
 
