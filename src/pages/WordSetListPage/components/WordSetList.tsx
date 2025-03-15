@@ -71,13 +71,13 @@ const WordSetList = () => {
             >
                 <S.Root>
                     {data?.map(
-                        ({ createdAt, problemSetCount, setId, setName }) => (
+                        ({ createdAt, problemSetsCount, setId, setName }) => (
                             <WordSetItem
                                 id={String(setId)}
                                 key={setId}
                                 name={setName}
                                 createdAt={new Date(createdAt)}
-                                problemSetCount={1}
+                                problemSetCount={problemSetsCount}
                             />
                         ),
                     )}

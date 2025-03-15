@@ -2,6 +2,8 @@ import { ResponsePromise } from "ky";
 import KyInstance from "../../core/ky";
 import { WrappedObject } from "../../core/type";
 
+
+
 export type PairItem = {
     id: number;
     word: string;

@@ -6,13 +6,13 @@ type WordSetDTO = {
     setId: number;
     setName: string;
     createdAt: string;
-    problemSetCount: number;
+    problemSetsCount: number;
 };
 
 type GetMyWordSetsResponse = WordSetDTO[];
 
 const GetMyWordSetsRequest = (): ResponsePromise<
     WrappedObject<GetMyWordSetsResponse>
-> => KyInstance.get("wordsets");
+> => KyInstance.get("wordsets/all");
 
 export default GetMyWordSetsRequest;

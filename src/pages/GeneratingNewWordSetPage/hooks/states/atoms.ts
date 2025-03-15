@@ -15,6 +15,7 @@ const makeNewCustomKorItem = (id: string): KorItem => ({
     value: "",
     sourceType: "CUSTOM",
     status: "INITIAL",
+    type: null,
 });
 
 // pairId 리스트
