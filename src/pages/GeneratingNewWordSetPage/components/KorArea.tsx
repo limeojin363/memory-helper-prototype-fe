@@ -48,11 +48,6 @@ const KorArea = ({ pairId }: { pairId: string }) => {
         useMemo(() => getPairStatusAtom(pairId), [pairId]),
     );
 
-    useEffect(() => {
-        console.log("pairId", pairId);
-        console.log("pair", pair);
-    }, [pair, pairId]);
-
     if (pairStatus === "INITIAL") return null;
 
     if (pairStatus === "WAITING") return null;
@@ -91,17 +86,13 @@ const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
         if (
             status === "SELECTABLE-SELECTED" ||
             status === "SELECTABLE-UNSELECTED"
-        ) {
+        )
             toggleKorOption();
-        }
     };
 
     const onClickCustomItemSubmit = useSubmitCustomKorInput(korId);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-        // setKorInput((draft) => {
-        //     draft!.value = e.target.value;
-        // });
         setKorInput((prev) => ({ ...prev, value: e.target.value }));
 
     const showDeleteButton =

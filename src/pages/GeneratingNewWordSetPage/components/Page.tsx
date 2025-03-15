@@ -6,7 +6,9 @@ import WordInputPairItem from "./InputPairItem";
 import { usePageState } from "../hooks/states/usePageStateNew";
 
 const NewWord = () => {
-    const goBack = () => useNavigate()({ to: "/words" });
+    const navigate = useNavigate();
+
+    const goBack = () => navigate({ to: "/words" });
 
     const { addNewPair, pairIdList } = usePageState();
 

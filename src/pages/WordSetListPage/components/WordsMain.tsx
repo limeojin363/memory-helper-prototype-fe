@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import SearchBar from "../../components/layouts/mobile/SearchBar";
-import WordSetList from "../../components/word-sets/WordSetList";
+import SearchBar from "../../../components/layouts/mobile/SearchBar";
+import WordSetList from "./WordSetList";
 import S from "./WordsMain.styled";
-import useInput from "../../hooks/useInput";
-import Icon from "../../components/icons/Icon";
+import useInput from "../../../hooks/useInput";
+import Icon from "../../../components/icons/Icon";
 
 const WordsMain = () => {
     const [value, onChange] = useInput();

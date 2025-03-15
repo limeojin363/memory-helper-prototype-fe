@@ -6,9 +6,8 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function RouteComponent() {
-    const { isLoginned } = useAuth();
+    // const { isLoginned } = useAuth();
 
-    // TODO: Uncomment this code to enable authentication
     // if (!isLoginned) {
     //     return <Navigate to="/login" />;
     // }

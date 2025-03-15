@@ -11,6 +11,9 @@ const S = {
     ArrowWrapper: styled.div`
         position: absolute;
         left: 20px;
+        :active {
+            transform: scale(0.9);
+        }
     `,
 };
 

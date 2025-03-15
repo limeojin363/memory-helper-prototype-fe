@@ -1,16 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
 import HttpAuthRequests from "../../../apis/services/auth";
 import useAuth from "../../../hooks/useAuth";
+import { NavigateOptions, useNavigate } from "@tanstack/react-router";
 
-const useLogin = () => {
+const useLogin = ({
+    navigateOptionAfterSuccessfullyLoggedIn,
+}: {
+    navigateOptionAfterSuccessfullyLoggedIn: NavigateOptions;
+}) => {
     const { setAccessToken, setRefreshToken, setUserInfo } = useAuth();
+
+    const navigate = useNavigate();
 
     const { mutate } = useMutation({
         mutationFn: HttpAuthRequests.Login,
         onSuccess: async (res) => {
             const { data } = await res.json();
-
-            console.log(data)
 
             setAccessToken(data.accessToken);
             setRefreshToken(data.refreshToken);
@@ -18,6 +23,8 @@ const useLogin = () => {
                 username: data.username,
                 email: "null@null.com",
             });
+
+            navigate(navigateOptionAfterSuccessfullyLoggedIn);
         },
     });
 

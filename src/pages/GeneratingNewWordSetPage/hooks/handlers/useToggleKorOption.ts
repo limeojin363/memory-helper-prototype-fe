@@ -15,7 +15,7 @@ const useToggleKorOption = (korInputId: string) => {
 
     const { mutate: toggleKorOption } = useMutation({
         mutationFn: async () => {
-            // 서버에다가 toggle 요청 보내기
+            // TODO: 서버에다가 toggle 요청 보내기
             try {
             } catch (error) {}
         },

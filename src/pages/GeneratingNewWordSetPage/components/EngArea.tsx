@@ -9,7 +9,6 @@ import { usePair } from "../hooks/states/usePair";
 const EngArea = ({ pairId }: { pairId: string }) => {
     const { pair, setPair } = usePair(pairId);
 
-
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setPair((prev) => ({ ...prev, engValue: e.target.value }));
 

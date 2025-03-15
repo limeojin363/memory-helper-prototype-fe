@@ -1,8 +1,9 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import Icon from "../icons/Icon";
-import Text from "../texts/Text";
+import Icon from "../../../components/icons/Icon";
+import Text from "../../../components/texts/Text";
 import S from "./WordSetItem.styled";
+import { useNavigate } from "@tanstack/react-router";
 
 type WordSetItemProps = {
     id: string;
@@ -26,6 +27,7 @@ const WordSetItem = ({
     problemSetCount,
 }: WordSetItemProps) => {
     const formattedDate = formatDate(createdAt);
+    const navigate = useNavigate();
 
     const {
         attributes,
@@ -47,8 +49,17 @@ const WordSetItem = ({
         transition,
     };
 
+    const onClick = () => {
+        navigate({
+            to: "/words/$wordSetId",
+            params: {
+                wordSetId: id,
+            },
+        });
+    };
+
     return (
-        <S.Root id={id} ref={setNodeRef} style={style}>
+        <S.Root id={id} ref={setNodeRef} onClick={onClick} style={style}>
             <div ref={setActivatorNodeRef} {...attributes} {...listeners}>
                 <Icon
                     size={16}

@@ -4,6 +4,7 @@ import S from "./styled";
 import Header from "../../../components/layouts/mobile/Header";
 import WordSetList, { ComponentViewDataItem } from "./WordSetList";
 import Text from "../../../components/texts/Text";
+import { useNavigate } from "@tanstack/react-router";
 
 export type Data = {
     createdAt: Date;
@@ -20,6 +21,10 @@ const formatDate = (date: Date) => {
 
 const WordSetDetail = ({ wordsetId }: { wordsetId: string }) => {
     const { data, isPending, isError } = useWordSetDetailData(wordsetId);
+
+    const navigate = useNavigate();
+
+    const goBack = () => navigate({ to: "/words" });
 
     if (isError) {
         return (
@@ -40,7 +45,7 @@ const WordSetDetail = ({ wordsetId }: { wordsetId: string }) => {
 
     return (
         <S.PageWrapper>
-            <Header title="단어 세트 보기" />
+            <Header title="단어 세트 보기" goBack={goBack} />
             <S.DateWrapper>
                 <Text
                     label={formatDate(data.createdAt)}

@@ -1,21 +1,36 @@
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
+import HttpAuthRequests from "../apis/services/auth";
 
 type UserInfo = {
     username: string;
     email: string;
 };
 
-const accessTokenAtom = atomWithStorage<null | string>("accessToken", null);
-const refreshTokenAtom = atomWithStorage<null | string>("refreshToken", null);
-const userInfoAtom = atomWithStorage<null | UserInfo>("userInfo", null);
+const accessTokenAtom = atomWithStorage<null | string>(
+    "accessToken",
+    JSON.parse(localStorage.getItem("accessToken") || "null"),
+);
+const refreshTokenAtom = atomWithStorage<null | string>(
+    "refreshToken",
+    JSON.parse(localStorage.getItem("refreshToken") || "null"),
+);
+const userInfoAtom = atomWithStorage<null | UserInfo>(
+    "userInfo",
+    JSON.parse(localStorage.getItem("userInfo") || "null"),
+);
+const isLoggedInAtom = atomWithStorage<null | boolean>(
+    "isLoggedIn",
+    JSON.parse(localStorage.getItem("isLoggedIn") || "null"),
+);
 
 const useAuth = () => {
     const [accessToken, setAccessToken] = useAtom(accessTokenAtom);
     const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
     const [userInfo, setUserInfo] = useAtom(userInfoAtom);
 
-    const isLoginned = !!accessToken;
+    // 수정 필요: 유효성이 미검증된 토큰의 존재만 확인하는 문제
+    const getIsLoggedIn = !!accessToken;
 
     return {
         accessToken,
@@ -24,7 +39,7 @@ const useAuth = () => {
         setRefreshToken,
         userInfo,
         setUserInfo,
-        isLoginned,
+        getIsLoggedIn,
     };
 };
 
