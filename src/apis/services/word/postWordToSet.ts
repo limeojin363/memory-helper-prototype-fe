@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type PostWordToSetRequestData = {
     word: string;
@@ -23,6 +23,6 @@ const PostWordToSetRequest = (
     setId: number,
     data: PostWordToSetRequestData,
 ): ResponsePromise<WrappedObject<PostWordToSetResponseData>> =>
-    KyInstance.post(`wordsets/${setId}`, { json: data });
+    apiClient.post(`wordsets/${setId}`, { json: data });
 
 export default PostWordToSetRequest;

@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type WordInSet = {
     wordId: number;
@@ -21,6 +21,6 @@ type GetWordsInWordSetResponseData = {
 const GetWordsInWordSetRequest = (
     setId: number,
 ): ResponsePromise<WrappedObject<GetWordsInWordSetResponseData>> =>
-    KyInstance.get(`wordsets/${setId}`);
+    apiClient.get(`wordsets/${setId}`);
 
 export default GetWordsInWordSetRequest;

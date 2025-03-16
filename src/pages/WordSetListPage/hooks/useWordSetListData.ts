@@ -5,8 +5,8 @@ const useWordSetListData = () => {
     const { data } = useQuery({
         queryKey: ["wordSetList"],
         queryFn: async () => {
-            const { data } = await (await GetMyWordSetsRequest()).json();
-
+            const { data } = await GetMyWordSetsRequest();
+    
             return data;
         },
     });

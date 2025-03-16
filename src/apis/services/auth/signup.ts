@@ -1,4 +1,4 @@
-import KyInstance from "../../core/ky";
+import { baseApiClient } from "../../core/clients";
 
 type SignupBody = {
     username: string;
@@ -7,6 +7,6 @@ type SignupBody = {
 };
 
 const SignupRequest = (body: SignupBody) =>
-    KyInstance.post("auth/signup", { json: body });
+    baseApiClient.post("auth/signup", { json: body });
 
 export default SignupRequest;

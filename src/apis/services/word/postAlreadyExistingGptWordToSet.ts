@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type PostAlreadyExistingGptWordToSetResponseData = {
     wordId: number;
@@ -17,6 +17,6 @@ const PostAlreadyExistingGptWordToSetRequest = (
     wordId: number,
 ): ResponsePromise<
     WrappedObject<PostAlreadyExistingGptWordToSetResponseData>
-> => KyInstance.post(`wordsets/${setId}/word/gpt/${wordId}`);
+> => apiClient.post(`wordsets/${setId}/word/gpt/${wordId}`);
 
 export default PostAlreadyExistingGptWordToSetRequest;

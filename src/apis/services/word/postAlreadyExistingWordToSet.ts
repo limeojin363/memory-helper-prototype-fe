@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type PostExistingWordToSetResponseData = {
     wordId: number;
@@ -16,6 +16,6 @@ const PostExistingWordToSetRequest = (
     setId: number,
     wordId: number,
 ): ResponsePromise<WrappedObject<PostExistingWordToSetResponseData>> =>
-    KyInstance.post(`wordsets/${setId}/word/${wordId}`);
+    apiClient.post(`wordsets/${setId}/word/${wordId}`);
 
 export default PostExistingWordToSetRequest;
