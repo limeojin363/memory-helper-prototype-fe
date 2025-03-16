@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type PostWordExistsResponseData = {
     wordId: number;
@@ -15,6 +15,6 @@ type PostWordExistsResponseData = {
 const PostWordExistsRequest = (
     word: string,
 ): ResponsePromise<WrappedObject<PostWordExistsResponseData>> =>
-    KyInstance.post("word/exists", { json: { word } });
+    apiClient.post("word/exists", { json: { word } });
 
 export default PostWordExistsRequest;

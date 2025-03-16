@@ -1,5 +1,4 @@
-import { ResponsePromise } from "ky";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 import { WrappedObject } from "../../core/type";
 
 type WordSetDTO = {
@@ -11,8 +10,7 @@ type WordSetDTO = {
 
 type GetMyWordSetsResponse = WordSetDTO[];
 
-const GetMyWordSetsRequest = (): ResponsePromise<
-    WrappedObject<GetMyWordSetsResponse>
-> => KyInstance.get("wordsets/all");
+const GetMyWordSetsRequest = async () =>
+    apiClient.get<WrappedObject<GetMyWordSetsResponse>>("wordsets/all").json();
 
 export default GetMyWordSetsRequest;

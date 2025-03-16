@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
-import KyInstance from "../../core/ky";
 import { WrappedObject } from "../../core/type";
+import { baseApiClient } from "../../core/clients";
 
 type GetUserResponse = {
     username: string;
@@ -8,6 +8,6 @@ type GetUserResponse = {
 };
 
 const GetUserRequest = (): ResponsePromise<WrappedObject<GetUserResponse>> =>
-    KyInstance.get("auth/user");
+    baseApiClient.get("auth/user");
 
 export default GetUserRequest;

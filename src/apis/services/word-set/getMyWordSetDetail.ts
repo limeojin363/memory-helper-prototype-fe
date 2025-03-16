@@ -1,5 +1,5 @@
 import { ResponsePromise } from "ky";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 import { WrappedObject } from "../../core/type";
 
 
@@ -18,6 +18,6 @@ export type PairItem = {
 const GetMyWordSetDetailRequest = (
     wordSetId: string,
 ): ResponsePromise<WrappedObject<PairItem[]>> =>
-    KyInstance.get(`wordsets/${wordSetId}`);
+    apiClient.get(`wordsets/${wordSetId}`);
 
 export default GetMyWordSetDetailRequest;

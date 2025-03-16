@@ -1,6 +1,5 @@
-import KyInstance from "../../core/ky";
+import { baseApiClient } from "../../core/clients";
 
-const LogoutRequest = () =>
-    KyInstance.post("auth/logout");
+const LogoutRequest = () => baseApiClient.post("auth/logout");
 
 export default LogoutRequest;

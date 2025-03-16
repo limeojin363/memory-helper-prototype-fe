@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type PostGptWordToSetRequestData = {
     word: string;
@@ -23,6 +23,6 @@ const PostGptWordToSetRequest = (
     setId: number,
     requestData: PostGptWordToSetRequestData,
 ): ResponsePromise<WrappedObject<PostGptWordToSetResponseData>> =>
-    KyInstance.post(`wordsets/gpt/${setId}`, { json: requestData });
+    apiClient.post(`wordsets/gpt/${setId}`, { json: requestData });
 
 export default PostGptWordToSetRequest;

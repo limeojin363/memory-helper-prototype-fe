@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
-import KyInstance from "../../core/ky";
 import { WrappedObject } from "../../core/type";
+import { baseApiClient } from "../../core/clients";
 
 type LoginBody = {
     email: string;
@@ -16,6 +16,6 @@ type LoginResponse = {
 const LoginRequest = (
     body: LoginBody,
 ): ResponsePromise<WrappedObject<LoginResponse>> =>
-    KyInstance.post("auth/login", { json: body });
+    baseApiClient.post("auth/login", { json: body });
 
 export default LoginRequest;

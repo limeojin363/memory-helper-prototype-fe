@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type DeleteWordResponseData = {
     wordId: number;
@@ -14,6 +14,6 @@ type DeleteWordResponseData = {
 const DeleteWordRequest = (
     id: number,
 ): ResponsePromise<WrappedObject<DeleteWordResponseData>> =>
-    KyInstance.delete(`word/${id}`);
+    apiClient.delete(`word/${id}`);
 
 export default DeleteWordRequest;

@@ -1,6 +1,6 @@
 import { ResponsePromise } from "ky";
 import { WrappedObject } from "../../core/type";
-import KyInstance from "../../core/ky";
+import apiClient from "../../core/clients";
 
 type DeleteWordFromWordSetResponseData = {
     wordId: number;
@@ -15,6 +15,6 @@ const DeleteWordFromWordSetRequest = (
     setId: number,
     wordId: number,
 ): ResponsePromise<WrappedObject<DeleteWordFromWordSetResponseData>> =>
-    KyInstance.delete(`wordsets/${setId}/word/${wordId}`);
+    apiClient.delete(`wordsets/${setId}/word/${wordId}`);
 
 export default DeleteWordFromWordSetRequest;
