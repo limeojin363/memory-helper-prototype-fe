@@ -1,3 +1,5 @@
+import { TypeOfPartOfSpeech } from "../../../components/type-selector/types";
+
 export type InputPair = {
     id: string;
     engValue: string;
@@ -23,12 +25,10 @@ export type KorStatus =
     | "SELECTABLE-UNSELECTED"
     | "SELECTABLE-SELECTED";
 
-export type TypeOfPartOfSpeech = "noun" | "verb" | "adjective" | "adverb";
-
 export type KorItem = {
     sourceType: KorSourceType;
     status: KorStatus;
     id: string;
     value: string;
-    type: null | TypeOfPartOfSpeech;
+    type: null | { value: TypeOfPartOfSpeech; isFixed: boolean };
 };

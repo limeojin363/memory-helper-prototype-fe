@@ -4,10 +4,7 @@ import { korInputAtomFamily } from "../states/atoms";
 import { usePair } from "../states/usePair";
 import uuid from "react-uuid";
 import HTTPWordRequest from "../../../../apis/services/word";
-import {
-    ListDataConverter,
-    WordConverter,
-} from "../../../WordSetDetailPage/hooks/useWordSetDetailData";
+import { WordConverter } from "../../../WordSetDetailPage/hooks/useWordSetDetailData";
 
 const useSubmitEngInput = (pairId: string) => {
     const { pair, setPair } = usePair(pairId);
@@ -45,27 +42,7 @@ const useSubmitEngInput = (pairId: string) => {
                     engStatus: "OK",
                     korIds: [...prev.korIds, id],
                 }));
-
-                // setTimeout(() => {
-
-                //     res.data.forEach(({ id, value }) => {
-                //         getDefaultStore().set(korInputAtomFamily(id), {
-                //             id,
-                //             value,
-                //             sourceType: "OFFERED",
-                //             status: "SELECTABLE-UNSELECTED",
-                //             type: null,
-                //         });
-                //     });
-
-                //     setPair((prev) => ({ ...prev, engStatus: "OK" }));
-
-                //     setPair((prev) => ({
-                //         ...prev,
-                //         korIds: res.data.map((item) => item.id),
-                //     }));
-                // }, 1000);
-            });
+           });
         },
         onError: () => {
             setPair((prev) => ({

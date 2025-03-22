@@ -90,6 +90,8 @@ const S = {
         padding: 12px 16px;
         transition: all 0.1s;
 
+        flex: 1;
+
         ${({ status }) => KorStyleMap[status]}
     `,
     EngInput: styled.input<SEngInputProps>`
@@ -164,7 +166,11 @@ const S = {
     KorItemWrapper: styled.div`
         position: relative;
         display: flex;
-        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    `,
+    TypeSelectorWrapper: styled.div`
+        position: relative;
     `,
     EngInputWrapper: styled.div`
         position: relative;

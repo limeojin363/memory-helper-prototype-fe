@@ -27,7 +27,6 @@ const S = {
     KorAreaContainer: styled.div`
         display: flex;
         flex-direction: column;
-        gap: 4px;
     `,
     KorItemList: styled.div`
         display: flex;
