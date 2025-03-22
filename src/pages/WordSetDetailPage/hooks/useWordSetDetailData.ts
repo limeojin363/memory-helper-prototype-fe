@@ -3,7 +3,7 @@ import { ComponentViewDataItem } from "../components/WordSetList";
 import HTTPWordSetRequest from "../../../apis/services/word-set";
 import { PairItem } from "../../../apis/services/word-set/getMyWordSetDetail";
 
-const typeList = ["noun", "verb", "adjective", "adverb"] as const;
+const typeValueList = ["noun", "verb", "adjective", "adverb"] as const;
 
 export class ListDataConverter {
     createdAt: Date;
@@ -29,9 +29,18 @@ export const WordConverter = {
         }) {
             this.clientData = {
                 engWord: data.word,
-                korWords: typeList
-                    .map((type) => data[type].map((word) => ({ word, type })))
-                    .flat(),
+                korWords: typeValueList
+                    .map((typeValue) =>
+                        data[typeValue].map((word) => ({
+                            word,
+                            type: {
+                                value: typeValue,
+                                isFixed: true,
+                            },
+                        })),
+                    )
+                    .flat()
+                    .filter((item) => item.word !== ""),
             };
         }
     },

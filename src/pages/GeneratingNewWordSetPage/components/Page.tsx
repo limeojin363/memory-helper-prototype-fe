@@ -4,6 +4,7 @@ import Header from "../../../components/layouts/mobile/Header";
 import Icon from "../../../components/icons/Icon";
 import WordInputPairItem from "./InputPairItem";
 import { usePageState } from "../hooks/states/usePageStateNew";
+import Select from "../../../components/type-selector/TypeSelector";
 
 const NewWord = () => {
     const navigate = useNavigate();

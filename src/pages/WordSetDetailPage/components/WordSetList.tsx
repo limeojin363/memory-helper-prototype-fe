@@ -6,7 +6,10 @@ export type ComponentViewDataItem = {
     engWord: string;
     korWords: {
         word: string;
-        type: "noun" | "verb" | "adjective" | "adverb";
+        type: null | {
+            value: "noun" | "verb" | "adjective" | "adverb";
+            isFixed: boolean;
+        };
     }[];
 };
 
@@ -30,7 +33,7 @@ const WordSetItem = ({ data }: { data: ComponentViewDataItem }) => {
                     {data.korWords.map((korWord, index) => (
                         <Text
                             key={index}
-                            label={`(${NounViewMap[korWord.type]}) ${korWord.word}`}
+                            label={`${korWord.word}`}
                             fontStyle="body-xl"
                         />
                     ))}

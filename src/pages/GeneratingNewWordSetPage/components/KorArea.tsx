@@ -8,9 +8,10 @@ import S from "./styled";
 import { KorStatus } from "../types";
 import { useAtomValue } from "jotai";
 import { getPairStatusAtom } from "../hooks/states/atoms";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useKorInput } from "../hooks/states/useKorInput";
 import { usePair } from "../hooks/states/usePair";
+import TypeSelector from "../../../components/type-selector/TypeSelector";
 interface KorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     status: KorStatus;
     value: string;
@@ -76,7 +77,7 @@ const KorArea = ({ pairId }: { pairId: string }) => {
 
 const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
     const { korInput, setKorInput } = useKorInput(korId);
-    const { value, status, sourceType } = korInput;
+    const { value, status, sourceType, type } = korInput;
     const { toggleKorOption } = useToggleKorOption(korId);
     const { setPair } = usePair(pairId);
 
@@ -104,6 +105,7 @@ const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
 
     return (
         <S.KorItemWrapper>
+            <TypeSelector id={korId} />
             <KorInput
                 placeholder="영단어를 먼저 입력해주세요"
                 onClick={onClickKorItem}
