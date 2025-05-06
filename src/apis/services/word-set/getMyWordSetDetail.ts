@@ -16,7 +16,7 @@ export type PairItem = {
 };
 
 const GetMyWordSetDetailRequest = (
-    wordSetId: string,
+    wordSetId: number,
 ): ResponsePromise<WrappedObject<PairItem[]>> =>
     apiClient.get(`wordsets/${wordSetId}`);
 

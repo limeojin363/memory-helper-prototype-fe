@@ -1,18 +1,9 @@
 import { getDefaultStore, useAtom } from "jotai";
 import uuid from "react-uuid";
 import { korInputAtomFamily, pairAtomFamily, pairIdListAtom } from "./atoms";
-import { useEffect } from "react";
-import HTTPWordRequest from "../../../../apis/services/word";
 
 export const usePageState = () => {
     const [pairIdList, setPairIdList] = useAtom(pairIdListAtom);
-
-    useEffect(() => {
-        HTTPWordRequest.PostWordExists("word")
-            .then((response) => response.json())
-            .catch((error) => console.error("Error:", error))
-            .then((response) => console.log("Success:", response))
-    }, []);
 
     const addNewPair = () => setPairIdList((prev) => [...prev, uuid()]);
 

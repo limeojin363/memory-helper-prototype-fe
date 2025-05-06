@@ -31,5 +31,5 @@ const RootLayout = styled.div`
     flex-direction: column;
 
     align-items: center;
-    height: 100dvh;
+    min-height: 100dvh;
 `;

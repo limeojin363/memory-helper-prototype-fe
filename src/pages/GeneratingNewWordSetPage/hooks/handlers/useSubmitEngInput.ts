@@ -1,4 +1,4 @@
-import { getDefaultStore, useAtom } from "jotai";
+import { getDefaultStore } from "jotai";
 import { useMutation } from "@tanstack/react-query";
 import { korInputAtomFamily } from "../states/atoms";
 import { usePair } from "../states/usePair";
@@ -42,7 +42,7 @@ const useSubmitEngInput = (pairId: string) => {
                     engStatus: "OK",
                     korIds: [...prev.korIds, id],
                 }));
-           });
+            });
         },
         onError: () => {
             setPair((prev) => ({
