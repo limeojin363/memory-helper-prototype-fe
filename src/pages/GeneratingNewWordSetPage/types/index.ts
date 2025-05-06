@@ -30,5 +30,8 @@ export type KorItem = {
     status: KorStatus;
     id: string;
     value: string;
-    type: null | { value: TypeOfPartOfSpeech; isFixed: boolean };
+    type: null | {
+        value: "noun" | "verb" | "adjective" | "adverb";
+        isFixed: boolean;
+    };
 };

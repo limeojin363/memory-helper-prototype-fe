@@ -5,6 +5,7 @@ import Header from "../../../components/layouts/mobile/Header";
 import WordSetList, { ComponentViewDataItem } from "./WordSetList";
 import Text from "../../../components/texts/Text";
 import { useNavigate } from "@tanstack/react-router";
+import useDeleteWordSet from "../hooks/useDeleteWordSet";
 
 export type Data = {
     createdAt: Date;
@@ -19,12 +20,14 @@ const formatDate = (date: Date) => {
     return `${year}-${month}-${day}`;
 };
 
-const WordSetDetail = ({ wordsetId }: { wordsetId: string }) => {
+const WordSetDetail = ({ wordsetId }: { wordsetId: number }) => {
     const { data, isPending, isError } = useWordSetDetailData(wordsetId);
 
     const navigate = useNavigate();
 
     const goBack = () => navigate({ to: "/words" });
+
+    const deleteHadler = useDeleteWordSet(wordsetId);
 
     if (isError) {
         return (
@@ -52,6 +55,7 @@ const WordSetDetail = ({ wordsetId }: { wordsetId: string }) => {
                     fontStyle="caption-md"
                 />
             </S.DateWrapper>
+            <button onClick={deleteHadler}>삭제</button>
             <WordSetList list={data.list} />
         </S.PageWrapper>
     );

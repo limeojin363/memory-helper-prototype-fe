@@ -2,6 +2,7 @@ import { atom, PrimitiveAtom } from "jotai";
 import { InputPair, KorItem, PairStatus } from "../../types";
 import { atomFamily } from "jotai/utils";
 import deepEqual from "fast-deep-equal";
+import uuid from "react-uuid";
 
 const makeNewPairItem = (id: string): InputPair => ({
     id,
@@ -17,6 +18,8 @@ const makeNewCustomKorItem = (id: string): KorItem => ({
     status: "INITIAL",
     type: null,
 });
+
+export const newWordSetIdAtom = atom(uuid());
 
 // pairId 리스트
 export const pairIdListAtom = atom<string[]>([]);
@@ -56,5 +59,38 @@ export const getPairStatusAtom = (pairId: string) => {
 
                 return "SELECTING-KOR";
         }
+    });
+};
+
+export const getPairDataForServerAtom = (pairId: string) => {
+    return atom<{
+        wordId: number;
+        word: string;
+        noun: string[];
+        verb: string[];
+        adjective: string[];
+        adverb: string[];
+    }>((get) => {
+        const pair = get(pairAtomFamily(pairId));
+        const korIds = pair.korIds.map((korId) =>
+            get(korInputAtomFamily(korId)),
+        );
+
+        return {
+            wordId: 0,
+            word: pair.engValue,
+            noun: korIds
+                .filter((kor) => kor.type?.value === "noun")
+                .map((kor) => kor.value),
+            verb: korIds
+                .filter((kor) => kor.type?.value === "verb")
+                .map((kor) => kor.value),
+            adjective: korIds
+                .filter((kor) => kor.type?.value === "adjective")
+                .map((kor) => kor.value),
+            adverb: korIds
+                .filter((kor) => kor.type?.value === "adverb")
+                .map((kor) => kor.value),
+        };
     });
 };

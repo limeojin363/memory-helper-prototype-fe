@@ -4,7 +4,8 @@ import Header from "../../../components/layouts/mobile/Header";
 import Icon from "../../../components/icons/Icon";
 import WordInputPairItem from "./InputPairItem";
 import { usePageState } from "../hooks/states/usePageStateNew";
-import Select from "../../../components/type-selector/TypeSelector";
+import useCreateNewWordSet from "../hooks/handlers/useCreateNewWordSet";
+import useFinishGeneratingStep from "../hooks/handlers/useFinishGeneratingStep";
 
 const NewWord = () => {
     const navigate = useNavigate();
@@ -12,6 +13,13 @@ const NewWord = () => {
     const goBack = () => navigate({ to: "/words" });
 
     const { addNewPair, pairIdList } = usePageState();
+
+    const { data: newWordSetData } = useCreateNewWordSet();
+
+    const finish = useFinishGeneratingStep();
+
+    if (!newWordSetData) return null;
+
 
     return (
         <>
@@ -26,6 +34,11 @@ const NewWord = () => {
                     size={30}
                     onClick={addNewPair}
                 />
+                <button
+                    onClick={finish}
+                >
+                    제출하기
+                </button>
             </S.Root>
         </>
     );

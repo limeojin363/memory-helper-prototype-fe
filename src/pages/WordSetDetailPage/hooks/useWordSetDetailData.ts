@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ComponentViewDataItem } from "../components/WordSetList";
 import HTTPWordSetRequest from "../../../apis/services/word-set";
 import { PairItem } from "../../../apis/services/word-set/getMyWordSetDetail";
+import { AddGptWordResponse } from "../../../apis/services/word-set/addGptWord";
 
 const typeValueList = ["noun", "verb", "adjective", "adverb"] as const;
 
@@ -44,9 +45,15 @@ export const WordConverter = {
             };
         }
     },
+    ClientToServer: class {
+        serverData: AddGptWordResponse;
+        constructor(data: ComponentViewDataItem) {
+            
+        }
+    }
 };
 
-const useWordSetDetailData = (wordSetId: string) => {
+const useWordSetDetailData = (wordSetId: number) => {
     const { data, isPending, isError } = useQuery({
         queryKey: ["wordSetDetail", wordSetId],
         queryFn: async () => {
