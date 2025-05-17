@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import HttpAuthRequests from "../../../apis/services/auth";
+import AuthApi from "../../../apis/services/auth";
 import useAuth from "../../../hooks/useAuth";
 import { NavigateOptions, useNavigate } from "@tanstack/react-router";
 
@@ -13,7 +13,7 @@ const useLogin = ({
     const navigate = useNavigate();
 
     const { mutate } = useMutation({
-        mutationFn: HttpAuthRequests.Login,
+        mutationFn: AuthApi.Login,
         onSuccess: async (res) => {
             const { data } = await res.json();
 

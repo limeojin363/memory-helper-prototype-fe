@@ -1,6 +1,5 @@
 import { useAtom } from "jotai";
 import { atomWithStorage } from "jotai/utils";
-import HttpAuthRequests from "../apis/services/auth";
 
 type UserInfo = {
     username: string;
@@ -18,10 +17,6 @@ const refreshTokenAtom = atomWithStorage<null | string>(
 const userInfoAtom = atomWithStorage<null | UserInfo>(
     "userInfo",
     JSON.parse(localStorage.getItem("userInfo") || "null"),
-);
-const isLoggedInAtom = atomWithStorage<null | boolean>(
-    "isLoggedIn",
-    JSON.parse(localStorage.getItem("isLoggedIn") || "null"),
 );
 
 const useAuth = () => {

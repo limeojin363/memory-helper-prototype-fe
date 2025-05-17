@@ -1,5 +1,5 @@
 import ky, { BeforeRequestHook, BeforeRetryHook, HTTPError } from "ky";
-import HttpAuthRequests from "../services/auth";
+import AuthApi from "../services/auth";
 
 const HOST =
     "https://port-0-memory-helper-prototype-be-m6ekc447ebe44eb6.sel4.cloudtype.app";
@@ -28,7 +28,7 @@ const handleTokenRefresh: BeforeRetryHook = async ({ error, retryCount }) => {
 
     if (retryCount === DEFAULT_RETRY_LIMIT - 1) {
         window.location.href = "/login";
-        await HttpAuthRequests.Logout();
+        await AuthApi.Logout();
         return ky.stop;
     }
 
@@ -38,7 +38,7 @@ const handleTokenRefresh: BeforeRetryHook = async ({ error, retryCount }) => {
             throw new Error("refreshToken이 없음");
         }
         const { data } = await (
-            await HttpAuthRequests.TokenRefresh(refreshToken)
+            await AuthApi.TokenRefresh(refreshToken)
         ).json();
 
         localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
@@ -46,7 +46,7 @@ const handleTokenRefresh: BeforeRetryHook = async ({ error, retryCount }) => {
     } catch (error) {
         window.location.href = "/login";
         console.error("Token refresh 실패, 로그아웃", error);
-        await HttpAuthRequests.Logout();
+        await AuthApi.Logout();
         return ky.stop;
     }
 };
