@@ -1,4 +1,4 @@
-import { ApiFunc } from "../../index.types";
+import { ApiFunc } from "../../types";
 
 export type LoginFunc = ApiFunc<LoginReqBody, LoginResData>;
 

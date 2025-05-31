@@ -2,7 +2,7 @@ import AddWordToWordset from "./add-word-to-wordset";
 import CreateWordset from "./create-wordset";
 import DeleteWordInWordset from "./delete-word-in-wordset";
 import DeleteWordset from "./delete-wordset";
-import GetWordsInWordset from "./get-words-in-set";
+import GetWordsetDetail from "./get-wordset-detail";
 import GetAllWordsets from "./get-wordsets";
 import RenameWordset from "./rename-wordset";
 
@@ -11,7 +11,7 @@ const WordsetApi = {
     CreateWordset,
     DeleteWordInWordset,
     DeleteWordset,
-    GetWordsInWordset,
+    GetWordsetDetail,
     GetAllWordsets,
     RenameWordset,
 };

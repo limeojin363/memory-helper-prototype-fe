@@ -1,6 +1,9 @@
-import { ApiFunc } from "../../index.types";
+import { ApiFunc } from "../../types";
 
-export type DeleteWordsetFunc = ApiFunc<DeleteWordsetReqParam, DeleteWordsetResData>;
+export type DeleteWordsetFunc = ApiFunc<
+    DeleteWordsetReqParam,
+    DeleteWordsetResData
+>;
 
 export type DeleteWordsetReqParam = {
     id: number; // 삭제할 단어셋 ID

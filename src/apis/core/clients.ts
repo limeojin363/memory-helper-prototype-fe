@@ -38,7 +38,7 @@ const handleTokenRefresh: BeforeRetryHook = async ({ error, retryCount }) => {
             throw new Error("refreshToken이 없음");
         }
         const { data } = await (
-            await AuthApi.TokenRefresh(refreshToken)
+            await AuthApi.TokenRefresh({ refreshToken })
         ).json();
 
         localStorage.setItem("accessToken", JSON.stringify(data.accessToken));
@@ -58,7 +58,7 @@ export const baseApiClient = ky.create({
     },
 });
 
-const apiClient = ky.extend({
+const authenticatedApiClient = ky.extend({
     prefixUrl: HOST + PATHNAME_POSTFIX,
     timeout: 10000,
     retry: {
@@ -73,4 +73,4 @@ const apiClient = ky.extend({
     },
 });
 
-export default apiClient;
+export default authenticatedApiClient;

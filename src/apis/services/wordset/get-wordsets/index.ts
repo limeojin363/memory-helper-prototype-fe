@@ -1,7 +1,7 @@
-import { baseApiClient } from "../../../core/clients";
+import authenticatedApiClient from "../../../core/clients";
 import { GetAllWordsetsFunc } from "./index.types";
 
 const GetAllWordsets: GetAllWordsetsFunc = () =>
-    baseApiClient.get("wordsets/all");
+    authenticatedApiClient.get("wordsets/all");
 
 export default GetAllWordsets;

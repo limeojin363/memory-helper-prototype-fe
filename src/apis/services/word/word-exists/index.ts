@@ -1,7 +1,7 @@
-import { baseApiClient } from "../../../core/clients";
+import authenticatedApiClient from "../../../core/clients";
 import { WordExistsFunc } from "./index.types";
 
 const WordExists: WordExistsFunc = ({ word }) =>
-    baseApiClient.post("word/exists", { json: { word } });
+    authenticatedApiClient.post("word/exists", { json: { word } });
 
 export default WordExists;

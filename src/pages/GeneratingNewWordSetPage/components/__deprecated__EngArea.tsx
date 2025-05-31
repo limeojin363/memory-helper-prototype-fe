@@ -1,6 +1,5 @@
 import S from "./styled";
 import Text from "../../../components/texts/Text";
-import useSubmitEngInput from "../hooks/handlers/useSubmitEngInput";
 import Icon from "../../../components/icons/Icon";
 import { ClipLoader } from "react-spinners";
 import { Colors } from "../../../designs/colors";
@@ -11,8 +10,6 @@ const EngArea = ({ pairId }: { pairId: string }) => {
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setPair((prev) => ({ ...prev, engValue: e.target.value }));
-
-    const submitEngInput = useSubmitEngInput(pairId);
 
     const editable =
         pair.engStatus === "INITIAL" || pair.engStatus === "NEEDS-CORRECTION";
@@ -39,7 +36,7 @@ const EngArea = ({ pairId }: { pairId: string }) => {
                                 colorName="neutral-dark-darkest"
                                 iconName="submit"
                                 size={12}
-                                onClick={submitEngInput}
+                                onClick={() => {}}
                             />
                         </S.IcButtonWrapper>
                     </S.SideIconPositionor>

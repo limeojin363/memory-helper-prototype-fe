@@ -1,6 +1,9 @@
-import { ApiFunc } from "../../index.types";
+import { ApiFunc } from "../../types";
 
-export type CreateWordsetFunc = ApiFunc<CreateWordsetReqBody, CreateWordsetResData>;
+export type CreateWordsetFunc = ApiFunc<
+    CreateWordsetReqBody,
+    CreateWordsetResData
+>;
 
 export type CreateWordsetReqBody = {
     setName: string;

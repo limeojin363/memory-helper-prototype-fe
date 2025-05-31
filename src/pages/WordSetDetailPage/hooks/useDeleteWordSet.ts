@@ -1,17 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
-import DeleteWordSetRequest from "../../../apis/services/word-set/deleteWordSet";
+import WordsetApi from "../../../apis/services/wordset";
 
 const useDeleteWordSet = (setId: number) => {
-   const {mutate: handler}=  useMutation({
+    const { mutate: handler } = useMutation({
         mutationFn: async () => {
-            await DeleteWordSetRequest(setId);
+            WordsetApi.DeleteWordset({ id: setId });
         },
         onSuccess: () => {
             window.location.href = "/words";
         },
     });
 
-    return ()=>handler();
+    return () => handler();
 };
 
 export default useDeleteWordSet;

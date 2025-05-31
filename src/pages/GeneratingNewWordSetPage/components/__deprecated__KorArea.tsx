@@ -2,7 +2,6 @@ import { ClipLoader } from "react-spinners";
 import Icon from "../../../components/icons/Icon";
 import Text from "../../../components/texts/Text";
 import { Colors } from "../../../designs/colors";
-import useSubmitCustomKorInput from "../hooks/handlers/useSubmitKorInput";
 import useToggleKorOption from "../hooks/handlers/useToggleKorOption";
 import S from "./styled";
 import { KorStatus } from "../types";
@@ -12,6 +11,7 @@ import { useMemo } from "react";
 import { useKorInput } from "../hooks/states/useKorInput";
 import { usePair } from "../hooks/states/usePair";
 import TypeSelector from "../../../components/type-selector/TypeSelector";
+
 interface KorInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     status: KorStatus;
     value: string;
@@ -77,7 +77,7 @@ const KorArea = ({ pairId }: { pairId: string }) => {
 
 const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
     const { korInput, setKorInput } = useKorInput(korId);
-    const { value, status, sourceType, type } = korInput;
+    const { value, status, sourceType } = korInput;
     const { toggleKorOption } = useToggleKorOption(korId);
     const { setPair } = usePair(pairId);
 
@@ -90,8 +90,6 @@ const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
         )
             toggleKorOption();
     };
-
-    const onClickCustomItemSubmit = useSubmitCustomKorInput(korId);
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
         setKorInput((prev) => ({ ...prev, value: e.target.value }));
@@ -118,7 +116,6 @@ const KorItem = ({ korId, pairId }: { korId: string; pairId: string }) => {
                 <S.SideIconPositionor right={4}>
                     <S.IcButtonWrapper size={24}>
                         <Icon
-                            onClick={onClickCustomItemSubmit}
                             colorName="neutral-dark-darkest"
                             iconName="submit"
                             size={20}

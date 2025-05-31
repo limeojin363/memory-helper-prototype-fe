@@ -1,59 +1,65 @@
-import { useNavigate } from "@tanstack/react-router";
-import styled from "@emotion/styled";
-import Header from "../../../components/layouts/mobile/Header";
-import Icon from "../../../components/icons/Icon";
-import WordInputPairItem from "./InputPairItem";
-import { usePageState } from "../hooks/states/usePageStateNew";
-import useCreateNewWordSet from "../hooks/handlers/useCreateNewWordSet";
-import useFinishGeneratingStep from "../hooks/handlers/useFinishGeneratingStep";
+import WordList, { WordItemProps } from "./ListView/List";
+import { useState } from "react";
+import DetailViewModal from "./ModalView/Modal";
+import {
+    useInitializeWordset,
+    useWordsetDetailData,
+} from "../hooks/useServerData";
+import { TypeKey } from "../../WordSetDetailPage/components/WordSetList";
+import { Provider } from "jotai";
 
-const NewWord = () => {
-    const navigate = useNavigate();
-
-    const goBack = () => navigate({ to: "/words" });
-
-    const { addNewPair, pairIdList } = usePageState();
-
-    const { data: newWordSetData } = useCreateNewWordSet();
-
-    const finish = useFinishGeneratingStep();
-
-    if (!newWordSetData) return null;
-
+// 입력한 이름으로 세트 생성
+const EnterName = ({
+    initialize,
+}: {
+    initialize: (name: string) => unknown;
+}) => {
+    const [value, setValue] = useState("");
 
     return (
-        <>
-            <Header title="New Word Set Generating" goBack={goBack} />
-            <S.Root>
-                {pairIdList.map((pairId) => (
-                    <WordInputPairItem key={pairId} pairId={pairId} />
-                ))}
-                <Icon
-                    colorName="neutral-dark-darkest"
-                    iconName="plus"
-                    size={30}
-                    onClick={addNewPair}
-                />
-                <button
-                    onClick={finish}
-                >
-                    제출하기
-                </button>
-            </S.Root>
-        </>
+        <form
+            onSubmit={(e) => {
+                e.preventDefault();
+                initialize(value);
+            }}
+        >
+            <input value={value} onChange={(e) => setValue(e.target.value)} />
+        </form>
     );
 };
 
-export default NewWord;
+const listProcessCallback = (item: {
+    wordId: number;
+    word: string;
+    meaning: Array<{
+        type: TypeKey;
+        value: string;
+    }>;
+}): WordItemProps & {key: number} => ({
+    eng: item.word,
+    firstMeaning: item.meaning[0].value,
+    meaningCount: item.meaning.length,
+    key: item.wordId,
+    id: item.wordId,
+});
 
-const S = {
-    Root: styled.div`
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: center;
+const GeneratingNewWordSetPage = () => {
+    const initialize = useInitializeWordset();
+    const data = useWordsetDetailData();
 
-        width: calc(100% - 32px);
-        margin: 20px 16px 0;
-    `,
+    const initialized = !!data;
+
+    if (!initialized) return <EnterName initialize={initialize} />;
+
+    const processedList = data.list.map(listProcessCallback);
+
+    return (
+        // modalStatusAtom은 Provider 내부에서만 생존한다
+        <Provider>
+            <WordList listData={processedList} />
+            <DetailViewModal />
+        </Provider>
+    );
 };
+
+export default GeneratingNewWordSetPage;
