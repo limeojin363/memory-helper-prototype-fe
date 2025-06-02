@@ -1,41 +1,46 @@
 import styled from "@emotion/styled";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import { TypeKey } from "../../../WordSetDetailPage/components/WordSetList";
 import { useMutation } from "@tanstack/react-query";
 import WordApi from "../../../../apis/services/word";
 import { getDataFromApiRes } from "../../../../apis/services";
 import WordsetApi from "../../../../apis/services/wordset";
 import { AddWordToSetReqParam } from "../../../../apis/services/wordset/add-word-to-wordset/index.types";
-import { useWordsetId } from "../../hooks/useServerData";
-import Text from "../../../../components/texts/Text";
+import Text, { FontStyleMap } from "../../../../components/texts/Text";
 import { Colors } from "../../../../designs/colors";
 import Icon from "../../../../components/icons/Icon";
 import { ClipLoader } from "react-spinners";
 import { queryClient } from "../../../../routes/__root";
 import TypeSelector from "./TypeSelector";
 import { modalStatusAtom } from "../../hooks/useModalState";
-import { useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { wordsetIdAtom } from "../../hooks/useServerData";
 
-const useEditorState = () => {
-    const [state, setState] = useState<{
-        word: string;
-        meanings: {
-            type: TypeKey;
-            value: string;
-        }[];
-    }>(() => ({
-        word: "",
-        meanings: [
-            {
-                type: "noun",
-                value: "",
-            },
-        ],
-    }));
+export type EditorState = {
+    word: string;
+    meanings: {
+        type: TypeKey;
+        value: string;
+    }[];
+};
+
+const getEmptyState = (): EditorState => ({
+    word: "",
+    meanings: [],
+});
+
+const useEditorState = (initialState?: EditorState) => {
+    const [state, setState] = useState<EditorState>(
+        initialState ?? getEmptyState(),
+    );
+
+    useEffect(() => {
+        setState(initialState ?? getEmptyState());
+    }, [initialState]);
 
     const setModalStatus = useSetAtom(modalStatusAtom);
 
-    const wordsetId = useWordsetId();
+    const wordsetId = useAtomValue(wordsetIdAtom);
 
     const addCustomMeaning = () =>
         setState((prev) => ({
@@ -129,18 +134,24 @@ const useEditorState = () => {
 };
 
 // 단어 편집 - 새로 생성 or 이미 존재하는 Item을 수정
-const WordDetailEdit = ({ mode = "CREATE" }: { mode: "MODIFY" | "CREATE" }) => {
+const WordDetailEdit = ({
+    initialState,
+    mode,
+}: {
+    initialState?: EditorState;
+    mode: "CREATE" | "MODIFY";
+}) => {
     const {
         state: { word, meanings },
-        loadServerMeanings,
         isLoadingMeanings,
+        loadServerMeanings,
         addCustomMeaning,
         changeMeaningByIdx,
         changeTypeByIdx,
         deleteMeaningByIdx,
         changeWord,
         submitWord,
-    } = useEditorState();
+    } = useEditorState(initialState);
 
     return (
         <S.Root>
@@ -183,19 +194,31 @@ const EngArea = ({
 }) => {
     const showLoadButton = !isLoadingMeanings && !!value;
 
+    const inputKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key !== "Enter") return;
+        if (!showLoadButton) return;
+        loadServerMeanings();
+    };
+
     return (
         <S.EngAreaWrapper>
             <Text fontStyle="heading-5" label="Eng" />
             <S.EngInputWrapper>
-                <S.Input onChange={onChange} value={value} />
+                <S.Input
+                    onKeyDown={inputKeyDownHandler}
+                    onChange={onChange}
+                    value={value}
+                />
                 {showLoadButton && (
                     <S.SideIconPositionor right={4}>
-                        <S.IcButtonWrapper size={24}>
+                        <S.IcButtonWrapper
+                            onClick={loadServerMeanings}
+                            size={24}
+                        >
                             <Icon
                                 colorName="neutral-dark-darkest"
                                 iconName="submit"
                                 size={12}
-                                onClick={loadServerMeanings}
                             />
                         </S.IcButtonWrapper>
                     </S.SideIconPositionor>
@@ -230,16 +253,55 @@ const KorArea = ({
     deleteMeaningByIdx: (idx: number) => void;
     addCustomMeaning: () => void;
 }) => {
+    const inputKeyDownHandler =
+        (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key !== "Enter") return;
+
+            if (!e.shiftKey) {
+                if (meanings.length - 1 === idx) {
+                    addCustomMeaning();
+                    setTimeout(() => {
+                        const NextInput = document.querySelector(
+                            `input[data-idx="${idx + 1}"]`,
+                        ) as HTMLInputElement | null;
+                        NextInput?.focus();
+                    });
+                } else {
+                    const NextInput = document.querySelector(
+                        `input[data-idx="${idx + 1}"]`,
+                    ) as HTMLInputElement | null;
+                    NextInput?.focus();
+                }
+            } else {
+                if (idx === 0) return;
+                else {
+                    const PrevInput = document.querySelector(
+                        `input[data-idx="${idx - 1}"]`,
+                    ) as HTMLInputElement | null;
+                    PrevInput?.focus();
+                }
+            }
+        };
+
+    const onClickAddCustom = () => {
+        addCustomMeaning();
+        setTimeout(() => {
+            const CreatedInput = document.querySelector(
+                `input[data-idx="${meanings.length}"]`,
+            ) as HTMLInputElement | null;
+            CreatedInput?.focus();
+        })
+    }
+
     return (
         <S.KorAreaWrapper>
             <S.KorTopWrapper>
                 <Text fontStyle="heading-5" label="Kor" />
-                <S.IcButtonWrapper size={16}>
+                <S.IcButtonWrapper size={16} onClick={onClickAddCustom}>
                     <Icon
                         colorName="neutral-dark-darkest"
                         iconName="plus"
                         size={12}
-                        onClick={addCustomMeaning}
                     />
                 </S.IcButtonWrapper>
             </S.KorTopWrapper>
@@ -251,19 +313,23 @@ const KorArea = ({
                         value={item.type}
                     />
                     <S.Input
+                        data-idx={idx}
                         type="text"
                         value={item.value}
+                        onKeyDown={inputKeyDownHandler(idx)}
                         onChange={(e) =>
                             changeMeaningByIdx(idx, e.target.value)
                         }
                     />
                     <S.SideIconPositionor right={4}>
-                        <S.IcButtonWrapper size={24}>
+                        <S.IcButtonWrapper
+                            onClick={() => deleteMeaningByIdx(idx)}
+                            size={24}
+                        >
                             <Icon
                                 colorName="neutral-dark-darkest"
                                 iconName="trash"
                                 size={20}
-                                onClick={() => deleteMeaningByIdx(idx)}
                             />
                         </S.IcButtonWrapper>
                     </S.SideIconPositionor>
@@ -302,11 +368,12 @@ const S = {
         all: unset;
         border-radius: 12px;
         padding: 12px 16px;
-        transition: all 0.1s;
 
         width: 100%;
 
         box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
+
+        ${FontStyleMap["body-lg"]}
     `,
     KorAreaWrapper: styled.div`
         flex: 1;
@@ -319,11 +386,16 @@ const S = {
         display: flex;
         justify-content: space-between;
     `,
-    IcButtonWrapper: styled.div<{ size: number }>`
+    IcButtonWrapper: styled.button<{ size: number }>`
         ${({ size }) => `
             width: ${size}px;
             height: ${size}px;
         `}
+
+        border: none;
+        padding: 3px;
+        cursor: pointer;
+        box-shadow: 0 0 0 2px ${Colors["neutral-dark-darkest"]} inset;
 
         display: flex;
         align-items: center;
@@ -334,7 +406,7 @@ const S = {
         border-radius: 30%;
 
         :active {
-            transform: scale(0.9);
+            transform: scale(0.95);
         }
     `,
     KorMeaningItemWrapper: styled.div`
@@ -342,14 +414,6 @@ const S = {
         display: flex;
         align-items: center;
         gap: 8px;
-    `,
-    KorMeaningInput: styled.input`
-        all: unset;
-        border-radius: 12px;
-        padding: 12px 16px;
-        transition: all 0.1s;
-
-        flex: 1;
     `,
     TypeSelectorWrapper: styled.div`
         position: relative;
@@ -366,10 +430,16 @@ const S = {
     `,
     GenButton: styled.button`
         cursor: pointer;
-        background-color: ${Colors["neutral-light-medium"]};
-        box-shadow: 0 0 0 1px ${Colors["neutral-dark-dark"]} inset;
+        border: none;
+
+        background-color: ${Colors["neutral-light-dark"]};
+        box-shadow: 0 0 0 2px ${Colors["neutral-dark-dark"]} inset;
         border-radius: 12px;
         padding: 12px 16px;
+
+        :active {
+            transform: scale(0.99);
+        }
     `,
     InputsAreaWrapper: styled.div`
         display: flex;

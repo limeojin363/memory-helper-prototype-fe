@@ -68,7 +68,7 @@ const TypeSelector = ({
     );
 };
 
-const ViewOfType = {
+export const ViewOfType = {
     noun: "명",
     verb: "동",
     adjective: "형",
@@ -86,11 +86,18 @@ const S = {
         position: relative;
     `,
     DropdownButton: styled.button`
-        border: none;
-        border-radius: 30%;
         width: 28px;
         height: 28px;
+
+        border-radius: 30%;
+        border: none;
         box-shadow: 0 0 0 2px ${Colors["neutral-dark-darkest"]} inset;
+
+        background-color: ${Colors["neutral-light-dark"]};
+
+        :active {
+            transform: scale(0.95);
+        }
     `,
     DropdownList: styled.div<{
         isOpen: boolean;
@@ -112,10 +119,17 @@ const S = {
         gap: 4px;
     `,
     DropdownItem: styled.button`
-        border: none;
-        border-radius: 30%;
         width: 28px;
         height: 28px;
+
+        border-radius: 30%;
+        border: none;
         box-shadow: 0 0 0 2px ${Colors["neutral-dark-darkest"]} inset;
+
+        background-color: ${Colors["neutral-light-dark"]};
+
+        :active {
+            transform: scale(0.95);
+        }
     `,
 };

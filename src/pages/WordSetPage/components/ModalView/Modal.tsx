@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import ItemView from "./ItemView";
-import WordDetailEdit from "./ItemEdit";
+import WordDetailEdit, { EditorState } from "./ItemEdit";
 import {
     isCreateMode,
     isViewMode,
@@ -11,14 +10,21 @@ import { Colors } from "../../../../designs/colors";
 import Text from "../../../../components/texts/Text";
 
 const ModalContent = ({ status }: { status: ItemData | "CREATE-NEW-WORD" }) => {
-    if (isViewMode(status)) return <ItemView status={status} />;
-    else if (isCreateMode(status)) return <WordDetailEdit mode="CREATE" />;
+    if (isViewMode(status)) {
+        const initialState: EditorState = {
+            meanings: status.selectedData.meaning,
+            word: status.selectedData.word,
+        };
+        return <WordDetailEdit mode="MODIFY" initialState={initialState} />;
+    } else if (isCreateMode(status)) return <WordDetailEdit mode="CREATE" />;
 };
 
 const DetailViewModal = () => {
-    const { close, navigation, status } = useModalState();
+    const { close, infoForNavigation, status } = useModalState();
 
     if (!status) return null;
+
+    const { next, prev } = infoForNavigation!;
 
     return (
         <S.BlackBg>
@@ -34,12 +40,20 @@ const DetailViewModal = () => {
                     <ModalContent status={status} />
                 </S.MainArea>
                 <S.BottomButtonsArea>
-                    <S.BottomButton onClick={navigation.prev}>
-                        {"<-"}
+                    <S.BottomButton
+                        disabled={!prev.active}
+                        onClick={prev.navigation}
+                    >
+                        {prev.content}
                     </S.BottomButton>
-                    <S.BottomButton onClick={navigation.next}>
-                        {"->"}
-                    </S.BottomButton>
+                    {next ? (
+                        <S.BottomButton
+                            disabled={!next.active}
+                            onClick={next.navigation}
+                        >
+                            {next.content}
+                        </S.BottomButton>
+                    ) : null}
                 </S.BottomButtonsArea>
             </S.Wrapper>
         </S.BlackBg>
@@ -86,6 +100,10 @@ const S = {
         display: flex;
         justify-content: center;
         align-items: center;
+
+        :active {
+            transform: scale(0.97);
+        }
     `,
     MainArea: styled.div`
         flex: 1;
@@ -95,22 +113,33 @@ const S = {
         box-shadow: 0 0 0 2px ${Colors["neutral-dark-dark"]} inset;
         border-radius: 12px;
 
-        display:flex;
-        flex-direction: column
-        
+        display: flex;
+        flex-direction: column;
     `,
     BottomButtonsArea: styled.div`
         width: 100%;
         height: 80px;
         display: flex;
+        gap: 8px;
     `,
     BottomButton: styled.button`
         flex: 1;
 
         cursor: pointer;
         background-color: ${Colors["neutral-light-medium"]};
-        box-shadow: 0 0 0 2px ${Colors["neutral-dark-dark"]} inset;
+        border: none;
+        box-shadow: 0 0 0 5px ${Colors["neutral-dark-dark"]} inset;
 
         border-radius: 12px;
+
+        :active {
+            transform: scale(0.99);
+        }
+
+        :disabled {
+            background-color: ${Colors["neutral-light-darkest"]};
+            cursor: not-allowed;
+            transform: scale(1);
+        }
     `,
 };

@@ -4,7 +4,7 @@ import { atom, PrimitiveAtom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import Text from "../texts/Text";
 import { Colors } from "../../designs/colors";
-import { useKorInput } from "../../pages/GeneratingNewWordSetPage/hooks/states/useKorInput";
+import { useKorInput } from "../../pages/WordSetPage/hooks/states/useKorInput";
 import { css } from "@emotion/react";
 
 export type TypeOfPartOfSpeech = "noun" | "verb" | "adjective" | "adverb";

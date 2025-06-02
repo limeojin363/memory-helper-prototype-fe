@@ -149,5 +149,6 @@ const S = {
         ${({ fontStyle }) => FontStyleMap[fontStyle]}
         color: ${({ colorName }) => Colors[colorName]};
         user-select: ${({ userSelect }) => userSelect};
+        vertical-align: middle;
     `,
 };

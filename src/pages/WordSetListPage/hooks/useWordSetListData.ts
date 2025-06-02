@@ -5,7 +5,7 @@ import { getDataFromApiRes } from "../../../apis/services";
 // Todo: apply dnd-kit
 const useWordSetListData = () => {
     const { data } = useQuery({
-        queryKey: ["wordSetList"],
+        queryKey: ["wordsetList"],
         queryFn: async () => {
             const res = WordsetApi.GetAllWordsets();
             return getDataFromApiRes(res);

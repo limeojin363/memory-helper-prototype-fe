@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import GeneratingNewWordSetPage from '../../pages/GeneratingNewWordSetPage/components/Page';
+import WordsetPage from "../../pages/WordSetPage/components/Page";
 
 export const Route = createFileRoute("/_authenticated/words_/new")({
-    component: () => <GeneratingNewWordSetPage />,
+    component: () => <WordsetPage />,
 });

@@ -4,16 +4,11 @@ import { Global, css } from "@emotion/react";
 import { Colors } from "../designs/colors";
 import styled from "@emotion/styled";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { DevTools } from "jotai-devtools";
 import "jotai-devtools/styles.css";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const queryClient = new QueryClient({
     defaultOptions: {
-        queries: {
-            gcTime: Infinity,
-            staleTime: Infinity,
-        },
+        queries: {},
     },
 });
 
@@ -28,9 +23,6 @@ export const Route = createRootRoute({
                     ${emotionReset}
                 `}
             />
-            {/* <TanStackRouterDevtools /> */}
-            <DevTools />
-            <ReactQueryDevtools />
         </QueryClientProvider>
     ),
 });

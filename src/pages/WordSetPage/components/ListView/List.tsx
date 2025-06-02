@@ -1,3 +1,4 @@
+import Icon from "../../../../components/icons/Icon";
 import { Colors } from "../../../../designs/colors";
 import { useModalState } from "../../hooks/useModalState";
 import styled from "@emotion/styled";
@@ -8,12 +9,19 @@ export type WordItemProps = {
     firstMeaning: string;
     meaningCount: number;
 };
+
 const OpenCreateModal = () => {
     const { openCreateMode } = useModalState();
 
-    return <S.ItemWrapper onClick={openCreateMode}>+</S.ItemWrapper>;
+    return (
+        <S.ItemWrapper onClick={openCreateMode}>
+            {/* TODO: + 아이콘으로 대체 */}
+            <Icon colorName="neutral-dark-darkest" iconName="plus" size={20} />
+        </S.ItemWrapper>
+    );
 };
 
+// Pure
 const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     const mainText = eng;
     const sideText = `"${firstMeaning}" 등 ${meaningCount}개 의미`;
@@ -30,6 +38,7 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     );
 };
 
+// Pure
 const List = ({ listData }: { listData: WordItemProps[] }) => {
     return (
         <S.ListContainer>
@@ -45,29 +54,33 @@ export default List;
 
 const S = {
     ListContainer: styled.div`
-        width: calc(100% - 20px);
-        padding: 10px;
-
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: stretch;
         gap: 8px;
     `,
-    ItemWrapper: styled.div`
+    ItemWrapper: styled.button`
         height: 40px;
 
-        background-color: ${Colors["neutral-light-medium"]};
-        box-shadow: 0 0 0 2px ${Colors["neutral-dark-dark"]} inset;
+        background-color: ${Colors["neutral-light-dark"]};
+
+        border: none;
+        box-shadow: 0 0 0 2px ${Colors["neutral-dark-medium"]} inset;
         border-radius: 12px;
 
-                display: flex;
+        display: flex;
         justify-content: center;
         align-items: center;
 
-
         :active {
             transform: scale(0.99);
+        }
+        :focus {
+            outline: none;
+        }
+        :focus-visible {
+            box-shadow: 0 0 0 3px ${Colors["neutral-dark-darkest"]} inset;
         }
     `,
     ItemInner: styled.div`
@@ -77,34 +90,5 @@ const S = {
         display: flex;
         justify-content: space-between;
         align-items: center;
-    `,
-    EngAreaWrapper: styled.div`
-        position: relative;
-
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    `,
-    KorAreaWrapper: styled.div`
-        flex: 1;
-
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-    `,
-    KorTopWrapper: styled.div`
-        display: flex;
-        justify-content: space-between;
-    `,
-    WordView: styled.div`
-        flex: 1;
-        all: unset;
-        border-radius: 12px;
-        padding: 12px 16px;
-        transition: all 0.1s;
-
-        width: 100%;
-
-        box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]} inset;
     `,
 };
