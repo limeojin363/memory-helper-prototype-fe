@@ -11,10 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WordsImport } from './routes/words'
 import { Route as LoginImport } from './routes/login'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthenticatedWordsImport } from './routes/_authenticated/words'
 import { Route as AuthenticatedWithStatusBarImport } from './routes/_authenticated/_with-status-bar'
 import { Route as AuthenticatedWordsNewImport } from './routes/_authenticated/words_.new'
 import { Route as AuthenticatedWordsWordSetIdImport } from './routes/_authenticated/words_.$wordSetId'
@@ -23,6 +23,12 @@ import { Route as AuthenticatedWithStatusBarProblemsImport } from './routes/_aut
 import { Route as AuthenticatedWithStatusBarProblemsProblemIdImport } from './routes/_authenticated/_with-status-bar/problems_.$problemId'
 
 // Create/Update Routes
+
+const WordsRoute = WordsImport.update({
+  id: '/words',
+  path: '/words',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
   id: '/login',
@@ -39,12 +45,6 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
-} as any)
-
-const AuthenticatedWordsRoute = AuthenticatedWordsImport.update({
-  id: '/words',
-  path: '/words',
-  getParentRoute: () => AuthenticatedRoute,
 } as any)
 
 const AuthenticatedWithStatusBarRoute = AuthenticatedWithStatusBarImport.update(
@@ -113,18 +113,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
+    '/words': {
+      id: '/words'
+      path: '/words'
+      fullPath: '/words'
+      preLoaderRoute: typeof WordsImport
+      parentRoute: typeof rootRoute
+    }
     '/_authenticated/_with-status-bar': {
       id: '/_authenticated/_with-status-bar'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthenticatedWithStatusBarImport
-      parentRoute: typeof AuthenticatedImport
-    }
-    '/_authenticated/words': {
-      id: '/_authenticated/words'
-      path: '/words'
-      fullPath: '/words'
-      preLoaderRoute: typeof AuthenticatedWordsImport
       parentRoute: typeof AuthenticatedImport
     }
     '/_authenticated/_with-status-bar/problems': {
@@ -190,14 +190,12 @@ const AuthenticatedWithStatusBarRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedWithStatusBarRoute: typeof AuthenticatedWithStatusBarRouteWithChildren
-  AuthenticatedWordsRoute: typeof AuthenticatedWordsRoute
   AuthenticatedWordsWordSetIdRoute: typeof AuthenticatedWordsWordSetIdRoute
   AuthenticatedWordsNewRoute: typeof AuthenticatedWordsNewRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWithStatusBarRoute: AuthenticatedWithStatusBarRouteWithChildren,
-  AuthenticatedWordsRoute: AuthenticatedWordsRoute,
   AuthenticatedWordsWordSetIdRoute: AuthenticatedWordsWordSetIdRoute,
   AuthenticatedWordsNewRoute: AuthenticatedWordsNewRoute,
 }
@@ -210,7 +208,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedWithStatusBarRouteWithChildren
   '/login': typeof LoginRoute
-  '/words': typeof AuthenticatedWordsRoute
+  '/words': typeof WordsRoute
   '/problems': typeof AuthenticatedWithStatusBarProblemsRoute
   '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
   '/words/$wordSetId': typeof AuthenticatedWordsWordSetIdRoute
@@ -222,7 +220,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedWithStatusBarRouteWithChildren
   '/login': typeof LoginRoute
-  '/words': typeof AuthenticatedWordsRoute
+  '/words': typeof WordsRoute
   '/problems': typeof AuthenticatedWithStatusBarProblemsRoute
   '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
   '/words/$wordSetId': typeof AuthenticatedWordsWordSetIdRoute
@@ -235,8 +233,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/words': typeof WordsRoute
   '/_authenticated/_with-status-bar': typeof AuthenticatedWithStatusBarRouteWithChildren
-  '/_authenticated/words': typeof AuthenticatedWordsRoute
   '/_authenticated/_with-status-bar/problems': typeof AuthenticatedWithStatusBarProblemsRoute
   '/_authenticated/_with-status-bar/settings': typeof AuthenticatedWithStatusBarSettingsRoute
   '/_authenticated/words_/$wordSetId': typeof AuthenticatedWordsWordSetIdRoute
@@ -272,8 +270,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/words'
     | '/_authenticated/_with-status-bar'
-    | '/_authenticated/words'
     | '/_authenticated/_with-status-bar/problems'
     | '/_authenticated/_with-status-bar/settings'
     | '/_authenticated/words_/$wordSetId'
@@ -286,12 +284,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  WordsRoute: typeof WordsRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  WordsRoute: WordsRoute,
 }
 
 export const routeTree = rootRoute
@@ -306,7 +306,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/_authenticated",
-        "/login"
+        "/login",
+        "/words"
       ]
     },
     "/": {
@@ -316,13 +317,15 @@ export const routeTree = rootRoute
       "filePath": "_authenticated.tsx",
       "children": [
         "/_authenticated/_with-status-bar",
-        "/_authenticated/words",
         "/_authenticated/words_/$wordSetId",
         "/_authenticated/words_/new"
       ]
     },
     "/login": {
       "filePath": "login.tsx"
+    },
+    "/words": {
+      "filePath": "words.tsx"
     },
     "/_authenticated/_with-status-bar": {
       "filePath": "_authenticated/_with-status-bar.tsx",
@@ -332,10 +335,6 @@ export const routeTree = rootRoute
         "/_authenticated/_with-status-bar/settings",
         "/_authenticated/_with-status-bar/problems_/$problemId"
       ]
-    },
-    "/_authenticated/words": {
-      "filePath": "_authenticated/words.tsx",
-      "parent": "/_authenticated"
     },
     "/_authenticated/_with-status-bar/problems": {
       "filePath": "_authenticated/_with-status-bar/problems.tsx",

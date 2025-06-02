@@ -9,6 +9,8 @@ import IcDragHandle from "../../assets/icons/drag-handle.svg?react";
 import IcPlus from "../../assets/icons/plus.svg?react";
 import IcTrash from "../../assets/icons/trash.svg?react";
 import IcSubmit from "../../assets/icons/submit.svg?react";
+import IcLinedArrowPrev from "../../assets/icons/lined-arrow-prev.svg?react";
+import IcLinedArrowNext from "../../assets/icons/lined-arrow-next.svg?react";
 import styled from "@emotion/styled";
 import { MouseEventHandler } from "react";
 
@@ -23,6 +25,8 @@ const RawIcons = {
     plus: IcPlus,
     trash: IcTrash,
     submit: IcSubmit,
+    "lined-arrow-prev": IcLinedArrowPrev,
+    "lined-arrow-next": IcLinedArrowNext,
 } as const;
 
 export type IconName = keyof typeof RawIcons;

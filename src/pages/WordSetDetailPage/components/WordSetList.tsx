@@ -1,26 +1,24 @@
-import React from "react";
 import S from "./styled";
 import Text from "../../../components/texts/Text";
 
-export type ComponentViewDataItem = {
-    engWord: string;
-    korWords: {
-        word: string;
-        type: null | {
-            value: "noun" | "verb" | "adjective" | "adverb";
-            isFixed: boolean;
-        };
-    }[];
-};
-
-const NounViewMap = {
+export const TypeMap = {
     noun: "명",
     verb: "동",
     adjective: "형",
     adverb: "부",
+} as const;
+
+export type TypeKey = keyof typeof TypeMap;
+
+export type ComponentViewDataItem = {
+    engWord: string;
+    korWords: {
+        value: string;
+        type: TypeKey;
+    }[];
 };
 
-const WordSetItem = ({ data }: { data: ComponentViewDataItem }) => {
+const WordItem = ({ data }: { data: ComponentViewDataItem }) => {
     return (
         <S.ItemContainer>
             <S.EngAreaContainer>
@@ -30,10 +28,10 @@ const WordSetItem = ({ data }: { data: ComponentViewDataItem }) => {
             <S.KorAreaContainer>
                 <Text label={"Kor"} fontStyle="body-xl" />
                 <S.KorItemList>
-                    {data.korWords.map((korWord, index) => (
+                    {data.korWords.map((korWordItem, index) => (
                         <Text
                             key={index}
-                            label={`${korWord.word}`}
+                            label={`${korWordItem.value}`}
                             fontStyle="body-xl"
                         />
                     ))}
@@ -43,14 +41,14 @@ const WordSetItem = ({ data }: { data: ComponentViewDataItem }) => {
     );
 };
 
-const WordSetList = ({ list }: { list: ComponentViewDataItem[] }) => {
+const WordList = ({ list }: { list: ComponentViewDataItem[] }) => {
     return (
         <S.ListContainer>
             {list.map((data, index) => (
-                <WordSetItem key={index} data={data} />
+                <WordItem key={index} data={data} />
             ))}
         </S.ListContainer>
     );
 };
 
-export default WordSetList;
+export default WordList;

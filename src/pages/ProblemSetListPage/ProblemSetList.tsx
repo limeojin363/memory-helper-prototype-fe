@@ -1,7 +1,6 @@
 import ProblemSetItem from "./ProblemSetItem";
 import S from "./ProblemSetList.styled";
 import { useState } from "react";
-import _ from "lodash";
 import {
     DndContext,
     closestCenter,

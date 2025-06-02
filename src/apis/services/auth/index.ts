@@ -1,15 +1,15 @@
-import GetUserRequest from "./getUser";
-import LoginRequest from "./login";
-import LogoutRequest from "./logout";
-import SignupRequest from "./signup";
-import TokenRefreshRequest from "./token-refresh";
+import GetUserInfo from "./get-user-info";
+import Login from "./login";
+import Logout from "./logout";
+import Signup from "./signup";
+import TokenRefresh from "./token-refresh";
 
-const HttpAuthRequests = {
-    Login: LoginRequest,
-    Logout: LogoutRequest,
-    Signup: SignupRequest,
-    GetUser: GetUserRequest,
-    TokenRefresh: TokenRefreshRequest,
+const AuthApi = {
+    GetUserInfo,
+    Login,
+    Logout,
+    Signup,
+    TokenRefresh,
 };
 
-export default HttpAuthRequests;
+export default AuthApi;

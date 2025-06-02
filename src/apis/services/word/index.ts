@@ -1,7 +1,9 @@
-import PostWordExistsRequest from "./postWordExists";
+import SpellingCheck from "./spelling-check";
+import WordExists from "./word-exists";
 
-const HTTPWordRequest = {
-    PostWordExists: PostWordExistsRequest,
+const WordApi = {
+    SpellingCheck,
+    WordExists,
 };
 
-export default HTTPWordRequest;
+export default WordApi;
