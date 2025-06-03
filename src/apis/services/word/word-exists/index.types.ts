@@ -1,4 +1,4 @@
-import { TypeKey } from "../../../../pages/WordSetDetailPage/components/WordSetList";
+import { TypeKey } from "../../../../components/type-selector/TypeSelector";
 import { ApiFunc } from "../../types";
 
 export type WordExistsFunc = ApiFunc<WordExistsReqBody, WordExistsResData>;

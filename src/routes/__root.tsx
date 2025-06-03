@@ -5,6 +5,7 @@ import { Colors } from "../designs/colors";
 import styled from "@emotion/styled";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "jotai-devtools/styles.css";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 export const queryClient = new QueryClient({
     defaultOptions: {
@@ -23,6 +24,7 @@ export const Route = createRootRoute({
                     ${emotionReset}
                 `}
             />
+            <ReactQueryDevtools/>
         </QueryClientProvider>
     ),
 });
