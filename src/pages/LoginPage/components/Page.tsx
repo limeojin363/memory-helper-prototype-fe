@@ -3,6 +3,7 @@ import useLogin from "../hooks/useLogin";
 import S from "./styled";
 import Header from "../../../components/layouts/mobile/Header";
 import { NavigateOptions } from "@tanstack/react-router";
+import Text from "../../../components/texts/Text";
 
 const LoginPage = ({
     navigateOptionAfterSuccessfullyLoggedIn = { to: "/words" },
@@ -21,7 +22,9 @@ const LoginPage = ({
 
     return (
         <S.PageWrapper>
-            <Header title="로그인" />
+            <Header>
+                <Text fontStyle="heading-3" label={"로그인"} />
+            </Header>
             <form
                 onSubmit={(e) => {
                     e.preventDefault();

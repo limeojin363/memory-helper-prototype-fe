@@ -1,0 +1,143 @@
+import Icon from "../../../components/icons/Icon";
+import { TypeKey } from "../../../components/type-selector/TypeSelector";
+import { NavigationInfo } from "../../../components/detail-modal/DetailModal";
+import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
+import { atom, useAtom } from "jotai";
+
+export type ItemData = {
+    selectedData: {
+        wordId: number;
+        word: string;
+        meaning: Array<{
+            type: TypeKey;
+            value: string;
+        }>;
+        createdAt: string;
+        gpt: boolean;
+    };
+};
+
+export type ModalStatus = ItemData | "CREATE-NEW-WORD" | null;
+
+export const isViewMode = (modalInfo: ModalStatus): modalInfo is ItemData =>
+    typeof modalInfo === "object";
+
+export const isCreateMode = (
+    modalInfo: ModalStatus,
+): modalInfo is "CREATE-NEW-WORD" => modalInfo === "CREATE-NEW-WORD";
+
+const modalStatusAtom = atom<ModalStatus>(null);
+
+const listDataAtom = atom<GetWordsetDetailData["list"]>([]);
+
+// TODO: list 데이터의 동기화 방식 변경(맘에 안듦)
+const useWordModalState = () => {
+    const [status, setStatus] = useAtom<ModalStatus>(modalStatusAtom);
+    const [listData, setListData] = useAtom(listDataAtom);
+
+    const select = (wordId: number) => {
+        const selectedData = listData.find((item) => item.wordId === wordId);
+        if (selectedData)
+            setStatus({
+                selectedData,
+            });
+    };
+
+    const close = () => setStatus(null);
+
+    const openCreateMode = () => setStatus("CREATE-NEW-WORD");
+
+    //  << case 정리 >>
+    // view
+    //  - prev
+    //    - 이전 요소 O -> ["<-", active, 동작]
+    //    - 이전 요소 X -> ["<-", deactive, 미동작]
+    //  - next:
+    //    - 다음 요소 O -> ["->", active, 동작]
+    //    - 다음 요소 X -> ["NEW", active, 동작]
+    // create
+    //  - prev:
+    //    - 이전 요소 O -> ["<-", active, 동작]
+    //    - 이전 요소 X -> ["<-", deactive, 미동작]
+    //  - next:
+    //    X
+    const infoForNavigation: {
+        next?: NavigationInfo;
+        prev?: NavigationInfo;
+    } = (() => {
+        if (isViewMode(status)) {
+            const currentIndex = listData.findIndex(
+                (item) => item.wordId === status.selectedData.wordId,
+            );
+            const doesPrevExists = currentIndex !== 0;
+            const prevItem = listData[currentIndex - 1];
+            const doesNextExists = currentIndex !== listData.length - 1;
+            const nextItem = listData[currentIndex + 1];
+
+            return {
+                prev: {
+                    navigate: doesPrevExists
+                        ? () => select(prevItem.wordId)
+                        : () => {},
+                    content: (
+                        <Icon
+                            colorName="neutral-dark-darkest"
+                            iconName="lined-arrow-prev"
+                            size={20}
+                        />
+                    ),
+                    active: doesPrevExists,
+                },
+                next: {
+                    navigate: doesNextExists
+                        ? () => select(nextItem.wordId)
+                        : openCreateMode,
+                    content: doesNextExists ? (
+                        <Icon
+                            colorName="neutral-dark-darkest"
+                            iconName="lined-arrow-next"
+                            size={20}
+                        />
+                    ) : (
+                        <Icon
+                            colorName="neutral-dark-darkest"
+                            iconName="plus"
+                            size={20}
+                        />
+                    ),
+                    active: true,
+                },
+            };
+        } else {
+            const doesPrevExists = listData.length > 0;
+            const prevItem = listData[listData.length - 1];
+
+            return {
+                prev: {
+                    navigate: doesPrevExists
+                        ? () => select(prevItem.wordId)
+                        : () => {},
+                    content: (
+                        <Icon
+                            colorName="neutral-dark-darkest"
+                            iconName="lined-arrow-prev"
+                            size={20}
+                        />
+                    ),
+                    active: doesPrevExists,
+                },
+            };
+        }
+    })();
+
+    return {
+        close,
+        openCreateMode,
+        select,
+        status,
+        setListData,
+        ...infoForNavigation,
+    };
+};
+
+export default useWordModalState;
