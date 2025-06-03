@@ -1,5 +1,3 @@
-import { TypeOfPartOfSpeech } from "../../../components/type-selector/types";
-
 export type InputPair = {
     id: string;
     engValue: string;

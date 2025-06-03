@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { TypeKey } from "../../WordSetDetailPage-dep/components/WordSetList";
 import { useMutation } from "@tanstack/react-query";
 import WordApi from "../../../apis/services/word";
 import { getDataFromApiRes } from "../../../apis/services";
+import { TypeKey } from "../../../components/type-selector/TypeSelector";
 
 const useNewWordState = () => {
     const [eng, setEng] = useState("");
