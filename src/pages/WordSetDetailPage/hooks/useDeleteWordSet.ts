@@ -1,13 +1,20 @@
 import { useMutation } from "@tanstack/react-query";
 import WordsetApi from "../../../apis/services/wordset";
+import { useNavigate } from "@tanstack/react-router";
+import { queryClient } from "../../../routes/__root";
 
 const useDeleteWordSet = (setId: number) => {
+    const navigate = useNavigate();
+
     const { mutate: handler } = useMutation({
         mutationFn: async () => {
-            WordsetApi.DeleteWordset({ id: setId });
+           await WordsetApi.DeleteWordset({ id: setId });
         },
-        onSuccess: () => {
-            window.location.href = "/words";
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ["wordsetList"],
+            });
+            navigate({ to: "/words" });
         },
     });
 
