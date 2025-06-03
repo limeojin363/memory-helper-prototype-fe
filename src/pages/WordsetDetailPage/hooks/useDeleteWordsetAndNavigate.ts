@@ -3,7 +3,7 @@ import WordsetApi from "../../../apis/services/wordset";
 import { useNavigate } from "@tanstack/react-router";
 import { queryClient } from "../../../routes/__root";
 
-const useDeleteWordSet = (setId: number) => {
+const useDeleteWordsetAndNavigate = (setId: number) => {
     const navigate = useNavigate();
 
     const { mutate: handler } = useMutation({
@@ -21,4 +21,4 @@ const useDeleteWordSet = (setId: number) => {
     return () => handler();
 };
 
-export default useDeleteWordSet;
+export default useDeleteWordsetAndNavigate;

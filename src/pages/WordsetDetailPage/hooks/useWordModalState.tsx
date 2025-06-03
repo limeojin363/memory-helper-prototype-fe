@@ -20,7 +20,7 @@ export type ItemData = {
 export type ModalStatus = ItemData | "CREATE-NEW-WORD" | null;
 
 export const isViewMode = (modalInfo: ModalStatus): modalInfo is ItemData =>
-    typeof modalInfo === "object";
+    typeof modalInfo === "object" && modalInfo !== null;
 
 export const isCreateMode = (
     modalInfo: ModalStatus,

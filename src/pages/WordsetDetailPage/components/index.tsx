@@ -7,6 +7,7 @@ import WordsetName from "./WordsetName";
 import Header from "../../../components/layouts/mobile/Header";
 import { useNavigate } from "@tanstack/react-router";
 import { TypeKey } from "../../../components/type-selector/TypeSelector";
+import useDeleteWordsetAndNavigate from "../hooks/useDeleteWordsetAndNavigate";
 
 // 모델 변환자
 const listProcessCallback = (item: {
@@ -35,6 +36,8 @@ const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
             to: "/words",
         });
 
+    const deleteAndNavigate = useDeleteWordsetAndNavigate(wordsetId);
+
     if (!detailData) return null;
 
     const setName = detailData.name;
@@ -46,6 +49,7 @@ const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
             <S.Outer>
                 <Header goBack={goBack}>
                     <WordsetName propValue={setName} wordsetId={wordsetId} />
+                    <button onClick={deleteAndNavigate}>삭제</button>
                 </Header>
                 <WordList listData={processedList} />
                 <WordDetailModal
