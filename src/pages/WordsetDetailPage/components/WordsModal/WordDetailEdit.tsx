@@ -1,19 +1,20 @@
 import styled from "@emotion/styled";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import WordApi from "../../../apis/services/word";
-import { getDataFromApiRes } from "../../../apis/services";
-import WordsetApi from "../../../apis/services/wordset";
-import { AddWordToSetReqParam } from "../../../apis/services/wordset/add-word-to-wordset/index.types";
-import Text, { FontStyleMap } from "../../../components/texts/Text";
-import { Colors } from "../../../designs/colors";
-import Icon from "../../../components/icons/Icon";
+import WordApi from "../../../../apis/services/word";
+import { getDataFromApiRes } from "../../../../apis/services";
+import WordsetApi from "../../../../apis/services/wordset";
+import { AddWordToSetReqParam } from "../../../../apis/services/wordset/add-word-to-wordset/index.types";
+import Text, { FontStyleMap } from "../../../../components/texts/Text";
+import { Colors } from "../../../../designs/colors";
+import Icon from "../../../../components/icons/Icon";
 import { ClipLoader } from "react-spinners";
-import { queryClient } from "../../../routes/__root";
+import { queryClient } from "../../../../routes/__root";
 import TypeSelector, {
     TypeKey,
-} from "../../../components/type-selector/TypeSelector";
-import useWordModalState from "../hooks/useWordModalState";
+} from "../../../../components/type-selector/TypeSelector";
+import useWordModalState from "../../hooks/useWordModalState";
+import Button1 from "../../../../components/button1";
 
 export type EditorState = {
     word: string;
@@ -219,16 +220,28 @@ const EngArea = ({
                 />
                 {showLoadButton && (
                     <S.SideIconPositionor right={4}>
-                        <S.IcButtonWrapper
+                        <Button1
                             onClick={loadServerMeanings}
-                            size={24}
+                            width={"24px"}
+                            height={"24px"}
+                            activeTransformScale={0.95}
+                            colorStyle="Primary"
+                            borderRadius={"30%"}
                         >
-                            <Icon
-                                colorName="neutral-dark-darkest"
-                                iconName="submit"
-                                size={12}
-                            />
-                        </S.IcButtonWrapper>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Icon
+                                    colorName="highlight-dark"
+                                    iconName="submit"
+                                    size={12}
+                                />
+                            </div>
+                        </Button1>
                     </S.SideIconPositionor>
                 )}
 
@@ -305,13 +318,35 @@ const KorArea = ({
         <S.KorAreaWrapper>
             <S.KorTopWrapper>
                 <Text fontStyle="heading-5" label="Kor" />
-                <S.IcButtonWrapper size={16} onClick={onClickAddCustom}>
+                <Button1
+                    onClick={onClickAddCustom}
+                    width={"16px"}
+                    height={"16px"}
+                    activeTransformScale={0.95}
+                    colorStyle="Primary"
+                    borderRadius={"30%"}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Icon
+                            colorName="highlight-dark"
+                            iconName="plus"
+                            size={10}
+                        />
+                    </div>
+                </Button1>
+                {/* <S.IcButtonWrapper size={16} onClick={onClickAddCustom}>
                     <Icon
                         colorName="neutral-dark-darkest"
                         iconName="plus"
                         size={12}
                     />
-                </S.IcButtonWrapper>
+                </S.IcButtonWrapper> */}
             </S.KorTopWrapper>
 
             {meanings.map((item, idx) => (
@@ -330,16 +365,29 @@ const KorArea = ({
                         }
                     />
                     <S.SideIconPositionor right={4}>
-                        <S.IcButtonWrapper
+                        <Button1
                             onClick={() => deleteMeaningByIdx(idx)}
-                            size={24}
+                            width={"24px"}
+                            height={"24px"}
+                            activeTransformScale={0.95}
+                            colorStyle="Primary"
+                            borderRadius={"30%"}
                         >
-                            <Icon
-                                colorName="neutral-dark-darkest"
-                                iconName="trash"
-                                size={20}
-                            />
-                        </S.IcButtonWrapper>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Icon
+                                    colorName="highlight-dark"
+                                    iconName="trash"
+                                    size={20}
+                                />
+                            </div>
+                        </Button1>
+                        {/* <S.IcButtonWrapper size={24}></S.IcButtonWrapper> */}
                     </S.SideIconPositionor>
                 </S.KorMeaningItemWrapper>
             ))}

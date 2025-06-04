@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import WordList, { WordItemProps } from "./ListView/List";
-import WordDetailModal from "./WordDetailModal";
+import WordList, { WordItemProps } from "./WordsArea";
+import WordDetailModal from "./WordsModal/WordDetailModal";
 import { useWordsetDetailData } from "../hooks/useWordsetDetailData";
 import { Provider } from "jotai";
 import WordsetName from "./WordsetName";

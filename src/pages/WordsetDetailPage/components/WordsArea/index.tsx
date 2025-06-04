@@ -2,6 +2,7 @@ import Icon from "../../../../components/icons/Icon";
 import { Colors } from "../../../../designs/colors";
 import styled from "@emotion/styled";
 import useWordModalState from "../../hooks/useWordModalState";
+import Button1 from "../../../../components/button1";
 
 export type WordItemProps = {
     id: number;
@@ -14,9 +15,9 @@ const OpenCreateModal = () => {
     const { openCreateMode } = useWordModalState();
 
     return (
-        <S.ItemWrapper onClick={openCreateMode}>
+        <Button1 height={"40px"} onClick={openCreateMode}>
             <Icon colorName="neutral-dark-darkest" iconName="plus" size={20} />
-        </S.ItemWrapper>
+        </Button1>
     );
 };
 
@@ -28,17 +29,17 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     const { select } = useWordModalState();
 
     return (
-        <S.ItemWrapper onClick={() => select(id)}>
+        <Button1 height={"40px"} onClick={() => select(id)}>
             <S.ItemInner>
                 <div>{mainText}</div>
                 <div>{sideText}</div>
             </S.ItemInner>
-        </S.ItemWrapper>
+        </Button1>
     );
 };
 
 // Pure
-const List = ({ listData }: { listData: WordItemProps[] }) => {
+const WordsArea = ({ listData }: { listData: WordItemProps[] }) => {
     return (
         <S.ListContainer>
             {listData.map((item) => (
@@ -49,7 +50,7 @@ const List = ({ listData }: { listData: WordItemProps[] }) => {
     );
 };
 
-export default List;
+export default WordsArea;
 
 const S = {
     ListContainer: styled.div`
@@ -75,9 +76,6 @@ const S = {
 
         :active {
             transform: scale(0.99);
-        }
-        :focus {
-            outline: none;
         }
         :focus-visible {
             box-shadow: 0 0 0 3px ${Colors["neutral-dark-darkest"]} inset;

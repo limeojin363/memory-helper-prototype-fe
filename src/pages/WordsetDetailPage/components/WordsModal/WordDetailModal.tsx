@@ -1,7 +1,7 @@
 import WordDetailEdit, { WordDetailEditProps } from "./WordDetailEdit";
-import useWordModalState, { isViewMode } from "../hooks/useWordModalState";
-import DetailModal from "../../../components/detail-modal/DetailModal";
-import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
+import useWordModalState, { isViewMode } from "../../hooks/useWordModalState";
+import DetailModal from "../../../../components/detail-modal/DetailModal";
+import { GetWordsetDetailData } from "../../../../apis/services/wordset/get-wordset-detail/index.types";
 import { useEffect } from "react";
 
 export type WordDetailModalProps = {
