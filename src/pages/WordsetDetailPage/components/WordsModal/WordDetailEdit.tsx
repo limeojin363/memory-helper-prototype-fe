@@ -15,6 +15,8 @@ import TypeSelector, {
 } from "../../../../components/type-selector/TypeSelector";
 import useWordModalState from "../../hooks/useWordModalState";
 import Button1 from "../../../../components/button1";
+import ButtonWithText from "../../../../components/button-with-text";
+import TextField from "../../../../components/text-field";
 
 export type EditorState = {
     word: string;
@@ -59,7 +61,7 @@ const useEditorState = ({
             ],
         }));
 
-    // TODO: MODIFY CASE 대응
+    // TODO: VIEW CASE 대응
     const { mutateAsync: submitWord } = useMutation({
         mutationFn: async () => {
             if (!wordsetId) return;
@@ -140,7 +142,7 @@ const useEditorState = ({
 
 export type WordDetailEditProps = {
     initialState?: EditorState;
-    mode: "CREATE" | "MODIFY";
+    mode: "CREATE" | "VIEW";
     wordsetId: number; // 단어 세트 ID, CREATE 모드에서만 필요
 };
 
@@ -179,13 +181,10 @@ const WordDetailEdit = ({
                     addCustomMeaning={addCustomMeaning}
                 />
             </S.InputsAreaWrapper>
-            <S.GenButton onClick={submitWord}>
-                <Text
-                    fontStyle="action-lg"
-                    label={mode === "CREATE" ? "생성" : "수정"}
-                    colorName="neutral-dark-darkest"
-                />
-            </S.GenButton>
+            <ButtonWithText
+                onClick={submitWord}
+                text={mode === "CREATE" ? "생성" : "삭제"}
+            />
         </S.Root>
     );
 };
@@ -213,7 +212,7 @@ const EngArea = ({
         <S.EngAreaWrapper>
             <Text fontStyle="heading-5" label="Eng" />
             <S.EngInputWrapper>
-                <S.Input
+                <TextField
                     onKeyDown={inputKeyDownHandler}
                     onChange={onChange}
                     value={value}
@@ -355,7 +354,7 @@ const KorArea = ({
                         select={(t) => changeTypeByIdx(idx, t)}
                         value={item.type}
                     />
-                    <S.Input
+                    <TextField
                         data-idx={idx}
                         type="text"
                         value={item.value}
@@ -488,7 +487,6 @@ const S = {
         cursor: pointer;
         border: none;
 
-        background-color: ${Colors["neutral-light-dark"]};
         box-shadow: 0 0 0 2px ${Colors["neutral-dark-dark"]} inset;
         border-radius: 12px;
         padding: 12px 16px;

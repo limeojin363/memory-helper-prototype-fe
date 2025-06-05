@@ -3,6 +3,8 @@ import { Colors } from "../../../../designs/colors";
 import styled from "@emotion/styled";
 import useWordModalState from "../../hooks/useWordModalState";
 import Button1 from "../../../../components/button1";
+import useDeleteWordsetAndNavigate from "../../hooks/useDeleteWordsetAndNavigate";
+import Text from "../../../../components/texts/Text";
 
 export type WordItemProps = {
     id: number;
@@ -15,7 +17,7 @@ const OpenCreateModal = () => {
     const { openCreateMode } = useWordModalState();
 
     return (
-        <Button1 height={"40px"} onClick={openCreateMode}>
+        <Button1 height={"40px"} onClick={openCreateMode} colorStyle="Neutral">
             <Icon colorName="neutral-dark-darkest" iconName="plus" size={20} />
         </Button1>
     );
@@ -29,7 +31,11 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     const { select } = useWordModalState();
 
     return (
-        <Button1 height={"40px"} onClick={() => select(id)}>
+        <Button1
+            height={"40px"}
+            onClick={() => select(id)}
+            colorStyle="Neutral"
+        >
             <S.ItemInner>
                 <div>{mainText}</div>
                 <div>{sideText}</div>
@@ -39,12 +45,29 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
 };
 
 // Pure
-const WordsArea = ({ listData }: { listData: WordItemProps[] }) => {
+const WordsArea = ({
+    listData,
+    wordsetId,
+}: {
+    listData: WordItemProps[];
+    wordsetId: number;
+}) => {
+    const deleteAndNavigate = useDeleteWordsetAndNavigate(wordsetId);
+
     return (
         <S.ListContainer>
-            {listData.map((item) => (
-                <WordItem {...item} />
-            ))}
+            <Button1 onClick={deleteAndNavigate} colorStyle="Neutral">
+                <Text fontStyle="action-lg" label="단어장 삭제" />
+            </Button1>
+            <S.Separator />
+            {listData.length > 0 && (
+                <>
+                    {listData.map((item) => (
+                        <WordItem {...item} />
+                    ))}
+                    <S.Separator />
+                </>
+            )}
             <OpenCreateModal />
         </S.ListContainer>
     );
@@ -88,5 +111,10 @@ const S = {
         display: flex;
         justify-content: space-between;
         align-items: center;
+    `,
+    Separator: styled.div`
+        width: 100%;
+        height: 1.8px;
+        background-color: ${Colors["neutral-dark-darkest"]};
     `,
 };

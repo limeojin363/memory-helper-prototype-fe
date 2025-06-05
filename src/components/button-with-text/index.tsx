@@ -1,20 +1,23 @@
 import styled from "@emotion/styled";
 import { Colors } from "../../designs/colors";
 import { css } from "@emotion/react";
+import Text from "../texts/Text";
 
-export type Button1Props = { children: React.ReactNode } & SProps &
+export type ButtonWithTextProps = { text: string } & SProps &
     React.ButtonHTMLAttributes<HTMLButtonElement>;
 
-const Button1 = ({
-    children,
+// TODO: 색상값 좀 더 세련되게 처리하기. Ex) LineColor, BgColor로 이원화?
+// TODO: ButtonWithIcon 작성
+const ButtonWithText = ({
+    text,
     height,
     width,
     borderRadius,
     activeTransformScale,
     bgColor,
-    colorStyle = "Primary",
+    disabled,
     ...props
-}: Button1Props) => {
+}: ButtonWithTextProps) => {
     return (
         <S.Root
             height={height}
@@ -22,15 +25,21 @@ const Button1 = ({
             borderRadius={borderRadius}
             activeTransformScale={activeTransformScale}
             bgColor={bgColor}
-            colorStyle={colorStyle}
+            disabled={disabled}
             {...props}
         >
-            {children}
+            <Text
+                label={text}
+                fontStyle="action-lg"
+                colorName={
+                    disabled ? "neutral-dark-lightest" : "neutral-dark-darkest"
+                }
+            />
         </S.Root>
     );
 };
 
-export default Button1;
+export default ButtonWithText;
 
 type SProps = {
     height?: string;
@@ -39,25 +48,18 @@ type SProps = {
     activeTransformScale?: number;
     bgColor?: string;
     colorStyle?: keyof typeof ColorStyleMap;
+    disabled?: boolean;
 };
 
 // box-shadow, background-color Preset
 const ColorStyleMap = {
-    Primary: css`
-        box-shadow: 0 0 0 1.4px ${Colors["highlight-medium"]} inset;
-        background-color: ${Colors["highlight-lightest"]};
-    `,
     Neutral: css`
         background-color: ${Colors["neutral-light-medium"]};
         box-shadow: 0 0 0 1.4px ${Colors["neutral-dark-darkest"]} inset;
     `,
-    NeutralSelected: css`
-        background-color: ${Colors["neutral-light-medium"]};
-        box-shadow: 0 0 0 3px ${Colors["neutral-dark-darkest"]} inset;
-    `,
     Disabled: css`
         background-color: ${Colors["neutral-light-dark"]};
-        box-shadow: 0 0 0 1.4px ${Colors["neutral-dark-darkest"]} inset;
+        box-shadow: 0 0 0 1.4px ${Colors["neutral-dark-lightest"]} inset;
     `,
 };
 
@@ -68,8 +70,6 @@ const S = {
         border-radius: ${({ borderRadius }) =>
             borderRadius ? `${borderRadius}` : "12px"};
 
-        background-color: ${({ bgColor }) => bgColor || "transparent"};
-
         border: none;
 
         display: flex;
@@ -78,7 +78,8 @@ const S = {
 
         cursor: pointer;
 
-        ${({ colorStyle }) => colorStyle && ColorStyleMap[colorStyle]}
+        ${({ disabled }) =>
+            disabled ? ColorStyleMap.Disabled : ColorStyleMap.Neutral}
 
         :active {
             transform: scale(
