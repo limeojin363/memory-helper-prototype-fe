@@ -80,6 +80,13 @@ export const FontStyleMap = {
         line-height: 14px; /* 140% */
         letter-spacing: 0.15px;
     `,
+    "action-xl": css`
+        font-family: Inter;
+        font-size: 17px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: normal;
+    `,
     "action-lg": css`
         font-family: Inter;
         font-size: 14px;
@@ -117,6 +124,7 @@ export type FontStyleName = keyof typeof FontStyleMap;
 type TextProps = {
     label: string;
     fontStyle: FontStyleName;
+    fontSize?: number;
     colorName?: ColorName;
     userSelect?: "none" | "auto";
 } & React.HTMLAttributes<HTMLDivElement>;
@@ -124,12 +132,14 @@ type TextProps = {
 const Text = ({
     label,
     fontStyle,
+    fontSize,
     colorName = "neutral-dark-dark",
     userSelect = "none",
 }: TextProps) => {
     return (
         <S.Text
             colorName={colorName}
+            fontSize={fontSize}
             fontStyle={fontStyle}
             userSelect={userSelect}
         >
@@ -143,12 +153,14 @@ export default Text;
 const S = {
     Text: styled.div<{
         fontStyle: keyof typeof FontStyleMap;
+        fontSize?: number;
         colorName: ColorName;
         userSelect: "none" | "auto";
     }>`
         ${({ fontStyle }) => FontStyleMap[fontStyle]}
         color: ${({ colorName }) => Colors[colorName]};
         user-select: ${({ userSelect }) => userSelect};
+        font-size: ${({ fontSize }) => `${fontSize}px`};
         vertical-align: middle;
     `,
 };

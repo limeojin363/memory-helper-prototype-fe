@@ -2,6 +2,15 @@ import styled from "@emotion/styled";
 import { useEffect, useRef, useState } from "react";
 import Text from "../texts/Text";
 import { Colors } from "../../designs/colors";
+import Button1, { Button1Props } from "../button1";
+
+const ButtonPropPreset: Omit<Button1Props, "children"> = {
+    height: "28px",
+    width: "28px",
+    borderRadius: "10px",
+    activeTransformScale: 0.95,
+    colorStyle: "Primary",
+};
 
 const TypeSelector = ({
     select,
@@ -46,22 +55,56 @@ const TypeSelector = ({
 
     return (
         <S.Root ref={dropdownRef}>
-            <S.DropdownButton onClick={open}>
-                <Text label={ViewOfType[value]} fontStyle="action-md" />
-            </S.DropdownButton>
+            <Button1 {...ButtonPropPreset} onClick={open}>
+                <Text
+                    label={ViewOfType[value]}
+                    colorName="highlight-darkest"
+                    fontStyle="action-md"
+                />
+            </Button1>
             <S.DropdownList isOpen={isOpen}>
-                <S.DropdownItem onClick={() => handleItemClick("noun")}>
-                    <Text label="명" fontStyle="action-md" />
-                </S.DropdownItem>
-                <S.DropdownItem onClick={() => handleItemClick("verb")}>
-                    <Text label="동" fontStyle="action-md" />
-                </S.DropdownItem>
-                <S.DropdownItem onClick={() => handleItemClick("adjective")}>
-                    <Text label="형" fontStyle="action-md" />
-                </S.DropdownItem>
-                <S.DropdownItem onClick={() => handleItemClick("adverb")}>
-                    <Text label="부" fontStyle="action-md" />
-                </S.DropdownItem>
+                {/* TODO: 반복코드 줄이기 */}
+                <Button1
+                    {...ButtonPropPreset}
+                    onClick={() => handleItemClick("noun")}
+                    activeTransformScale={0.95}
+                >
+                    <Text
+                        label="명"
+                        colorName="highlight-darkest"
+                        fontStyle="action-md"
+                    />
+                </Button1>
+                <Button1
+                    {...ButtonPropPreset}
+                    onClick={() => handleItemClick("verb")}
+                >
+                    <Text
+                        label="동"
+                        colorName="highlight-darkest"
+                        fontStyle="action-md"
+                    />
+                </Button1>
+                <Button1
+                    {...ButtonPropPreset}
+                    onClick={() => handleItemClick("adjective")}
+                >
+                    <Text
+                        label="형"
+                        colorName="highlight-darkest"
+                        fontStyle="action-md"
+                    />
+                </Button1>
+                <Button1
+                    {...ButtonPropPreset}
+                    onClick={() => handleItemClick("adverb")}
+                >
+                    <Text
+                        label="부"
+                        colorName="highlight-darkest"
+                        fontStyle="action-md"
+                    />
+                </Button1>
             </S.DropdownList>
         </S.Root>
     );

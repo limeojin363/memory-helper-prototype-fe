@@ -1,19 +1,22 @@
 import styled from "@emotion/styled";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import WordApi from "../../../apis/services/word";
-import { getDataFromApiRes } from "../../../apis/services";
-import WordsetApi from "../../../apis/services/wordset";
-import { AddWordToSetReqParam } from "../../../apis/services/wordset/add-word-to-wordset/index.types";
-import Text, { FontStyleMap } from "../../../components/texts/Text";
-import { Colors } from "../../../designs/colors";
-import Icon from "../../../components/icons/Icon";
+import WordApi from "../../../../apis/services/word";
+import { getDataFromApiRes } from "../../../../apis/services";
+import WordsetApi from "../../../../apis/services/wordset";
+import { AddWordToSetReqParam } from "../../../../apis/services/wordset/add-word-to-wordset/index.types";
+import Text, { FontStyleMap } from "../../../../components/texts/Text";
+import { Colors } from "../../../../designs/colors";
+import Icon from "../../../../components/icons/Icon";
 import { ClipLoader } from "react-spinners";
-import { queryClient } from "../../../routes/__root";
+import { queryClient } from "../../../../routes/__root";
 import TypeSelector, {
     TypeKey,
-} from "../../../components/type-selector/TypeSelector";
-import useWordModalState from "../hooks/useWordModalState";
+} from "../../../../components/type-selector/TypeSelector";
+import useWordModalState from "../../hooks/useWordModalState";
+import Button1 from "../../../../components/button1";
+import ButtonWithText from "../../../../components/button-with-text";
+import TextField from "../../../../components/text-field";
 
 export type EditorState = {
     word: string;
@@ -58,7 +61,7 @@ const useEditorState = ({
             ],
         }));
 
-    // TODO: MODIFY CASE 대응
+    // TODO: VIEW CASE 대응
     const { mutateAsync: submitWord } = useMutation({
         mutationFn: async () => {
             if (!wordsetId) return;
@@ -139,7 +142,7 @@ const useEditorState = ({
 
 export type WordDetailEditProps = {
     initialState?: EditorState;
-    mode: "CREATE" | "MODIFY";
+    mode: "CREATE" | "VIEW";
     wordsetId: number; // 단어 세트 ID, CREATE 모드에서만 필요
 };
 
@@ -178,13 +181,10 @@ const WordDetailEdit = ({
                     addCustomMeaning={addCustomMeaning}
                 />
             </S.InputsAreaWrapper>
-            <S.GenButton onClick={submitWord}>
-                <Text
-                    fontStyle="action-lg"
-                    label={mode === "CREATE" ? "생성" : "수정"}
-                    colorName="neutral-dark-darkest"
-                />
-            </S.GenButton>
+            <ButtonWithText
+                onClick={submitWord}
+                text={mode === "CREATE" ? "생성" : "삭제"}
+            />
         </S.Root>
     );
 };
@@ -212,23 +212,35 @@ const EngArea = ({
         <S.EngAreaWrapper>
             <Text fontStyle="heading-5" label="Eng" />
             <S.EngInputWrapper>
-                <S.Input
+                <TextField
                     onKeyDown={inputKeyDownHandler}
                     onChange={onChange}
                     value={value}
                 />
                 {showLoadButton && (
                     <S.SideIconPositionor right={4}>
-                        <S.IcButtonWrapper
+                        <Button1
                             onClick={loadServerMeanings}
-                            size={24}
+                            width={"24px"}
+                            height={"24px"}
+                            activeTransformScale={0.95}
+                            colorStyle="Primary"
+                            borderRadius={"30%"}
                         >
-                            <Icon
-                                colorName="neutral-dark-darkest"
-                                iconName="submit"
-                                size={12}
-                            />
-                        </S.IcButtonWrapper>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Icon
+                                    colorName="highlight-dark"
+                                    iconName="submit"
+                                    size={12}
+                                />
+                            </div>
+                        </Button1>
                     </S.SideIconPositionor>
                 )}
 
@@ -305,13 +317,35 @@ const KorArea = ({
         <S.KorAreaWrapper>
             <S.KorTopWrapper>
                 <Text fontStyle="heading-5" label="Kor" />
-                <S.IcButtonWrapper size={16} onClick={onClickAddCustom}>
+                <Button1
+                    onClick={onClickAddCustom}
+                    width={"16px"}
+                    height={"16px"}
+                    activeTransformScale={0.95}
+                    colorStyle="Primary"
+                    borderRadius={"30%"}
+                >
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Icon
+                            colorName="highlight-dark"
+                            iconName="plus"
+                            size={10}
+                        />
+                    </div>
+                </Button1>
+                {/* <S.IcButtonWrapper size={16} onClick={onClickAddCustom}>
                     <Icon
                         colorName="neutral-dark-darkest"
                         iconName="plus"
                         size={12}
                     />
-                </S.IcButtonWrapper>
+                </S.IcButtonWrapper> */}
             </S.KorTopWrapper>
 
             {meanings.map((item, idx) => (
@@ -320,7 +354,7 @@ const KorArea = ({
                         select={(t) => changeTypeByIdx(idx, t)}
                         value={item.type}
                     />
-                    <S.Input
+                    <TextField
                         data-idx={idx}
                         type="text"
                         value={item.value}
@@ -330,16 +364,29 @@ const KorArea = ({
                         }
                     />
                     <S.SideIconPositionor right={4}>
-                        <S.IcButtonWrapper
+                        <Button1
                             onClick={() => deleteMeaningByIdx(idx)}
-                            size={24}
+                            width={"24px"}
+                            height={"24px"}
+                            activeTransformScale={0.95}
+                            colorStyle="Primary"
+                            borderRadius={"30%"}
                         >
-                            <Icon
-                                colorName="neutral-dark-darkest"
-                                iconName="trash"
-                                size={20}
-                            />
-                        </S.IcButtonWrapper>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Icon
+                                    colorName="highlight-dark"
+                                    iconName="trash"
+                                    size={20}
+                                />
+                            </div>
+                        </Button1>
+                        {/* <S.IcButtonWrapper size={24}></S.IcButtonWrapper> */}
                     </S.SideIconPositionor>
                 </S.KorMeaningItemWrapper>
             ))}
@@ -440,7 +487,6 @@ const S = {
         cursor: pointer;
         border: none;
 
-        background-color: ${Colors["neutral-light-dark"]};
         box-shadow: 0 0 0 2px ${Colors["neutral-dark-dark"]} inset;
         border-radius: 12px;
         padding: 12px 16px;

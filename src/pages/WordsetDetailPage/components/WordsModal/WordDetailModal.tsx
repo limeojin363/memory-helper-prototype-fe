@@ -1,7 +1,7 @@
 import WordDetailEdit, { WordDetailEditProps } from "./WordDetailEdit";
-import useWordModalState, { isViewMode } from "../hooks/useWordModalState";
-import DetailModal from "../../../components/detail-modal/DetailModal";
-import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
+import useWordModalState, { isViewMode } from "../../hooks/useWordModalState";
+import DetailModal from "../../../../components/detail-modal/DetailModal";
+import { GetWordsetDetailData } from "../../../../apis/services/wordset/get-wordset-detail/index.types";
 import { useEffect } from "react";
 
 export type WordDetailModalProps = {
@@ -20,7 +20,7 @@ const WordDetailModal = ({ listData, wordsetId }: WordDetailModalProps) => {
     if (!status) return null;
 
     const editComponentProps: WordDetailEditProps = {
-        mode: isViewMode(status) ? "MODIFY" : "CREATE",
+        mode: isViewMode(status) ? "VIEW" : "CREATE",
         initialState: isViewMode(status)
             ? {
                   meanings: status.selectedData.meaning,
