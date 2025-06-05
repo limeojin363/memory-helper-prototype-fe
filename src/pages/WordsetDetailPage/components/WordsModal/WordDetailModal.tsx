@@ -20,7 +20,7 @@ const WordDetailModal = ({ listData, wordsetId }: WordDetailModalProps) => {
     if (!status) return null;
 
     const editComponentProps: WordDetailEditProps = {
-        mode: isViewMode(status) ? "MODIFY" : "CREATE",
+        mode: isViewMode(status) ? "VIEW" : "CREATE",
         initialState: isViewMode(status)
             ? {
                   meanings: status.selectedData.meaning,
