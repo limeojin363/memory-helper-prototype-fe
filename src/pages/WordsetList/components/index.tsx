@@ -14,10 +14,10 @@ const WordsetListPage = () => {
 
     return (
         <>
-            <S.MiddleArea>
+            <S.MainArea>
                 <SearchBar value={value} onChange={onChange} />
                 <List data={listData} />
-            </S.MiddleArea>
+            </S.MainArea>
             <S.AddButton onClick={createAndNavigate}>
                 <Icon
                     iconName="plus"
@@ -32,13 +32,15 @@ const WordsetListPage = () => {
 export default WordsetListPage;
 
 const S = {
-    MiddleArea: styled.div`
+    MainArea: styled.div`
         display: flex;
         flex-direction: column;
         gap: 16px;
 
         width: calc(100% - 32px);
         margin: 20px 16px 0;
+        /* BottomNavigation 높이만큼 보정 */
+        padding-bottom: 100px;
     `,
     AddButton: styled.div`
         all: unset;

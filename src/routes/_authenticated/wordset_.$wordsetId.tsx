@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import WordsetDetailPage from "../../../pages/WordsetDetailPage/components";
+import WordsetDetailPage from "../../pages/WordsetDetail/components";
 
 const Component = () => {
     const { wordsetId } = Route.useParams();
@@ -7,6 +7,6 @@ const Component = () => {
     return <WordsetDetailPage wordsetId={Number(wordsetId)} />;
 };
 
-export const Route = createFileRoute("/_authenticated/_with-status-bar/wordset_/$wordsetId")({
+export const Route = createFileRoute("/_authenticated/wordset_/$wordsetId")({
     component: Component,
 });

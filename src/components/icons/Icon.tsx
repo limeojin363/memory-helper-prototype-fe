@@ -1,5 +1,5 @@
 import { Colors, ColorName } from "../../designs/colors";
-import IcStatusItemProblem from "../../assets/icons/status-item-problem.svg?react";
+import IcStatusItemExam from "../../assets/icons/status-item-exam.svg?react";
 import IcStatusItemSetting from "../../assets/icons/status-item-setting.svg?react";
 import IcStatusItemWord from "../../assets/icons/status-item-word.svg?react";
 import IcArrowLeft from "../../assets/icons/arrow-left.svg?react";
@@ -15,7 +15,7 @@ import styled from "@emotion/styled";
 import { MouseEventHandler } from "react";
 
 const RawIcons = {
-    "status-item-problem": IcStatusItemProblem,
+    "status-item-exam": IcStatusItemExam,
     "status-item-setting": IcStatusItemSetting,
     "status-item-word": IcStatusItemWord,
     "arrow-left": IcArrowLeft,

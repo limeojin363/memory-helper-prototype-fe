@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 import WordsArea, { WordItemProps } from "./WordsArea";
-import WordDetailModal from "./WordsModal/WordDetailModal";
+import WordDetailModal from "./WordsModal/WordsModalBody";
 import { useWordsetDetailData } from "../hooks/useWordsetDetailData";
 import { Provider } from "jotai";
 import WordsetName from "./WordsetName";
@@ -45,7 +45,7 @@ const ModeSelector = ({
             >
                 <Text
                     fontStyle={mode === "WORDS" ? "action-xl" : "action-xl"}
-                    fontSize={mode === "WORDS" ? 18: 17}
+                    fontSize={mode === "WORDS" ? 18 : 17}
                     label="단어장 보기"
                     colorName={"neutral-dark-darkest"}
                 />
@@ -57,7 +57,7 @@ const ModeSelector = ({
             >
                 <Text
                     fontStyle={mode === "EXAMS" ? "action-xl" : "action-xl"}
-                    fontSize={mode === "EXAMS" ? 18: 17}
+                    fontSize={mode === "EXAMS" ? 18 : 17}
                     label="시험 보기"
                     colorName={"neutral-dark-darkest"}
                 />
@@ -86,7 +86,7 @@ const Content = ({
 
     const goBack = () =>
         navigate({
-            to: "/words",
+            to: "/wordset",
         });
 
     const setName = detailData.name;

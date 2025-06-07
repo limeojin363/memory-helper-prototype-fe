@@ -3,7 +3,7 @@ import SearchBar from "../../components/layouts/mobile/SearchBar";
 import ProblemSetList from "./ProblemSetList";
 import S from "./ProblemsMain.styled";
 
-const ProblemsMain = () => {
+const ExamListPage = () => {
     const [value, onChange] = useInput();
 
     return (
@@ -14,4 +14,4 @@ const ProblemsMain = () => {
     );
 };
 
-export default ProblemsMain;
+export default ExamListPage;
