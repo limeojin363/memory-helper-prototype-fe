@@ -23,13 +23,15 @@ const DetailModal = ({
     return (
         <S.BlackBg>
             <S.Wrapper>
-                <S.CloseButton onClick={close}>
-                    <Text
-                        label="X"
-                        fontStyle="action-lg"
-                        colorName="neutral-dark-darkest"
-                    />
-                </S.CloseButton>
+                <S.CloseButtonWrapper>
+                    <S.CloseButton onClick={close}>
+                        <Text
+                            label="X"
+                            fontStyle="heading-2"
+                            colorName="neutral-dark-darkest"
+                        />
+                    </S.CloseButton>
+                </S.CloseButtonWrapper>
                 <S.ModalBody>{children}</S.ModalBody>
                 <S.BottomButtonsArea>
                     {prev && (
@@ -79,8 +81,8 @@ const S = {
         gap: 8px;
     `,
     CloseButton: styled.button`
-        height: 28px;
-        width: 28px;
+        height: 40px;
+        width: 40px;
         background-color: ${Colors["neutral-light-medium"]};
 
         font-size: 16px;
@@ -89,7 +91,7 @@ const S = {
 
         border: none;
         box-shadow: 0 0 0 2px ${Colors["neutral-dark-darkest"]} inset;
-        border-radius: 50%;
+        border-radius: 20%;
 
         display: flex;
         justify-content: center;
@@ -115,6 +117,11 @@ const S = {
         height: 80px;
         display: flex;
         gap: 8px;
+    `,
+    CloseButtonWrapper: styled.div`
+        display: flex;
+        justify-content: end;
+        align-items: center;
     `,
     BottomButton: styled.button`
         flex: 1;
