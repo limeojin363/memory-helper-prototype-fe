@@ -1,7 +1,7 @@
+import styled from "@emotion/styled";
 import { Link, ToOptions, useLocation } from "@tanstack/react-router";
-import S from "./StatusBar.styled";
 import Icon, { IconName } from "../../icons/Icon";
-import { ColorName } from "../../../designs/colors";
+import { ColorName, Colors } from "../../../designs/colors";
 import Text, { FontStyleName } from "../../texts/Text";
 
 type ItemProps = {
@@ -50,13 +50,13 @@ const StatusItem = ({ iconName, textView, path }: ItemProps) => {
 const itemList: ItemProps[] = [
     {
         iconName: "status-item-word",
-        textView: "Word Sets",
-        path: "/words",
+        textView: "Wordsets",
+        path: "/wordset",
     },
     {
-        iconName: "status-item-problem",
-        textView: "Problem Sets",
-        path: "/problems",
+        iconName: "status-item-exam",
+        textView: "Exams",
+        path: "/exam",
     },
     {
         iconName: "status-item-setting",
@@ -78,3 +78,38 @@ const MobileStatusBar = () => {
 };
 
 export default MobileStatusBar;
+
+const S = {
+    Root: styled.div`
+        position: fixed;
+        bottom: 0;
+
+        width: 100%;
+
+        background-color: ${Colors["neutral-light-medium"]};
+        border-top: ${Colors["neutral-light-dark"]} solid 2px;
+    `,
+    StatusBarInner: styled.div`
+        padding: 24px 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    `,
+    StatusItemOuter: styled.div`
+        width: 84px;
+        height: 40px;
+
+        a {
+            text-decoration: none;
+        }
+    `,
+    StatusItemInner: styled.div`
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        gap: 4px;
+
+        flex-direction: column;
+    `,
+};

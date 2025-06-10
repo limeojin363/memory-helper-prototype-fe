@@ -123,7 +123,7 @@ export type FontStyleName = keyof typeof FontStyleMap;
 
 type TextProps = {
     label: string;
-    fontStyle: FontStyleName;
+    fontStyle?: FontStyleName;
     fontSize?: number;
     colorName?: ColorName;
     userSelect?: "none" | "auto";
@@ -131,7 +131,7 @@ type TextProps = {
 
 const Text = ({
     label,
-    fontStyle,
+    fontStyle = "body-md",
     fontSize,
     colorName = "neutral-dark-dark",
     userSelect = "none",

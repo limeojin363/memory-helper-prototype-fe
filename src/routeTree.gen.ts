@@ -15,11 +15,13 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedWithStatusBarImport } from './routes/_authenticated/_with-status-bar'
-import { Route as AuthenticatedWithStatusBarWordsImport } from './routes/_authenticated/_with-status-bar/words'
+import { Route as AuthenticatedWordsetWordsetIdImport } from './routes/_authenticated/wordset_.$wordsetId'
+import { Route as AuthenticatedResultResultIdImport } from './routes/_authenticated/result_.$resultId'
+import { Route as AuthenticatedExamExamIdImport } from './routes/_authenticated/exam.$examId'
+import { Route as AuthenticatedWithStatusBarWordsetImport } from './routes/_authenticated/_with-status-bar/wordset'
 import { Route as AuthenticatedWithStatusBarSettingsImport } from './routes/_authenticated/_with-status-bar/settings'
-import { Route as AuthenticatedWithStatusBarProblemsImport } from './routes/_authenticated/_with-status-bar/problems'
-import { Route as AuthenticatedWithStatusBarWordsetWordsetIdImport } from './routes/_authenticated/_with-status-bar/wordset_.$wordsetId'
-import { Route as AuthenticatedWithStatusBarProblemsProblemIdImport } from './routes/_authenticated/_with-status-bar/problems_.$problemId'
+import { Route as AuthenticatedWithStatusBarExamImport } from './routes/_authenticated/_with-status-bar/exam'
+import { Route as AuthenticatedExamExamIdSolveImport } from './routes/_authenticated/exam_.$examId.solve'
 
 // Create/Update Routes
 
@@ -47,10 +49,30 @@ const AuthenticatedWithStatusBarRoute = AuthenticatedWithStatusBarImport.update(
   } as any,
 )
 
-const AuthenticatedWithStatusBarWordsRoute =
-  AuthenticatedWithStatusBarWordsImport.update({
-    id: '/words',
-    path: '/words',
+const AuthenticatedWordsetWordsetIdRoute =
+  AuthenticatedWordsetWordsetIdImport.update({
+    id: '/wordset_/$wordsetId',
+    path: '/wordset/$wordsetId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedResultResultIdRoute =
+  AuthenticatedResultResultIdImport.update({
+    id: '/result_/$resultId',
+    path: '/result/$resultId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
+const AuthenticatedExamExamIdRoute = AuthenticatedExamExamIdImport.update({
+  id: '/exam/$examId',
+  path: '/exam/$examId',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+
+const AuthenticatedWithStatusBarWordsetRoute =
+  AuthenticatedWithStatusBarWordsetImport.update({
+    id: '/wordset',
+    path: '/wordset',
     getParentRoute: () => AuthenticatedWithStatusBarRoute,
   } as any)
 
@@ -61,25 +83,18 @@ const AuthenticatedWithStatusBarSettingsRoute =
     getParentRoute: () => AuthenticatedWithStatusBarRoute,
   } as any)
 
-const AuthenticatedWithStatusBarProblemsRoute =
-  AuthenticatedWithStatusBarProblemsImport.update({
-    id: '/problems',
-    path: '/problems',
+const AuthenticatedWithStatusBarExamRoute =
+  AuthenticatedWithStatusBarExamImport.update({
+    id: '/exam',
+    path: '/exam',
     getParentRoute: () => AuthenticatedWithStatusBarRoute,
   } as any)
 
-const AuthenticatedWithStatusBarWordsetWordsetIdRoute =
-  AuthenticatedWithStatusBarWordsetWordsetIdImport.update({
-    id: '/wordset_/$wordsetId',
-    path: '/wordset/$wordsetId',
-    getParentRoute: () => AuthenticatedWithStatusBarRoute,
-  } as any)
-
-const AuthenticatedWithStatusBarProblemsProblemIdRoute =
-  AuthenticatedWithStatusBarProblemsProblemIdImport.update({
-    id: '/problems_/$problemId',
-    path: '/problems/$problemId',
-    getParentRoute: () => AuthenticatedWithStatusBarRoute,
+const AuthenticatedExamExamIdSolveRoute =
+  AuthenticatedExamExamIdSolveImport.update({
+    id: '/exam_/$examId/solve',
+    path: '/exam/$examId/solve',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -114,11 +129,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWithStatusBarImport
       parentRoute: typeof AuthenticatedImport
     }
-    '/_authenticated/_with-status-bar/problems': {
-      id: '/_authenticated/_with-status-bar/problems'
-      path: '/problems'
-      fullPath: '/problems'
-      preLoaderRoute: typeof AuthenticatedWithStatusBarProblemsImport
+    '/_authenticated/_with-status-bar/exam': {
+      id: '/_authenticated/_with-status-bar/exam'
+      path: '/exam'
+      fullPath: '/exam'
+      preLoaderRoute: typeof AuthenticatedWithStatusBarExamImport
       parentRoute: typeof AuthenticatedWithStatusBarImport
     }
     '/_authenticated/_with-status-bar/settings': {
@@ -128,26 +143,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWithStatusBarSettingsImport
       parentRoute: typeof AuthenticatedWithStatusBarImport
     }
-    '/_authenticated/_with-status-bar/words': {
-      id: '/_authenticated/_with-status-bar/words'
-      path: '/words'
-      fullPath: '/words'
-      preLoaderRoute: typeof AuthenticatedWithStatusBarWordsImport
+    '/_authenticated/_with-status-bar/wordset': {
+      id: '/_authenticated/_with-status-bar/wordset'
+      path: '/wordset'
+      fullPath: '/wordset'
+      preLoaderRoute: typeof AuthenticatedWithStatusBarWordsetImport
       parentRoute: typeof AuthenticatedWithStatusBarImport
     }
-    '/_authenticated/_with-status-bar/problems_/$problemId': {
-      id: '/_authenticated/_with-status-bar/problems_/$problemId'
-      path: '/problems/$problemId'
-      fullPath: '/problems/$problemId'
-      preLoaderRoute: typeof AuthenticatedWithStatusBarProblemsProblemIdImport
-      parentRoute: typeof AuthenticatedWithStatusBarImport
+    '/_authenticated/exam/$examId': {
+      id: '/_authenticated/exam/$examId'
+      path: '/exam/$examId'
+      fullPath: '/exam/$examId'
+      preLoaderRoute: typeof AuthenticatedExamExamIdImport
+      parentRoute: typeof AuthenticatedImport
     }
-    '/_authenticated/_with-status-bar/wordset_/$wordsetId': {
-      id: '/_authenticated/_with-status-bar/wordset_/$wordsetId'
+    '/_authenticated/result_/$resultId': {
+      id: '/_authenticated/result_/$resultId'
+      path: '/result/$resultId'
+      fullPath: '/result/$resultId'
+      preLoaderRoute: typeof AuthenticatedResultResultIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/wordset_/$wordsetId': {
+      id: '/_authenticated/wordset_/$wordsetId'
       path: '/wordset/$wordsetId'
       fullPath: '/wordset/$wordsetId'
-      preLoaderRoute: typeof AuthenticatedWithStatusBarWordsetWordsetIdImport
-      parentRoute: typeof AuthenticatedWithStatusBarImport
+      preLoaderRoute: typeof AuthenticatedWordsetWordsetIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/exam_/$examId/solve': {
+      id: '/_authenticated/exam_/$examId/solve'
+      path: '/exam/$examId/solve'
+      fullPath: '/exam/$examId/solve'
+      preLoaderRoute: typeof AuthenticatedExamExamIdSolveImport
+      parentRoute: typeof AuthenticatedImport
     }
   }
 }
@@ -155,24 +184,18 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthenticatedWithStatusBarRouteChildren {
-  AuthenticatedWithStatusBarProblemsRoute: typeof AuthenticatedWithStatusBarProblemsRoute
+  AuthenticatedWithStatusBarExamRoute: typeof AuthenticatedWithStatusBarExamRoute
   AuthenticatedWithStatusBarSettingsRoute: typeof AuthenticatedWithStatusBarSettingsRoute
-  AuthenticatedWithStatusBarWordsRoute: typeof AuthenticatedWithStatusBarWordsRoute
-  AuthenticatedWithStatusBarProblemsProblemIdRoute: typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
-  AuthenticatedWithStatusBarWordsetWordsetIdRoute: typeof AuthenticatedWithStatusBarWordsetWordsetIdRoute
+  AuthenticatedWithStatusBarWordsetRoute: typeof AuthenticatedWithStatusBarWordsetRoute
 }
 
 const AuthenticatedWithStatusBarRouteChildren: AuthenticatedWithStatusBarRouteChildren =
   {
-    AuthenticatedWithStatusBarProblemsRoute:
-      AuthenticatedWithStatusBarProblemsRoute,
+    AuthenticatedWithStatusBarExamRoute: AuthenticatedWithStatusBarExamRoute,
     AuthenticatedWithStatusBarSettingsRoute:
       AuthenticatedWithStatusBarSettingsRoute,
-    AuthenticatedWithStatusBarWordsRoute: AuthenticatedWithStatusBarWordsRoute,
-    AuthenticatedWithStatusBarProblemsProblemIdRoute:
-      AuthenticatedWithStatusBarProblemsProblemIdRoute,
-    AuthenticatedWithStatusBarWordsetWordsetIdRoute:
-      AuthenticatedWithStatusBarWordsetWordsetIdRoute,
+    AuthenticatedWithStatusBarWordsetRoute:
+      AuthenticatedWithStatusBarWordsetRoute,
   }
 
 const AuthenticatedWithStatusBarRouteWithChildren =
@@ -182,10 +205,18 @@ const AuthenticatedWithStatusBarRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedWithStatusBarRoute: typeof AuthenticatedWithStatusBarRouteWithChildren
+  AuthenticatedExamExamIdRoute: typeof AuthenticatedExamExamIdRoute
+  AuthenticatedResultResultIdRoute: typeof AuthenticatedResultResultIdRoute
+  AuthenticatedWordsetWordsetIdRoute: typeof AuthenticatedWordsetWordsetIdRoute
+  AuthenticatedExamExamIdSolveRoute: typeof AuthenticatedExamExamIdSolveRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWithStatusBarRoute: AuthenticatedWithStatusBarRouteWithChildren,
+  AuthenticatedExamExamIdRoute: AuthenticatedExamExamIdRoute,
+  AuthenticatedResultResultIdRoute: AuthenticatedResultResultIdRoute,
+  AuthenticatedWordsetWordsetIdRoute: AuthenticatedWordsetWordsetIdRoute,
+  AuthenticatedExamExamIdSolveRoute: AuthenticatedExamExamIdSolveRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -196,22 +227,26 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthenticatedWithStatusBarRouteWithChildren
   '/login': typeof LoginRoute
-  '/problems': typeof AuthenticatedWithStatusBarProblemsRoute
+  '/exam': typeof AuthenticatedWithStatusBarExamRoute
   '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
-  '/words': typeof AuthenticatedWithStatusBarWordsRoute
-  '/problems/$problemId': typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
-  '/wordset/$wordsetId': typeof AuthenticatedWithStatusBarWordsetWordsetIdRoute
+  '/wordset': typeof AuthenticatedWithStatusBarWordsetRoute
+  '/exam/$examId': typeof AuthenticatedExamExamIdRoute
+  '/result/$resultId': typeof AuthenticatedResultResultIdRoute
+  '/wordset/$wordsetId': typeof AuthenticatedWordsetWordsetIdRoute
+  '/exam/$examId/solve': typeof AuthenticatedExamExamIdSolveRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthenticatedWithStatusBarRouteWithChildren
   '/login': typeof LoginRoute
-  '/problems': typeof AuthenticatedWithStatusBarProblemsRoute
+  '/exam': typeof AuthenticatedWithStatusBarExamRoute
   '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
-  '/words': typeof AuthenticatedWithStatusBarWordsRoute
-  '/problems/$problemId': typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
-  '/wordset/$wordsetId': typeof AuthenticatedWithStatusBarWordsetWordsetIdRoute
+  '/wordset': typeof AuthenticatedWithStatusBarWordsetRoute
+  '/exam/$examId': typeof AuthenticatedExamExamIdRoute
+  '/result/$resultId': typeof AuthenticatedResultResultIdRoute
+  '/wordset/$wordsetId': typeof AuthenticatedWordsetWordsetIdRoute
+  '/exam/$examId/solve': typeof AuthenticatedExamExamIdSolveRoute
 }
 
 export interface FileRoutesById {
@@ -220,11 +255,13 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/_with-status-bar': typeof AuthenticatedWithStatusBarRouteWithChildren
-  '/_authenticated/_with-status-bar/problems': typeof AuthenticatedWithStatusBarProblemsRoute
+  '/_authenticated/_with-status-bar/exam': typeof AuthenticatedWithStatusBarExamRoute
   '/_authenticated/_with-status-bar/settings': typeof AuthenticatedWithStatusBarSettingsRoute
-  '/_authenticated/_with-status-bar/words': typeof AuthenticatedWithStatusBarWordsRoute
-  '/_authenticated/_with-status-bar/problems_/$problemId': typeof AuthenticatedWithStatusBarProblemsProblemIdRoute
-  '/_authenticated/_with-status-bar/wordset_/$wordsetId': typeof AuthenticatedWithStatusBarWordsetWordsetIdRoute
+  '/_authenticated/_with-status-bar/wordset': typeof AuthenticatedWithStatusBarWordsetRoute
+  '/_authenticated/exam/$examId': typeof AuthenticatedExamExamIdRoute
+  '/_authenticated/result_/$resultId': typeof AuthenticatedResultResultIdRoute
+  '/_authenticated/wordset_/$wordsetId': typeof AuthenticatedWordsetWordsetIdRoute
+  '/_authenticated/exam_/$examId/solve': typeof AuthenticatedExamExamIdSolveRoute
 }
 
 export interface FileRouteTypes {
@@ -233,32 +270,38 @@ export interface FileRouteTypes {
     | '/'
     | ''
     | '/login'
-    | '/problems'
+    | '/exam'
     | '/settings'
-    | '/words'
-    | '/problems/$problemId'
+    | '/wordset'
+    | '/exam/$examId'
+    | '/result/$resultId'
     | '/wordset/$wordsetId'
+    | '/exam/$examId/solve'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
     | '/login'
-    | '/problems'
+    | '/exam'
     | '/settings'
-    | '/words'
-    | '/problems/$problemId'
+    | '/wordset'
+    | '/exam/$examId'
+    | '/result/$resultId'
     | '/wordset/$wordsetId'
+    | '/exam/$examId/solve'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
     | '/_authenticated/_with-status-bar'
-    | '/_authenticated/_with-status-bar/problems'
+    | '/_authenticated/_with-status-bar/exam'
     | '/_authenticated/_with-status-bar/settings'
-    | '/_authenticated/_with-status-bar/words'
-    | '/_authenticated/_with-status-bar/problems_/$problemId'
-    | '/_authenticated/_with-status-bar/wordset_/$wordsetId'
+    | '/_authenticated/_with-status-bar/wordset'
+    | '/_authenticated/exam/$examId'
+    | '/_authenticated/result_/$resultId'
+    | '/_authenticated/wordset_/$wordsetId'
+    | '/_authenticated/exam_/$examId/solve'
   fileRoutesById: FileRoutesById
 }
 
@@ -295,7 +338,11 @@ export const routeTree = rootRoute
     "/_authenticated": {
       "filePath": "_authenticated.tsx",
       "children": [
-        "/_authenticated/_with-status-bar"
+        "/_authenticated/_with-status-bar",
+        "/_authenticated/exam/$examId",
+        "/_authenticated/result_/$resultId",
+        "/_authenticated/wordset_/$wordsetId",
+        "/_authenticated/exam_/$examId/solve"
       ]
     },
     "/login": {
@@ -305,32 +352,38 @@ export const routeTree = rootRoute
       "filePath": "_authenticated/_with-status-bar.tsx",
       "parent": "/_authenticated",
       "children": [
-        "/_authenticated/_with-status-bar/problems",
+        "/_authenticated/_with-status-bar/exam",
         "/_authenticated/_with-status-bar/settings",
-        "/_authenticated/_with-status-bar/words",
-        "/_authenticated/_with-status-bar/problems_/$problemId",
-        "/_authenticated/_with-status-bar/wordset_/$wordsetId"
+        "/_authenticated/_with-status-bar/wordset"
       ]
     },
-    "/_authenticated/_with-status-bar/problems": {
-      "filePath": "_authenticated/_with-status-bar/problems.tsx",
+    "/_authenticated/_with-status-bar/exam": {
+      "filePath": "_authenticated/_with-status-bar/exam.tsx",
       "parent": "/_authenticated/_with-status-bar"
     },
     "/_authenticated/_with-status-bar/settings": {
       "filePath": "_authenticated/_with-status-bar/settings.tsx",
       "parent": "/_authenticated/_with-status-bar"
     },
-    "/_authenticated/_with-status-bar/words": {
-      "filePath": "_authenticated/_with-status-bar/words.tsx",
+    "/_authenticated/_with-status-bar/wordset": {
+      "filePath": "_authenticated/_with-status-bar/wordset.tsx",
       "parent": "/_authenticated/_with-status-bar"
     },
-    "/_authenticated/_with-status-bar/problems_/$problemId": {
-      "filePath": "_authenticated/_with-status-bar/problems_.$problemId.tsx",
-      "parent": "/_authenticated/_with-status-bar"
+    "/_authenticated/exam/$examId": {
+      "filePath": "_authenticated/exam.$examId.tsx",
+      "parent": "/_authenticated"
     },
-    "/_authenticated/_with-status-bar/wordset_/$wordsetId": {
-      "filePath": "_authenticated/_with-status-bar/wordset_.$wordsetId.tsx",
-      "parent": "/_authenticated/_with-status-bar"
+    "/_authenticated/result_/$resultId": {
+      "filePath": "_authenticated/result_.$resultId.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/wordset_/$wordsetId": {
+      "filePath": "_authenticated/wordset_.$wordsetId.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/exam_/$examId/solve": {
+      "filePath": "_authenticated/exam_.$examId.solve.tsx",
+      "parent": "/_authenticated"
     }
   }
 }
