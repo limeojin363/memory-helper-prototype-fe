@@ -19,7 +19,7 @@ const Header = ({ goBack, children }: HeaderProps) => {
                         />
                     </S.ArrowButton>
                 )}
-                {children}
+                <S.ChildrenArea>{children}</S.ChildrenArea>
             </S.Inner>
         </S.Outer>
     );
@@ -43,7 +43,6 @@ const S = {
     Inner: styled.div`
         display: flex;
         align-items: center;
-        justify-content: center;
         width: calc(100% - 16px);
 
         height: 60px;
@@ -51,8 +50,6 @@ const S = {
         border-bottom: 1px solid black;
     `,
     ArrowButton: styled.button`
-        position: absolute;
-        left: 12px;
         :active {
             transform: scale(0.9);
         }
@@ -64,5 +61,8 @@ const S = {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+    `,
+    ChildrenArea: styled.div`
+        flex: 1;
     `,
 };

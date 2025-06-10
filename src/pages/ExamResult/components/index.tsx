@@ -1,7 +1,9 @@
 import styled from "@emotion/styled";
 
-const ExamResultPage = () => {
-    return <S.Root>{/* FILL HERE */}</S.Root>;
+type ExamResultPageProps = { resultId: number };
+
+const ExamResultPage = ({ resultId }: ExamResultPageProps) => {
+    return <S.Root>{resultId}</S.Root>;
 };
 
 const S = {

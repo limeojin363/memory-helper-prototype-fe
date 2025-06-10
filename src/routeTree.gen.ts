@@ -16,10 +16,12 @@ import { Route as AuthenticatedImport } from './routes/_authenticated'
 import { Route as IndexImport } from './routes/index'
 import { Route as AuthenticatedWithStatusBarImport } from './routes/_authenticated/_with-status-bar'
 import { Route as AuthenticatedWordsetWordsetIdImport } from './routes/_authenticated/wordset_.$wordsetId'
-import { Route as AuthenticatedExamExamIdImport } from './routes/_authenticated/exam/$examId'
+import { Route as AuthenticatedResultResultIdImport } from './routes/_authenticated/result_.$resultId'
+import { Route as AuthenticatedExamExamIdImport } from './routes/_authenticated/exam.$examId'
 import { Route as AuthenticatedWithStatusBarWordsetImport } from './routes/_authenticated/_with-status-bar/wordset'
 import { Route as AuthenticatedWithStatusBarSettingsImport } from './routes/_authenticated/_with-status-bar/settings'
 import { Route as AuthenticatedWithStatusBarExamImport } from './routes/_authenticated/_with-status-bar/exam'
+import { Route as AuthenticatedExamExamIdSolveImport } from './routes/_authenticated/exam_.$examId.solve'
 
 // Create/Update Routes
 
@@ -54,6 +56,13 @@ const AuthenticatedWordsetWordsetIdRoute =
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 
+const AuthenticatedResultResultIdRoute =
+  AuthenticatedResultResultIdImport.update({
+    id: '/result_/$resultId',
+    path: '/result/$resultId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+
 const AuthenticatedExamExamIdRoute = AuthenticatedExamExamIdImport.update({
   id: '/exam/$examId',
   path: '/exam/$examId',
@@ -79,6 +88,13 @@ const AuthenticatedWithStatusBarExamRoute =
     id: '/exam',
     path: '/exam',
     getParentRoute: () => AuthenticatedWithStatusBarRoute,
+  } as any)
+
+const AuthenticatedExamExamIdSolveRoute =
+  AuthenticatedExamExamIdSolveImport.update({
+    id: '/exam_/$examId/solve',
+    path: '/exam/$examId/solve',
+    getParentRoute: () => AuthenticatedRoute,
   } as any)
 
 // Populate the FileRoutesByPath interface
@@ -141,11 +157,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedExamExamIdImport
       parentRoute: typeof AuthenticatedImport
     }
+    '/_authenticated/result_/$resultId': {
+      id: '/_authenticated/result_/$resultId'
+      path: '/result/$resultId'
+      fullPath: '/result/$resultId'
+      preLoaderRoute: typeof AuthenticatedResultResultIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
     '/_authenticated/wordset_/$wordsetId': {
       id: '/_authenticated/wordset_/$wordsetId'
       path: '/wordset/$wordsetId'
       fullPath: '/wordset/$wordsetId'
       preLoaderRoute: typeof AuthenticatedWordsetWordsetIdImport
+      parentRoute: typeof AuthenticatedImport
+    }
+    '/_authenticated/exam_/$examId/solve': {
+      id: '/_authenticated/exam_/$examId/solve'
+      path: '/exam/$examId/solve'
+      fullPath: '/exam/$examId/solve'
+      preLoaderRoute: typeof AuthenticatedExamExamIdSolveImport
       parentRoute: typeof AuthenticatedImport
     }
   }
@@ -176,13 +206,17 @@ const AuthenticatedWithStatusBarRouteWithChildren =
 interface AuthenticatedRouteChildren {
   AuthenticatedWithStatusBarRoute: typeof AuthenticatedWithStatusBarRouteWithChildren
   AuthenticatedExamExamIdRoute: typeof AuthenticatedExamExamIdRoute
+  AuthenticatedResultResultIdRoute: typeof AuthenticatedResultResultIdRoute
   AuthenticatedWordsetWordsetIdRoute: typeof AuthenticatedWordsetWordsetIdRoute
+  AuthenticatedExamExamIdSolveRoute: typeof AuthenticatedExamExamIdSolveRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedWithStatusBarRoute: AuthenticatedWithStatusBarRouteWithChildren,
   AuthenticatedExamExamIdRoute: AuthenticatedExamExamIdRoute,
+  AuthenticatedResultResultIdRoute: AuthenticatedResultResultIdRoute,
   AuthenticatedWordsetWordsetIdRoute: AuthenticatedWordsetWordsetIdRoute,
+  AuthenticatedExamExamIdSolveRoute: AuthenticatedExamExamIdSolveRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -197,7 +231,9 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
   '/wordset': typeof AuthenticatedWithStatusBarWordsetRoute
   '/exam/$examId': typeof AuthenticatedExamExamIdRoute
+  '/result/$resultId': typeof AuthenticatedResultResultIdRoute
   '/wordset/$wordsetId': typeof AuthenticatedWordsetWordsetIdRoute
+  '/exam/$examId/solve': typeof AuthenticatedExamExamIdSolveRoute
 }
 
 export interface FileRoutesByTo {
@@ -208,7 +244,9 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedWithStatusBarSettingsRoute
   '/wordset': typeof AuthenticatedWithStatusBarWordsetRoute
   '/exam/$examId': typeof AuthenticatedExamExamIdRoute
+  '/result/$resultId': typeof AuthenticatedResultResultIdRoute
   '/wordset/$wordsetId': typeof AuthenticatedWordsetWordsetIdRoute
+  '/exam/$examId/solve': typeof AuthenticatedExamExamIdSolveRoute
 }
 
 export interface FileRoutesById {
@@ -221,7 +259,9 @@ export interface FileRoutesById {
   '/_authenticated/_with-status-bar/settings': typeof AuthenticatedWithStatusBarSettingsRoute
   '/_authenticated/_with-status-bar/wordset': typeof AuthenticatedWithStatusBarWordsetRoute
   '/_authenticated/exam/$examId': typeof AuthenticatedExamExamIdRoute
+  '/_authenticated/result_/$resultId': typeof AuthenticatedResultResultIdRoute
   '/_authenticated/wordset_/$wordsetId': typeof AuthenticatedWordsetWordsetIdRoute
+  '/_authenticated/exam_/$examId/solve': typeof AuthenticatedExamExamIdSolveRoute
 }
 
 export interface FileRouteTypes {
@@ -234,7 +274,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/wordset'
     | '/exam/$examId'
+    | '/result/$resultId'
     | '/wordset/$wordsetId'
+    | '/exam/$examId/solve'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -244,7 +286,9 @@ export interface FileRouteTypes {
     | '/settings'
     | '/wordset'
     | '/exam/$examId'
+    | '/result/$resultId'
     | '/wordset/$wordsetId'
+    | '/exam/$examId/solve'
   id:
     | '__root__'
     | '/'
@@ -255,7 +299,9 @@ export interface FileRouteTypes {
     | '/_authenticated/_with-status-bar/settings'
     | '/_authenticated/_with-status-bar/wordset'
     | '/_authenticated/exam/$examId'
+    | '/_authenticated/result_/$resultId'
     | '/_authenticated/wordset_/$wordsetId'
+    | '/_authenticated/exam_/$examId/solve'
   fileRoutesById: FileRoutesById
 }
 
@@ -294,7 +340,9 @@ export const routeTree = rootRoute
       "children": [
         "/_authenticated/_with-status-bar",
         "/_authenticated/exam/$examId",
-        "/_authenticated/wordset_/$wordsetId"
+        "/_authenticated/result_/$resultId",
+        "/_authenticated/wordset_/$wordsetId",
+        "/_authenticated/exam_/$examId/solve"
       ]
     },
     "/login": {
@@ -322,11 +370,19 @@ export const routeTree = rootRoute
       "parent": "/_authenticated/_with-status-bar"
     },
     "/_authenticated/exam/$examId": {
-      "filePath": "_authenticated/exam/$examId.tsx",
+      "filePath": "_authenticated/exam.$examId.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/result_/$resultId": {
+      "filePath": "_authenticated/result_.$resultId.tsx",
       "parent": "/_authenticated"
     },
     "/_authenticated/wordset_/$wordsetId": {
       "filePath": "_authenticated/wordset_.$wordsetId.tsx",
+      "parent": "/_authenticated"
+    },
+    "/_authenticated/exam_/$examId/solve": {
+      "filePath": "_authenticated/exam_.$examId.solve.tsx",
       "parent": "/_authenticated"
     }
   }

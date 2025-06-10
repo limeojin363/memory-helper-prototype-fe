@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ExamDetail from "../../../pages/ExamDetail/ProblemsDetail";
+import ExamDetailPage from "../../pages/ExamDetail/components";
 
 const Component = () => {
     const { examId } = Route.useParams();
-    return <ExamDetail examId={examId} />;
+    return <ExamDetailPage examId={Number(examId)} />;
 };
 
 export const Route = createFileRoute("/_authenticated/exam/$examId")({

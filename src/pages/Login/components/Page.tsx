@@ -6,7 +6,7 @@ import { NavigateOptions } from "@tanstack/react-router";
 import Text from "../../../components/texts/Text";
 
 const LoginPage = ({
-    navigateOptionAfterSuccessfullyLoggedIn = { to: "/words" },
+    navigateOptionAfterSuccessfullyLoggedIn = { to: "/wordset" },
 }: {
     navigateOptionAfterSuccessfullyLoggedIn?: NavigateOptions;
 }) => {
