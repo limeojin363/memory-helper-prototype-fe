@@ -5,13 +5,7 @@ import Text from "../../components/texts/Text";
 import { Colors } from "../../designs/colors";
 import { createContext, useContext } from "react";
 
-const Choice = ({
-    id,
-    value,
-}: {
-    id: string;
-    value: string;
-}) => {
+const Choice = ({ id, value }: { id: string; value: string }) => {
     const { isSelected, toggleChoice } = useChoices();
 
     return (
@@ -43,9 +37,11 @@ const ProblemItem = ({ itemData }: { itemData: ProblemType }) => {
                 <Text
                     label={`${itemData.problemNumber}. ${itemData.question}`}
                 />
-                {itemData.multipleChoice.map(({ id, value }) => (
-                    <Choice id={id} value={value} />
-                ))}
+                <S.ChoicesWrapper>
+                    {itemData.multipleChoice.map(({ id, value }) => (
+                        <Choice id={id} value={value} />
+                    ))}
+                </S.ChoicesWrapper>
             </S.ItemRoot>
         </ProblemItemContext.Provider>
     );
@@ -71,11 +67,21 @@ const S = {
     `,
     ItemRoot: styled.div`
         width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 8px;
     `,
     ChoiceRoot: styled.div`
         display: flex;
         align-items: center;
         gap: 8px;
+    `,
+    ChoicesWrapper: styled.div`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 2px;
     `,
     ChoiceIdWrapper: styled.button<{ selected: boolean }>`
         display: flex;

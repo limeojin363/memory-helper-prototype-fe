@@ -5,6 +5,7 @@ import useExamDetail from "../ExamDetail/hooks/useExamDetail";
 import ProblemList from "./ProblemList";
 import ButtonWithText from "../../components/button-with-text";
 import { createContext, useContext } from "react";
+import Text from "../../components/texts/Text";
 
 const ExamSolvingPageContext = createContext<{ examId: number }>({
     examId: 0,
@@ -29,7 +30,9 @@ const ExamSolvingPage = ({ examId }: { examId: number }) => {
     return (
         <ExamSolvingPageContext.Provider value={{ examId }}>
             <S.Root>
-                <Header goBack={goBack}>{examName}</Header>
+                <Header goBack={goBack}>
+                    <Text label={examName} />
+                </Header>
                 <S.Inner>
                     <ProblemList listData={problemList} />
                     <ButtonWithText
@@ -53,7 +56,7 @@ const S = {
 
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 40px;
     `,
 };
 

@@ -91,19 +91,15 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
                 <Text
                     label={`문제 수: ${howManyProblems}`}
                     fontStyle="action-md"
-                    colorName="neutral-dark-dark"
                 />
-                <Text label={날짜} fontStyle="body-md" />
+                <Text label={날짜} fontStyle="action-md" />
             </S.MetaDataArea>
             <S.ButtonsArea>
-                    <ButtonWithText
-                        text={sourceWordsetName}
-                        onClick={goToWordset}
-                    />
-                    <ButtonWithText
-                        text={"문제 풀기"}
-                        onClick={goToSolvingPage}
-                    />
+                <ButtonWithText
+                    text={sourceWordsetName}
+                    onClick={goToWordset}
+                />
+                <ButtonWithText text={"문제 풀기"} onClick={goToSolvingPage} />
             </S.ButtonsArea>
             <ResultList listData={examDetailData.results} />
         </S.Root>
