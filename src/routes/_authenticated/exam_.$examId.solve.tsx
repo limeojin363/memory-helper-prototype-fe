@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import ExamSolvingPage from "../../pages/ExamSolving/components";
+import ExamSolvingPage from "../../pages/ExamSolving";
 
 const Component = () => {
     const { examId } = Route.useParams();
