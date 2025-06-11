@@ -1,12 +1,17 @@
 import { atom, useAtom } from "jotai";
 import { atomFamily } from "jotai/utils";
 import { useMemo } from "react";
+import { useExamId } from ".";
+import { useProblemId } from "./ProblemList";
 
-const choiceAtomFamily = atomFamily(
+// export: useSubmitAnswer에서, 선택한 내용 종합 시 필요
+export const choiceAtomFamily = atomFamily(
     (_: { examId: number; problemId: number }) => atom<string[]>([]),
 );
 
-const useChoices = (examId: number, problemId: number) => {
+const useChoices = () => {
+    const examId = useExamId();
+    const problemId = useProblemId();
     const choiceAtom = useMemo(
         () => choiceAtomFamily({ examId, problemId }),
         [examId, problemId],

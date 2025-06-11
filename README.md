@@ -12,10 +12,11 @@ https://port-0-memory-helper-prototype-be-m6ekc447ebe44eb6.sel4.cloudtype.app/sw
 https://github.com/KimJungMook/memory-helper-prototype-be
 
 
-# [250610] To-do List
+# [250611] To-do List
 
 - ! /exam/{id} (추가로) 디자인 구상 및 마크업 작성
 - !!! /exam/{id}/solve 디자인 구상 및 마크업 작성
+  - 문제 - 선택지 컴포넌트 만들기
 - !!! /result/{id} 디자인 구상 및 마크업 작성
 
 - /wordset/{id} 제목편집 V/X 표시(GitHub PR제목 편집이랑 유사하게)와 리스너 부착
@@ -32,3 +33,5 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 - 로그인 페이지 마크업 새로 작성
 
 - import path alias 지정
+- storybook 설정
+- 테스트 코드 작성

@@ -1,24 +1,22 @@
 import styled from "@emotion/styled";
 import { ProblemType } from "../ExamDetail/hooks/useExamDetail";
-import { useExamId } from ".";
 import useChoices from "./useChoice";
 import Text from "../../components/texts/Text";
 import { Colors } from "../../designs/colors";
+import { createContext, useContext } from "react";
 
 const Choice = ({
-    selected,
-    onClick,
     id,
     value,
 }: {
-    selected: boolean;
-    onClick: React.MouseEventHandler;
     id: string;
     value: string;
 }) => {
+    const { isSelected, toggleChoice } = useChoices();
+
     return (
-        <S.ChoiceRoot onClick={onClick}>
-            <S.ChoiceIdWrapper selected={selected}>
+        <S.ChoiceRoot onClick={() => toggleChoice(id)}>
+            <S.ChoiceIdWrapper selected={isSelected(id)}>
                 <Text label={id} />
             </S.ChoiceIdWrapper>
             <Text label={value} />
@@ -26,24 +24,30 @@ const Choice = ({
     );
 };
 
+const ProblemItemContext = createContext<{ problemId: number }>({
+    problemId: 0,
+});
+
+export const useProblemId = () => {
+    const { problemId } = useContext(ProblemItemContext);
+
+    return problemId;
+};
+
 const ProblemItem = ({ itemData }: { itemData: ProblemType }) => {
-    const examId = useExamId();
     const problemId = itemData.problemNumber;
 
-    const { isSelected, toggleChoice } = useChoices(examId, problemId);
-
     return (
-        <S.ItemRoot>
-            <Text label={`${itemData.problemNumber}. ${itemData.question}`} />
-            {itemData.multipleChoice.map(({ id, value }) => (
-                <Choice
-                    selected={isSelected(id)}
-                    id={id}
-                    onClick={() => toggleChoice(id)}
-                    value={value}
+        <ProblemItemContext.Provider value={{ problemId }}>
+            <S.ItemRoot>
+                <Text
+                    label={`${itemData.problemNumber}. ${itemData.question}`}
                 />
-            ))}
-        </S.ItemRoot>
+                {itemData.multipleChoice.map(({ id, value }) => (
+                    <Choice id={id} value={value} />
+                ))}
+            </S.ItemRoot>
+        </ProblemItemContext.Provider>
     );
 };
 
@@ -83,7 +87,7 @@ const S = {
         width: 16px;
         border-radius: 50%;
 
-        background-color: ${({selected}) =>
+        background-color: ${({ selected }) =>
             selected ? Colors["highlight-dark"] : "transparent"};
     `,
 };
