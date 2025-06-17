@@ -3,6 +3,7 @@ import { ResultItem } from "../components/ResultList";
 
 export type ProblemType = {
     question: string;
+    problemId: number;
     problemNumber: number;
     multipleChoice: {
         id: string;
@@ -29,6 +30,7 @@ const TEMP_DATA: DataType = {
     problems: [
         {
             problemNumber: 1,
+            problemId: 1,
             question: "다음 중 React의 특징이 아닌 것은?",
             multipleChoice: [
                 { id: "A", value: "컴포넌트 기반" },
@@ -39,6 +41,7 @@ const TEMP_DATA: DataType = {
         },
         {
             problemNumber: 2,
+            problemId: 2,
             question: "React에서 상태를 관리하기 위한 Hook은?",
             multipleChoice: [
                 { id: "A", value: "useState" },

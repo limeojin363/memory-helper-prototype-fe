@@ -61,7 +61,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
     const howManyProblems = examDetailData.problems.length;
     const sourceWordsetId = examDetailData.sourceWordsetId;
     const sourceWordsetName = examDetailData.sourceWordsetName;
-    const 날짜 = examDetailData.createdAt.toLocaleDateString("ko-KR", {
+    const dateView = examDetailData.createdAt.toLocaleDateString("ko-KR", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -92,7 +92,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
                     label={`문제 수: ${howManyProblems}`}
                     fontStyle="action-md"
                 />
-                <Text label={날짜} fontStyle="action-md" />
+                <Text label={dateView} fontStyle="action-md" />
             </S.MetaDataArea>
             <S.ButtonsArea>
                 <ButtonWithText
@@ -115,7 +115,6 @@ const S = {
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* FILL HERE */
     `,
     MetaDataArea: styled.div`
         width: calc(100% - 40px);

@@ -29,16 +29,14 @@ export const useProblemId = () => {
 };
 
 const ProblemItem = ({ itemData }: { itemData: ProblemType }) => {
-    const problemId = itemData.problemNumber;
+    const { multipleChoice, problemId, question, problemNumber } = itemData;
 
     return (
         <ProblemItemContext.Provider value={{ problemId }}>
             <S.ItemRoot>
-                <Text
-                    label={`${itemData.problemNumber}. ${itemData.question}`}
-                />
+                <Text label={`${problemNumber}. ${question}`} />
                 <S.ChoicesWrapper>
-                    {itemData.multipleChoice.map(({ id, value }) => (
+                    {multipleChoice.map(({ id, value }) => (
                         <Choice id={id} value={value} />
                     ))}
                 </S.ChoicesWrapper>
