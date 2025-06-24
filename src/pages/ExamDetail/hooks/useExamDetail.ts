@@ -3,6 +3,7 @@ import { ResultItem } from "../components/ResultList";
 
 export type ProblemType = {
     question: string;
+    problemId: number;
     problemNumber: number;
     multipleChoice: {
         id: string;
@@ -29,22 +30,24 @@ const TEMP_DATA: DataType = {
     problems: [
         {
             problemNumber: 1,
+            problemId: 1,
             question: "다음 중 React의 특징이 아닌 것은?",
             multipleChoice: [
-                { id: "a", value: "컴포넌트 기반" },
-                { id: "b", value: "단방향 데이터 흐름" },
-                { id: "c", value: "상태 관리가 필요 없다" },
-                { id: "d", value: "가상 DOM 사용" },
+                { id: "A", value: "컴포넌트 기반" },
+                { id: "B", value: "단방향 데이터 흐름" },
+                { id: "C", value: "상태 관리가 필요 없다" },
+                { id: "D", value: "가상 DOM 사용" },
             ],
         },
         {
             problemNumber: 2,
+            problemId: 2,
             question: "React에서 상태를 관리하기 위한 Hook은?",
             multipleChoice: [
-                { id: "a", value: "useState" },
-                { id: "b", value: "useEffect" },
-                { id: "c", value: "useContext" },
-                { id: "d", value: "useReducer" },
+                { id: "A", value: "useState" },
+                { id: "B", value: "useEffect" },
+                { id: "C", value: "useContext" },
+                { id: "D", value: "useReducer" },
             ],
         },
     ],

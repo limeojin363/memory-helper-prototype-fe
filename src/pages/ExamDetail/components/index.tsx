@@ -61,7 +61,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
     const howManyProblems = examDetailData.problems.length;
     const sourceWordsetId = examDetailData.sourceWordsetId;
     const sourceWordsetName = examDetailData.sourceWordsetName;
-    const 날짜 = examDetailData.createdAt.toLocaleDateString("ko-KR", {
+    const dateView = examDetailData.createdAt.toLocaleDateString("ko-KR", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -91,19 +91,15 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
                 <Text
                     label={`문제 수: ${howManyProblems}`}
                     fontStyle="action-md"
-                    colorName="neutral-dark-dark"
                 />
-                <Text label={날짜} fontStyle="body-md" />
+                <Text label={dateView} fontStyle="action-md" />
             </S.MetaDataArea>
             <S.ButtonsArea>
-                    <ButtonWithText
-                        text={sourceWordsetName}
-                        onClick={goToWordset}
-                    />
-                    <ButtonWithText
-                        text={"문제 풀기"}
-                        onClick={goToSolvingPage}
-                    />
+                <ButtonWithText
+                    text={sourceWordsetName}
+                    onClick={goToWordset}
+                />
+                <ButtonWithText text={"문제 풀기"} onClick={goToSolvingPage} />
             </S.ButtonsArea>
             <ResultList listData={examDetailData.results} />
         </S.Root>
@@ -119,7 +115,6 @@ const S = {
         display: flex;
         flex-direction: column;
         align-items: center;
-        /* FILL HERE */
     `,
     MetaDataArea: styled.div`
         width: calc(100% - 40px);
