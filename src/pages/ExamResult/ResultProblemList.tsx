@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
 import Text from "../../components/texts/Text";
+import { ProblemResultItemType } from "./useResultDetail";
+import { Colors } from "../../designs/colors";
 
 type ResultProblemListProps = {
     listData: ProblemResultItemType[];
@@ -43,14 +45,14 @@ const ResultProblemItem = ({
     return (
         <S.ItemRoot>
             <Text label={`${problemNumber}. ${question}`} />
-            <Text label={`내가 낸 답: ${userAnswerView}`} />
+            <Text label={`내가 낸 답: ${"userAnswerView"}`} />
             <Text label={`정답: ${rightAnswerView}`} />
             <S.ChoicesWrapper>
                 {multipleChoice.map(({ id, value }) => (
                     <Choice
                         id={id}
                         value={value}
-                        selected={userAnswer.includes(id)}
+                        selected={userAnswer.includes({ id, value })}
                     />
                 ))}
             </S.ChoicesWrapper>
