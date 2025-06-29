@@ -16,8 +16,4 @@ export default defineConfig({
         TanStackRouterVite(),
         visualizer({ open: true }), // HTML 리포트 자동 열림
     ],
-    base: "/absproxy/5173/", // ✅ 그대로 유지
-    server: {
-        allowedHosts: ["limeojin363.com"],
-    },
 });
