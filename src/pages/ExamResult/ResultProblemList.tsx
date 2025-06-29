@@ -33,26 +33,30 @@ const ResultProblemItem = ({
 }) => {
     const {
         multipleChoice,
-        rightAnswers: rightAnswer,
-        userAnswers: userAnswer,
+        rightAnswers,
+        userAnswers,
         problemNumber,
         question,
     } = itemData;
 
-    // const userAnswerView = userAnswer.map(answer => answer.);
-    const rightAnswerView = rightAnswer.join();
+    const userAnswerView = userAnswers.map((answer) => answer.value).join(", ");
+    const rightAnswerView = rightAnswers
+        .map((answer) => answer.value)
+        .join(", ");
 
     return (
         <S.ItemRoot>
             <Text label={`${problemNumber}. ${question}`} />
-            <Text label={`내가 낸 답: ${"userAnswerView"}`} />
+            <Text label={`내가 낸 답: ${userAnswerView}`} />
             <Text label={`정답: ${rightAnswerView}`} />
             <S.ChoicesWrapper>
                 {multipleChoice.map(({ id, value }) => (
                     <Choice
                         id={id}
                         value={value}
-                        selected={userAnswer.includes({ id, value })}
+                        selected={userAnswers.some(
+                            (answerItem) => answerItem.id === id,
+                        )}
                     />
                 ))}
             </S.ChoicesWrapper>
@@ -75,8 +79,10 @@ const S = {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
         gap: 8px;
+
+        width: calc(100% - 40px);
+        padding: 0 20px;
     `,
     ItemRoot: styled.div``,
     ChoicesWrapper: styled.div`

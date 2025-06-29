@@ -33,12 +33,12 @@ const ExamResultPage = ({ resultId }: ExamResultPageProps) => {
     return (
         <S.PageRoot>
             <Header goBack={goBack}>
-                <Text label={`${examName} - ${dateView}`} />
+                <S.HeaderAreaContainer>
+                    <Text label={`${examName}`} onClick={goToExam} />
+                    <Text colorName="neutral-dark-lightest" fontStyle="body-sm" label={`tested on ${dateView}` } />
+                </S.HeaderAreaContainer>
             </Header>
-            <S.ContentsWrapper>
-                <Text label={examName} onClick={goToExam} />
-                <ResultProblemList listData={problemResultList} />
-            </S.ContentsWrapper>
+            <ResultProblemList listData={problemResultList} />
         </S.PageRoot>
     );
 };
@@ -46,6 +46,11 @@ const ExamResultPage = ({ resultId }: ExamResultPageProps) => {
 const S = {
     PageRoot: styled.div`
         width: 100%;
+    `,
+    HeaderAreaContainer: styled.div`
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     `,
     ContentsWrapper: styled.div`
         width: calc(100% - 40px);
