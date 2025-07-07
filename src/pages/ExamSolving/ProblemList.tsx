@@ -1,22 +1,9 @@
 import styled from "@emotion/styled";
 import { ProblemType } from "../ExamDetail/hooks/useExamDetail";
-import useChoices from "./useChoice";
 import Text from "../../components/texts/Text";
-import { Colors } from "../../designs/colors";
 import { createContext, useContext } from "react";
+import SolvingChoice from "./SolvingChoice";
 
-const Choice = ({ id, value }: { id: string; value: string }) => {
-    const { isSelected, toggleChoice } = useChoices();
-
-    return (
-        <S.ChoiceRoot onClick={() => toggleChoice(id)}>
-            <S.ChoiceIdWrapper selected={isSelected(id)}>
-                <Text label={id} />
-            </S.ChoiceIdWrapper>
-            <Text label={value} />
-        </S.ChoiceRoot>
-    );
-};
 
 const ProblemItemContext = createContext<{ problemId: number }>({
     problemId: 0,
@@ -34,10 +21,10 @@ const ProblemItem = ({ itemData }: { itemData: ProblemType }) => {
     return (
         <ProblemItemContext.Provider value={{ problemId }}>
             <S.ItemRoot>
-                <Text label={`${problemNumber}. ${question}`} />
+                <Text label={`${problemNumber}. ${question}`} fontStyle="body-lg"/>
                 <S.ChoicesWrapper>
                     {multipleChoice.map(({ id, value }) => (
-                        <Choice id={id} value={value} />
+                        <SolvingChoice id={id} value={value} />
                     ))}
                 </S.ChoicesWrapper>
             </S.ItemRoot>
@@ -70,29 +57,11 @@ const S = {
         justify-content: center;
         gap: 8px;
     `,
-    ChoiceRoot: styled.div`
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    `,
     ChoicesWrapper: styled.div`
         display: flex;
         flex-direction: column;
         justify-content: center;
         gap: 2px;
-    `,
-    ChoiceIdWrapper: styled.button<{ selected: boolean }>`
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        border: 1px solid ${Colors["highlight-dark"]};
-        height: 16px;
-        width: 16px;
-        border-radius: 50%;
-
-        background-color: ${({ selected }) =>
-            selected ? Colors["highlight-dark"] : "transparent"};
     `,
 };
 

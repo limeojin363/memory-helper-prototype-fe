@@ -2,30 +2,11 @@ import styled from "@emotion/styled";
 import Text from "../../components/texts/Text";
 import { ProblemResultItemType } from "./useResultDetail";
 import { Colors } from "../../designs/colors";
+import ResultChoice from "./ResultChoice";
 
 type ResultProblemListProps = {
     listData: ProblemResultItemType[];
 };
-
-const Choice = ({
-    id,
-    value,
-    selected,
-}: {
-    id: number;
-    value: string;
-    selected: boolean;
-}) => {
-    return (
-        <S.ChoiceRoot>
-            <S.ChoiceIdWrapper selected={selected}>
-                <Text label={String(id)} />
-            </S.ChoiceIdWrapper>
-            <Text label={value} />
-        </S.ChoiceRoot>
-    );
-};
-
 const ResultProblemItem = ({
     itemData,
 }: {
@@ -33,26 +14,35 @@ const ResultProblemItem = ({
 }) => {
     const {
         multipleChoice,
-        rightAnswers: rightAnswer,
-        userAnswers: userAnswer,
+        rightAnswers,
+        userAnswers,
         problemNumber,
         question,
     } = itemData;
 
-    // const userAnswerView = userAnswer.map(answer => answer.);
-    const rightAnswerView = rightAnswer.join();
+    const userAnswerView = userAnswers.map((answer) => answer.value).join(", ");
+    const rightAnswerView = rightAnswers
+        .map((answer) => answer.value)
+        .join(", ");
 
     return (
         <S.ItemRoot>
-            <Text label={`${problemNumber}. ${question}`} />
-            <Text label={`내가 낸 답: ${"userAnswerView"}`} />
-            <Text label={`정답: ${rightAnswerView}`} />
+            <Text label={`${problemNumber}. ${question}`} fontStyle="body-lg"/>
+            <div>
+                <Text label={`내가 낸 답: ${userAnswerView}`} />
+                <Text label={`정답: ${rightAnswerView}`} />
+            </div>
             <S.ChoicesWrapper>
                 {multipleChoice.map(({ id, value }) => (
-                    <Choice
-                        id={id}
+                    <ResultChoice
+                        num={id}
                         value={value}
-                        selected={userAnswer.includes({ id, value })}
+                        checked={userAnswers.some(
+                            (answerItem) => answerItem.id === id,
+                        )}
+                        focused={rightAnswers.some(
+                            (answerItem) => answerItem.id === id,
+                        )}
                     />
                 ))}
             </S.ChoicesWrapper>
@@ -75,10 +65,16 @@ const S = {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: center;
+        gap: 8px;
+
+        width: 100%;
+    `,
+    ItemRoot: styled.div`
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         gap: 8px;
     `,
-    ItemRoot: styled.div``,
     ChoicesWrapper: styled.div`
         display: flex;
         flex-direction: column;
