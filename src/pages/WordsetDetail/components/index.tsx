@@ -46,7 +46,7 @@ const ModeSelector = ({
                 <Text
                     fontStyle={mode === "WORDS" ? "action-xl" : "action-xl"}
                     fontSize={mode === "WORDS" ? 18 : 17}
-                    label="단어장 보기"
+                    label="단어장"
                     colorName={"neutral-dark-darkest"}
                 />
             </Button1>
@@ -58,7 +58,7 @@ const ModeSelector = ({
                 <Text
                     fontStyle={mode === "EXAMS" ? "action-xl" : "action-xl"}
                     fontSize={mode === "EXAMS" ? 18 : 17}
-                    label="시험 보기"
+                    label="시험"
                     colorName={"neutral-dark-darkest"}
                 />
             </Button1>
@@ -91,6 +91,7 @@ const Content = ({
 
     const setName = detailData.name;
     const processedList = detailData.list.map(listProcessCallback);
+    const examIds = detailData.examIds;
 
     return (
         // Provider for Modal Status
@@ -112,7 +113,7 @@ const Content = ({
                         />
                     </>
                 ) : (
-                    <ExamsArea listData={[]} />
+                    <ExamsArea examIds={examIds} wordsetId={wordsetId} />
                 )}
             </S.Outer>
         </Provider>

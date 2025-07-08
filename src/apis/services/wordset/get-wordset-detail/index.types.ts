@@ -22,4 +22,5 @@ export type GetWordsetDetailData = {
         createdAt: string;
         gpt: boolean; // GPT에서 생성된 결과인지 여부
     }>;
+    examIds: number[];
 };
