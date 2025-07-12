@@ -5,6 +5,10 @@ import useWordModalState from "../../hooks/useWordModalState";
 import Button1 from "../../../../components/button1";
 import useDeleteWordsetAndNavigate from "../../hooks/useDeleteWordsetAndNavigate";
 import Text from "../../../../components/texts/Text";
+import WordDetailModal from "../WordsModal/WordsModalBody";
+import { GetWordsetDetailData } from "../../../../apis/services/wordset/get-wordset-detail/index.types";
+import { TypeKey } from "../../../../components/type-selector/TypeSelector";
+import { useEffect } from "react";
 
 export type WordItemProps = {
     id: number;
@@ -14,7 +18,7 @@ export type WordItemProps = {
 };
 
 const OpenCreateModal = () => {
-    const { openCreateMode } = useWordModalState();
+    const { openWithCreateMode: openCreateMode } = useWordModalState();
 
     return (
         <Button1 height={"40px"} onClick={openCreateMode} colorStyle="Neutral">
@@ -28,7 +32,7 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     const mainText = eng;
     const sideText = `"${firstMeaning}" 등 ${meaningCount}개 의미`;
 
-    const { select } = useWordModalState();
+    const { openWithSelection: select } = useWordModalState();
 
     return (
         <Button1
@@ -44,15 +48,40 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     );
 };
 
+// 모델 변환자
+const listProcessCallback = (item: {
+    wordId: number;
+    word: string;
+    meaning: Array<{
+        type: TypeKey;
+        value: string;
+    }>;
+}): WordItemProps & { key: number } => ({
+    eng: item.word,
+    firstMeaning: item.meaning[0].value,
+    meaningCount: item.meaning.length,
+    key: item.wordId,
+    id: item.wordId,
+});
+
 // Pure
 const WordsArea = ({
     listData,
     wordsetId,
 }: {
-    listData: WordItemProps[];
+    listData: GetWordsetDetailData["list"];
     wordsetId: number;
 }) => {
+    const { setListData } = useWordModalState();
     const deleteAndNavigate = useDeleteWordsetAndNavigate(wordsetId);
+    const processedList = listData.map(listProcessCallback);
+
+    // 동기화
+    // 영 맘에 들지 않는다. useEffect는 날릴 수 있을 때 날린다.
+    useEffect(() => {
+        if (listData) setListData(listData);
+    }, [setListData, listData]);
+
 
     return (
         <S.ListContainer>
@@ -62,13 +91,14 @@ const WordsArea = ({
             <S.Separator />
             {listData.length > 0 && (
                 <>
-                    {listData.map((item) => (
+                    {processedList.map((item) => (
                         <WordItem {...item} />
                     ))}
                     <S.Separator />
                 </>
             )}
             <OpenCreateModal />
+            <WordDetailModal wordsetId={wordsetId} />
         </S.ListContainer>
     );
 };

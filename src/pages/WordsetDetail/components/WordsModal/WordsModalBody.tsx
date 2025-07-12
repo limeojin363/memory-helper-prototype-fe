@@ -1,34 +1,27 @@
 import WordDetailEdit, { WordDetailEditProps } from "./EditorArea";
-import useWordModalState, { isViewMode } from "../../hooks/useWordModalState";
+import useWordModalState, { isExisting } from "../../hooks/useWordModalState";
 import DetailModal from "../../../../components/detail-modal/DetailModal";
-import { GetWordsetDetailData } from "../../../../apis/services/wordset/get-wordset-detail/index.types";
-import { useEffect } from "react";
 
 export type WordDetailModalProps = {
-    listData?: GetWordsetDetailData["list"];
     wordsetId: number;
 };
 
-const WordDetailModal = ({ listData, wordsetId }: WordDetailModalProps) => {
-    const { close, status, next, prev, setListData } = useWordModalState();
-
-    // 영 맘에 들지 않는다. useEffect는 날릴 수 있을 때 날린다.
-    useEffect(() => {
-        if (listData) setListData(listData);
-    }, [setListData, listData]);
+const WordDetailModal = ({ wordsetId }: WordDetailModalProps) => {
+    const { close, status, next, prev } = useWordModalState();
 
     if (!status) return null;
 
     const editComponentProps: WordDetailEditProps = {
-        mode: isViewMode(status) ? "VIEW" : "CREATE",
-        initialState: isViewMode(status)
+        mode: isExisting(status) ? status.mode : "CREATE",
+        initialValues: isExisting(status)
             ? {
                   meanings: status.selectedData.meaning,
                   word: status.selectedData.word,
               }
             : undefined,
         wordsetId,
-    }
+        wordId: isExisting(status) ? status.selectedData.wordId : null,
+    };
 
     return (
         <DetailModal close={close} next={next} prev={prev}>

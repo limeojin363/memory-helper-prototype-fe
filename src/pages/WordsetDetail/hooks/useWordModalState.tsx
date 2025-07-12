@@ -15,16 +15,14 @@ export type ItemData = {
         createdAt: string;
         gpt: boolean;
     };
+    mode: "VIEW" | "MODIFY";
 };
 
 export type ModalStatus = ItemData | "CREATE-NEW-WORD" | null;
 
-export const isViewMode = (modalInfo: ModalStatus): modalInfo is ItemData =>
+// 기존 단어를 다루는가?
+export const isExisting = (modalInfo: ModalStatus): modalInfo is ItemData =>
     typeof modalInfo === "object" && modalInfo !== null;
-
-export const isCreateMode = (
-    modalInfo: ModalStatus,
-): modalInfo is "CREATE-NEW-WORD" => modalInfo === "CREATE-NEW-WORD";
 
 const modalStatusAtom = atom<ModalStatus>(null);
 
@@ -35,17 +33,27 @@ const useWordModalState = () => {
     const [status, setStatus] = useAtom<ModalStatus>(modalStatusAtom);
     const [listData, setListData] = useAtom(listDataAtom);
 
-    const select = (wordId: number) => {
+    const openWithSelection = (wordId: number) => {
         const selectedData = listData.find((item) => item.wordId === wordId);
         if (selectedData)
             setStatus({
                 selectedData,
+                mode: "VIEW",
             });
+    };
+
+    const selectModeOnExisting = (mode: "MODIFY" | "VIEW") => {
+        if (!isExisting(status)) return;
+
+        setStatus({
+            ...status,
+            mode,
+        });
     };
 
     const close = () => setStatus(null);
 
-    const openCreateMode = () => setStatus("CREATE-NEW-WORD");
+    const openWithCreateMode = () => setStatus("CREATE-NEW-WORD");
 
     //  << case 정리 >>
     // view
@@ -65,7 +73,7 @@ const useWordModalState = () => {
         next?: NavigationInfo;
         prev?: NavigationInfo;
     } = (() => {
-        if (isViewMode(status)) {
+        if (isExisting(status)) {
             const currentIndex = listData.findIndex(
                 (item) => item.wordId === status.selectedData.wordId,
             );
@@ -77,7 +85,7 @@ const useWordModalState = () => {
             return {
                 prev: {
                     navigate: doesPrevExists
-                        ? () => select(prevItem.wordId)
+                        ? () => openWithSelection(prevItem.wordId)
                         : () => {},
                     content: (
                         <Icon
@@ -90,8 +98,8 @@ const useWordModalState = () => {
                 },
                 next: {
                     navigate: doesNextExists
-                        ? () => select(nextItem.wordId)
-                        : openCreateMode,
+                        ? () => openWithSelection(nextItem.wordId)
+                        : openWithCreateMode,
                     content: doesNextExists ? (
                         <Icon
                             colorName="neutral-dark-darkest"
@@ -115,7 +123,7 @@ const useWordModalState = () => {
             return {
                 prev: {
                     navigate: doesPrevExists
-                        ? () => select(prevItem.wordId)
+                        ? () => openWithSelection(prevItem.wordId)
                         : () => {},
                     content: (
                         <Icon
@@ -132,10 +140,11 @@ const useWordModalState = () => {
 
     return {
         close,
-        openCreateMode,
-        select,
+        openWithCreateMode,
+        openWithSelection,
         status,
         setListData,
+        selectModeOnExisting,
         ...infoForNavigation,
     };
 };

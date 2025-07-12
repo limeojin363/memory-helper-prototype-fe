@@ -1,33 +1,15 @@
 import styled from "@emotion/styled";
-import WordsArea, { WordItemProps } from "./WordsArea";
-import WordDetailModal from "./WordsModal/WordsModalBody";
+import WordsArea from "./WordsArea";
 import { useWordsetDetailData } from "../hooks/useWordsetDetailData";
 import { Provider } from "jotai";
 import WordsetName from "./WordsetName";
 import Header from "../../../components/layouts/mobile/Header";
 import { useNavigate } from "@tanstack/react-router";
-import { TypeKey } from "../../../components/type-selector/TypeSelector";
 import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
 import { useState } from "react";
 import Button1 from "../../../components/button1";
 import ExamsArea from "./ExamsArea";
 import Text from "../../../components/texts/Text";
-
-// 모델 변환자
-const listProcessCallback = (item: {
-    wordId: number;
-    word: string;
-    meaning: Array<{
-        type: TypeKey;
-        value: string;
-    }>;
-}): WordItemProps & { key: number } => ({
-    eng: item.word,
-    firstMeaning: item.meaning[0].value,
-    meaningCount: item.meaning.length,
-    key: item.wordId,
-    id: item.wordId,
-});
 
 const ModeSelector = ({
     mode,
@@ -66,32 +48,32 @@ const ModeSelector = ({
     );
 };
 
+// ROOT
 const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
-    const detailData = useWordsetDetailData(wordsetId);
+    const pageData = useWordsetDetailData(wordsetId);
 
-    if (!detailData) return null;
+    if (!pageData) return null;
 
-    return <Content detailData={detailData} wordsetId={wordsetId} />;
+    return <Content pageData={pageData} wordsetId={wordsetId} />;
 };
 
 const Content = ({
     wordsetId,
-    detailData,
+    pageData,
 }: {
     wordsetId: number;
-    detailData: GetWordsetDetailData;
+    pageData: GetWordsetDetailData;
 }) => {
     const navigate = useNavigate();
-    const [mode, setMode] = useState<"WORDS" | "EXAMS">("WORDS");
+    const [pageMode, setPageMode] = useState<"WORDS" | "EXAMS">("WORDS");
 
     const goBack = () =>
         navigate({
             to: "/wordset",
         });
 
-    const setName = detailData.name;
-    const processedList = detailData.list.map(listProcessCallback);
-    const examIds = detailData.examIds;
+    const setName = pageData.name;
+    const examIds = pageData.examIds;
 
     return (
         // Provider for Modal Status
@@ -100,18 +82,9 @@ const Content = ({
                 <Header goBack={goBack}>
                     <WordsetName propValue={setName} wordsetId={wordsetId} />
                 </Header>
-                <ModeSelector mode={mode} setMode={setMode} />
-                {mode === "WORDS" ? (
-                    <>
-                        <WordsArea
-                            listData={processedList}
-                            wordsetId={wordsetId}
-                        />
-                        <WordDetailModal
-                            listData={detailData.list}
-                            wordsetId={wordsetId}
-                        />
-                    </>
+                <ModeSelector mode={pageMode} setMode={setPageMode} />
+                {pageMode === "WORDS" ? (
+                    <WordsArea listData={pageData.list} wordsetId={wordsetId} />
                 ) : (
                     <ExamsArea examIds={examIds} wordsetId={wordsetId} />
                 )}
