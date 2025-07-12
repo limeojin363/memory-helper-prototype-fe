@@ -17,8 +17,10 @@ import useWordModalState from "../../hooks/useWordModalState";
 import Button1 from "../../../../components/button1";
 import ButtonWithText from "../../../../components/button-with-text";
 import TextField from "../../../../components/text-field";
+import UpdateWordInWordset from "../../../../apis/services/wordset/update-word-in-wordset";
+import DeleteWordInWordset from "../../../../apis/services/wordset/delete-word-in-wordset";
 
-export type EditorState = {
+export type EditorValues = {
     word: string;
     meanings: {
         type: TypeKey;
@@ -26,28 +28,30 @@ export type EditorState = {
     }[];
 };
 
-const getEmptyState = (): EditorState => ({
+const getEmptyValues = (): EditorValues => ({
     word: "",
     meanings: [],
 });
 
 const useEditorState = ({
-    initialState,
+    initialValues,
     wordsetId,
+    wordId,
 }: {
-    initialState?: EditorState;
+    initialValues?: EditorValues;
     wordsetId: number;
+    wordId: number | null;
 }) => {
-    const [state, setState] = useState<EditorState>(
-        initialState ?? getEmptyState(),
+    const [state, setState] = useState<EditorValues>(
+        initialValues ?? getEmptyValues(),
     );
 
     const { close: closeModal } = useWordModalState();
 
     // TODO: 이거 날리는 방향으로 코딩하기
     useEffect(() => {
-        setState(initialState ?? getEmptyState());
-    }, [initialState]);
+        setState(initialValues ?? getEmptyValues());
+    }, [initialValues]);
 
     const addCustomMeaning = () =>
         setState((prev) => ({
@@ -61,8 +65,7 @@ const useEditorState = ({
             ],
         }));
 
-    // TODO: VIEW CASE 대응
-    const { mutateAsync: submitWord } = useMutation({
+    const { mutateAsync: createWord } = useMutation({
         mutationFn: async () => {
             if (!wordsetId) return;
 
@@ -79,6 +82,42 @@ const useEditorState = ({
             await queryClient.invalidateQueries({
                 queryKey: ["wordsetDetail", wordsetId],
             });
+            closeModal();
+        },
+    });
+
+    const { mutateAsync: updateWord } = useMutation({
+        mutationFn: async () => {
+            if (!wordsetId || !wordId) return;
+
+            await UpdateWordInWordset({
+                setId: wordsetId,
+                wordId,
+                meaning: state.meanings,
+            });
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ["wordsetDetail", wordsetId],
+            });
+            closeModal();
+        },
+    });
+
+    const { mutateAsync: deleteWord } = useMutation({
+        mutationFn: async () => {
+            if (!wordId) return;
+
+            await DeleteWordInWordset({
+                setId: wordsetId,
+                wordId: wordId,
+            });
+        },
+        onSuccess: async () => {
+            await queryClient.invalidateQueries({
+                queryKey: ["wordsetDetail", wordsetId],
+            });
+
             closeModal();
         },
     });
@@ -127,6 +166,7 @@ const useEditorState = ({
             word,
         }));
 
+    // TODO: word 꼬인 변수명 정상화
     return {
         state,
         isLoadingMeanings,
@@ -136,21 +176,25 @@ const useEditorState = ({
         changeTypeByIdx,
         deleteMeaningByIdx,
         changeWord,
-        submitWord: () => submitWord(),
+        createWord: () => createWord(),
+        deleteWord: () => deleteWord(),
+        updateWord: () => updateWord(),
     };
 };
 
 export type WordDetailEditProps = {
-    initialState?: EditorState;
-    mode: "CREATE" | "VIEW";
+    initialValues?: EditorValues;
+    mode: "CREATE" | "VIEW" | "MODIFY";
     wordsetId: number; // 단어 세트 ID, CREATE 모드에서만 필요
+    wordId: number | null;
 };
 
 // 단어 편집 - 새로 생성 or 이미 존재하는 Item을 수정
 const WordDetailEdit = ({
-    initialState,
+    initialValues,
     mode,
     wordsetId,
+    wordId,
 }: WordDetailEditProps) => {
     const {
         state: { word, meanings },
@@ -161,19 +205,27 @@ const WordDetailEdit = ({
         changeTypeByIdx,
         deleteMeaningByIdx,
         changeWord,
-        submitWord,
-    } = useEditorState({ initialState, wordsetId });
+        createWord,
+        updateWord,
+        deleteWord,
+    } = useEditorState({ initialValues, wordsetId, wordId });
+
+    const isEditable = mode !== "VIEW";
+
+    const { selectModeOnExisting } = useWordModalState();
 
     return (
         <S.Root>
             <S.InputsAreaWrapper>
                 <EngArea
+                    isEditable={isEditable}
                     isLoadingMeanings={isLoadingMeanings}
                     loadServerMeanings={loadServerMeanings}
                     value={word}
                     onChange={(e) => changeWord(e.target.value)}
                 />
                 <KorArea
+                    isEditable={isEditable}
                     meanings={meanings}
                     changeTypeByIdx={changeTypeByIdx}
                     changeMeaningByIdx={changeMeaningByIdx}
@@ -181,10 +233,41 @@ const WordDetailEdit = ({
                     addCustomMeaning={addCustomMeaning}
                 />
             </S.InputsAreaWrapper>
-            <ButtonWithText
-                onClick={submitWord}
-                text={mode === "CREATE" ? "생성" : "삭제"}
-            />
+            {(() => {
+                switch (mode) {
+                    case "CREATE":
+                        return (
+                            <ButtonWithText
+                                onClick={createWord}
+                                text={"생성"}
+                            />
+                        );
+                    case "VIEW":
+                        return (
+                            <>
+                                <ButtonWithText
+                                    onClick={deleteWord}
+                                    text={"삭제"}
+                                />
+                                <ButtonWithText
+                                    onClick={() =>
+                                        selectModeOnExisting("MODIFY")
+                                    }
+                                    text={"수정"}
+                                />
+                            </>
+                        );
+                    case "MODIFY":
+                        return (
+                            <ButtonWithText
+                                onClick={async () => {
+                                    await updateWord();
+                                }}
+                                text={"저장"}
+                            />
+                        );
+                }
+            })()}
         </S.Root>
     );
 };
@@ -194,13 +277,15 @@ const EngArea = ({
     onChange,
     loadServerMeanings,
     isLoadingMeanings,
+    isEditable,
 }: {
     value: string;
     onChange: ChangeEventHandler<HTMLInputElement>;
     loadServerMeanings: () => void;
     isLoadingMeanings: boolean;
+    isEditable: boolean;
 }) => {
-    const showLoadButton = !isLoadingMeanings && !!value;
+    const showLoadButton = !isLoadingMeanings && !!value && isEditable;
 
     const inputKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key !== "Enter") return;
@@ -213,6 +298,7 @@ const EngArea = ({
             <Text fontStyle="heading-5" label="Eng" />
             <S.EngInputWrapper>
                 <TextField
+                    disabled={!isEditable}
                     onKeyDown={inputKeyDownHandler}
                     onChange={onChange}
                     value={value}
@@ -220,7 +306,9 @@ const EngArea = ({
                 {showLoadButton && (
                     <S.SideIconPositionor right={4}>
                         <Button1
-                            onClick={loadServerMeanings}
+                            onClick={() => {
+                                loadServerMeanings();
+                            }}
                             width={"24px"}
                             height={"24px"}
                             activeTransformScale={0.95}
@@ -263,6 +351,7 @@ const KorArea = ({
     changeTypeByIdx,
     deleteMeaningByIdx,
     addCustomMeaning,
+    isEditable,
 }: {
     meanings: {
         type: TypeKey;
@@ -272,6 +361,7 @@ const KorArea = ({
     changeMeaningByIdx: (idx: number, value: string) => void;
     deleteMeaningByIdx: (idx: number) => void;
     addCustomMeaning: () => void;
+    isEditable: boolean;
 }) => {
     const inputKeyDownHandler =
         (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -313,48 +403,47 @@ const KorArea = ({
         });
     };
 
+    const showTrashButton = isEditable;
+
     return (
         <S.KorAreaWrapper>
             <S.KorTopWrapper>
                 <Text fontStyle="heading-5" label="Kor" />
-                <Button1
-                    onClick={onClickAddCustom}
-                    width={"16px"}
-                    height={"16px"}
-                    activeTransformScale={0.95}
-                    colorStyle="Primary"
-                    borderRadius={"30%"}
-                >
-                    <div
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
+                {isEditable && (
+                    <Button1
+                        onClick={onClickAddCustom}
+                        width={"16px"}
+                        height={"16px"}
+                        activeTransformScale={0.95}
+                        colorStyle="Primary"
+                        borderRadius={"30%"}
                     >
-                        <Icon
-                            colorName="highlight-dark"
-                            iconName="plus"
-                            size={10}
-                        />
-                    </div>
-                </Button1>
-                {/* <S.IcButtonWrapper size={16} onClick={onClickAddCustom}>
-                    <Icon
-                        colorName="neutral-dark-darkest"
-                        iconName="plus"
-                        size={12}
-                    />
-                </S.IcButtonWrapper> */}
+                        <div
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Icon
+                                colorName="highlight-dark"
+                                iconName="plus"
+                                size={10}
+                            />
+                        </div>
+                    </Button1>
+                )}
             </S.KorTopWrapper>
 
             {meanings.map((item, idx) => (
                 <S.KorMeaningItemWrapper key={idx}>
                     <TypeSelector
+                        disabled={!isEditable}
                         select={(t) => changeTypeByIdx(idx, t)}
                         value={item.type}
                     />
                     <TextField
+                        disabled={!isEditable}
                         data-idx={idx}
                         type="text"
                         value={item.value}
@@ -363,31 +452,32 @@ const KorArea = ({
                             changeMeaningByIdx(idx, e.target.value)
                         }
                     />
-                    <S.SideIconPositionor right={4}>
-                        <Button1
-                            onClick={() => deleteMeaningByIdx(idx)}
-                            width={"24px"}
-                            height={"24px"}
-                            activeTransformScale={0.95}
-                            colorStyle="Primary"
-                            borderRadius={"30%"}
-                        >
-                            <div
-                                style={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "center",
-                                }}
+                    {showTrashButton && (
+                        <S.SideIconPositionor right={4}>
+                            <Button1
+                                onClick={() => deleteMeaningByIdx(idx)}
+                                width={"24px"}
+                                height={"24px"}
+                                activeTransformScale={0.95}
+                                colorStyle="Primary"
+                                borderRadius={"30%"}
                             >
-                                <Icon
-                                    colorName="highlight-dark"
-                                    iconName="trash"
-                                    size={20}
-                                />
-                            </div>
-                        </Button1>
-                        {/* <S.IcButtonWrapper size={24}></S.IcButtonWrapper> */}
-                    </S.SideIconPositionor>
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <Icon
+                                        colorName="highlight-dark"
+                                        iconName="trash"
+                                        size={20}
+                                    />
+                                </div>
+                            </Button1>
+                        </S.SideIconPositionor>
+                    )}
                 </S.KorMeaningItemWrapper>
             ))}
         </S.KorAreaWrapper>

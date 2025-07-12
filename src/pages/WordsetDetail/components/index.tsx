@@ -1,33 +1,15 @@
 import styled from "@emotion/styled";
-import WordsArea, { WordItemProps } from "./WordsArea";
-import WordDetailModal from "./WordsModal/WordsModalBody";
+import WordsArea from "./WordsArea";
 import { useWordsetDetailData } from "../hooks/useWordsetDetailData";
 import { Provider } from "jotai";
 import WordsetName from "./WordsetName";
 import Header from "../../../components/layouts/mobile/Header";
 import { useNavigate } from "@tanstack/react-router";
-import { TypeKey } from "../../../components/type-selector/TypeSelector";
 import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
 import { useState } from "react";
 import Button1 from "../../../components/button1";
 import ExamsArea from "./ExamsArea";
 import Text from "../../../components/texts/Text";
-
-// 모델 변환자
-const listProcessCallback = (item: {
-    wordId: number;
-    word: string;
-    meaning: Array<{
-        type: TypeKey;
-        value: string;
-    }>;
-}): WordItemProps & { key: number } => ({
-    eng: item.word,
-    firstMeaning: item.meaning[0].value,
-    meaningCount: item.meaning.length,
-    key: item.wordId,
-    id: item.wordId,
-});
 
 const ModeSelector = ({
     mode,
@@ -46,7 +28,7 @@ const ModeSelector = ({
                 <Text
                     fontStyle={mode === "WORDS" ? "action-xl" : "action-xl"}
                     fontSize={mode === "WORDS" ? 18 : 17}
-                    label="단어장 보기"
+                    label="단어장"
                     colorName={"neutral-dark-darkest"}
                 />
             </Button1>
@@ -58,7 +40,7 @@ const ModeSelector = ({
                 <Text
                     fontStyle={mode === "EXAMS" ? "action-xl" : "action-xl"}
                     fontSize={mode === "EXAMS" ? 18 : 17}
-                    label="시험 보기"
+                    label="시험"
                     colorName={"neutral-dark-darkest"}
                 />
             </Button1>
@@ -66,53 +48,45 @@ const ModeSelector = ({
     );
 };
 
+// ROOT
 const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
-    const detailData = useWordsetDetailData(wordsetId);
+    const pageData = useWordsetDetailData(wordsetId);
 
-    if (!detailData) return null;
+    if (!pageData) return null;
 
-    return <Content detailData={detailData} wordsetId={wordsetId} />;
+    return <Content pageData={pageData} wordsetId={wordsetId} />;
 };
 
 const Content = ({
     wordsetId,
-    detailData,
+    pageData,
 }: {
     wordsetId: number;
-    detailData: GetWordsetDetailData;
+    pageData: GetWordsetDetailData;
 }) => {
     const navigate = useNavigate();
-    const [mode, setMode] = useState<"WORDS" | "EXAMS">("WORDS");
+    const [pageMode, setPageMode] = useState<"WORDS" | "EXAMS">("WORDS");
 
     const goBack = () =>
         navigate({
             to: "/wordset",
         });
 
-    const setName = detailData.name;
-    const processedList = detailData.list.map(listProcessCallback);
+    const setName = pageData.name;
+    const examIds = pageData.examIds;
 
     return (
         // Provider for Modal Status
         <Provider>
             <S.Outer>
                 <Header goBack={goBack}>
-                    <WordsetName propValue={setName} wordsetId={wordsetId} />
+                    <WordsetName valueFromProps={setName} wordsetId={wordsetId} />
                 </Header>
-                <ModeSelector mode={mode} setMode={setMode} />
-                {mode === "WORDS" ? (
-                    <>
-                        <WordsArea
-                            listData={processedList}
-                            wordsetId={wordsetId}
-                        />
-                        <WordDetailModal
-                            listData={detailData.list}
-                            wordsetId={wordsetId}
-                        />
-                    </>
+                <ModeSelector mode={pageMode} setMode={setPageMode} />
+                {pageMode === "WORDS" ? (
+                    <WordsArea listData={pageData.list} wordsetId={wordsetId} />
                 ) : (
-                    <ExamsArea listData={[]} />
+                    <ExamsArea examIds={examIds} wordsetId={wordsetId} />
                 )}
             </S.Outer>
         </Provider>

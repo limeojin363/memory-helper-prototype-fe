@@ -40,18 +40,18 @@ const S = {
 
         ${FontStyleMap["body-lg"]}
 
+        color: black;
+
+        box-shadow: 0 0 0 1px black inset;
+
         ${({ disabled }) =>
             disabled
                 ? css`
                       background-color: ${Colors["neutral-light-dark"]};
-                      box-shadow: 0 0 0 1px ${Colors["neutral-dark-lightest"]}
-                          inset;
                   `
                 : css`
                       background-color: ${Colors["neutral-light-medium"]};
-                      box-shadow: 0 0 0 1px ${Colors["neutral-light-darkest"]}
-                          inset;
-                  `} /* :focus-visible {
+                  `}/* :focus-visible {
             box-shadow: 0 0 0 3px ${Colors["neutral-dark-darkest"]} inset;
         } */
     `,

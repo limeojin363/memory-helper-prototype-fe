@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import WordsetApi from "../../../apis/services/wordset";
 import { queryClient } from "../../../routes/__root";
 import { FontStyleMap } from "../../../components/texts/Text";
+import ButtonWithText from "../../../components/button-with-text";
 
 const useRenameWordset = ({ wordsetId }: { wordsetId: number }) => {
     const { mutate: rename } = useMutation({
@@ -30,18 +31,20 @@ const useRenameWordset = ({ wordsetId }: { wordsetId: number }) => {
 };
 
 const WordsetName = ({
-    propValue,
+    valueFromProps,
     wordsetId,
 }: {
-    propValue: string;
+    valueFromProps: string;
     wordsetId: number;
 }) => {
-    const [value, setValue] = useState(propValue);
+    const [value, setValue] = useState(valueFromProps);
+
+    const isChanged = value !== valueFromProps;
 
     useEffect(() => {
         // propValue가 변경되면 value를 업데이트
-        setValue(propValue);
-    }, [setValue, propValue]);
+        setValue(valueFromProps);
+    }, [setValue, valueFromProps]);
 
     const rename = useRenameWordset({ wordsetId });
 
@@ -52,7 +55,7 @@ const WordsetName = ({
     const onKeyEnterDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key !== "Enter") return;
         // 값 변화가 없다면 실행 X
-        if (value === propValue) return;
+        if (!isChanged) return;
 
         rename(value);
     };
@@ -65,6 +68,26 @@ const WordsetName = ({
                 onChange={onChange}
                 onKeyDown={onKeyEnterDown}
             />
+            <S.ButtonsPositioner>
+                {isChanged && (
+                    <>
+                        <ButtonWithText
+                            height="24px"
+                            width="24px"
+                            text="V"
+                            borderRadius="30%"
+                            onClick={() => rename(value)}
+                        />
+                        <ButtonWithText
+                            height="24px"
+                            width="24px"
+                            text="X"
+                            borderRadius="30%"
+                            onClick={() => setValue(valueFromProps)}
+                        />
+                    </>
+                )}
+            </S.ButtonsPositioner>
         </S.Wrapper>
     );
 };
@@ -77,6 +100,7 @@ const S = {
         display: flex;
         justify-content: flex-end;
         width: 100%;
+        position: relative;
     `,
     Input: styled.input`
         background-color: ${Colors["neutral-light-medium"]};
@@ -86,7 +110,7 @@ const S = {
         border-radius: 12px;
         outline: none;
 
-        width: calc(100% - 68px);
+        width: calc(100% - 32px);
 
         display: flex;
         justify-content: center;
@@ -99,5 +123,13 @@ const S = {
         :focus {
             box-shadow: 0 0 0 2px ${Colors["neutral-dark-darkest"]} inset;
         }
+    `,
+    ButtonsPositioner: styled.div`
+        position: absolute;
+        right: 8px;
+        transform: translateY(50%);
+
+        display: flex;
+        gap: 4px;
     `,
 };
