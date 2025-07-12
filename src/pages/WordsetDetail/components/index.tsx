@@ -80,7 +80,7 @@ const Content = ({
         <Provider>
             <S.Outer>
                 <Header goBack={goBack}>
-                    <WordsetName propValue={setName} wordsetId={wordsetId} />
+                    <WordsetName valueFromProps={setName} wordsetId={wordsetId} />
                 </Header>
                 <ModeSelector mode={pageMode} setMode={setPageMode} />
                 {pageMode === "WORDS" ? (
