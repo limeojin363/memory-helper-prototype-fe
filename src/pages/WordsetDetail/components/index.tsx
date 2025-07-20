@@ -1,7 +1,7 @@
 import styled from "@emotion/styled";
 import WordsArea from "./WordsArea";
 import { useWordsetDetailData } from "../hooks/useWordsetDetailData";
-import { Provider } from "jotai";
+import { Provider as AtomProvider } from "jotai";
 import WordsetName from "./WordsetName";
 import Header from "../../../components/layouts/mobile/Header";
 import { useNavigate } from "@tanstack/react-router";
@@ -54,10 +54,10 @@ const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
 
     if (!pageData) return null;
 
-    return <Content pageData={pageData} wordsetId={wordsetId} />;
+    return <IfDataValid pageData={pageData} wordsetId={wordsetId} />;
 };
 
-const Content = ({
+const IfDataValid = ({
     wordsetId,
     pageData,
 }: {
@@ -77,10 +77,13 @@ const Content = ({
 
     return (
         // Provider for Modal Status
-        <Provider>
+        <AtomProvider>
             <S.Outer>
                 <Header goBack={goBack}>
-                    <WordsetName valueFromProps={setName} wordsetId={wordsetId} />
+                    <WordsetName
+                        valueFromProps={setName}
+                        wordsetId={wordsetId}
+                    />
                 </Header>
                 <ModeSelector mode={pageMode} setMode={setPageMode} />
                 {pageMode === "WORDS" ? (
@@ -89,7 +92,7 @@ const Content = ({
                     <ExamsArea examIds={examIds} wordsetId={wordsetId} />
                 )}
             </S.Outer>
-        </Provider>
+        </AtomProvider>
     );
 };
 

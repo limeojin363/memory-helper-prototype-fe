@@ -4,21 +4,61 @@ import Text from "../texts/Text";
 import { ColorName, Colors } from "../../designs/colors";
 import Button1, { Button1Props } from "../button1";
 
+// --------- text-field 참조 --------- //
+type ColorSetName =
+    | "PRIMARY-INITIAL"
+    | "PRIMARY-DISABLED"
+    | "NEUTRAL-INITIAL"
+    | "NEUTRAL-DISABLED";
+
+const ColorSetMap: {
+    [key in ColorSetName]: {
+        bgColor: string;
+        borderColor: string;
+        textColor: string;
+    };
+} = {
+    "NEUTRAL-DISABLED": {
+        bgColor: Colors["neutral-light-dark"],
+        borderColor: Colors["neutral-light-dark"],
+        textColor: Colors["neutral-dark-dark"],
+    },
+    "NEUTRAL-INITIAL": {
+        bgColor: "black",
+        borderColor: "black",
+        textColor: "black",
+    },
+    "PRIMARY-DISABLED": {
+        bgColor: Colors["neutral-light-darkest"],
+        borderColor: Colors["highlight-darkest"],
+        textColor: Colors["neutral-dark-dark"],
+    },
+    "PRIMARY-INITIAL": {
+        bgColor: "transparent",
+        borderColor: Colors["highlight-dark"],
+        textColor: Colors["neutral-dark-dark"],
+    },
+};
+// --------- text-field 참조 --------- //
+
 const TypeSelector = ({
     select,
     value,
     disabled,
+    colorSetName,
 }: {
     value: TypeKey;
     select: (t: TypeKey) => void;
     disabled: boolean;
+    colorSetName: ColorSetName
 }) => {
     const ButtonPropPreset: Omit<Button1Props, "children"> = {
         height: "28px",
         width: "28px",
         borderRadius: "10px",
         activeTransformScale: 0.95,
-        colorStyle: disabled ? "Disabled" : "Primary",
+        bgColor: ColorSetMap[colorSetName].bgColor,
+        borderColor: ColorSetMap[colorSetName].borderColor,
     };
 
     const [isOpen, setIsOpen] = useState(false);
@@ -55,9 +95,7 @@ const TypeSelector = ({
 
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const textColor: ColorName = !disabled
-        ? "highlight-darkest"
-        : "neutral-dark-darkest";
+    const textColor: ColorName =  "highlight-darkest"
 
     return (
         <S.Root ref={dropdownRef}>

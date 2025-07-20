@@ -5,7 +5,7 @@ import useWordModalState from "../../hooks/useWordModalState";
 import Button1 from "../../../../components/button1";
 import useDeleteWordsetAndNavigate from "../../hooks/useDeleteWordsetAndNavigate";
 import Text from "../../../../components/texts/Text";
-import WordDetailModal from "../WordsModal/WordsModalBody";
+import WordDetailModal from "../WordDetailModal";
 import { GetWordsetDetailData } from "../../../../apis/services/wordset/get-wordset-detail/index.types";
 import { TypeKey } from "../../../../components/type-selector/TypeSelector";
 import { useEffect } from "react";
@@ -64,7 +64,7 @@ const listProcessCallback = (item: {
     id: item.wordId,
 });
 
-// Pure
+// List 영역과 Modal 영역으로 나뉨
 const WordsArea = ({
     listData,
     wordsetId,
@@ -82,24 +82,25 @@ const WordsArea = ({
         if (listData) setListData(listData);
     }, [setListData, listData]);
 
-
     return (
-        <S.ListContainer>
-            <Button1 onClick={deleteAndNavigate} colorStyle="Neutral">
-                <Text fontStyle="action-lg" label="단어장 삭제" />
-            </Button1>
-            <S.Separator />
-            {listData.length > 0 && (
-                <>
-                    {processedList.map((item) => (
-                        <WordItem {...item} />
-                    ))}
-                    <S.Separator />
-                </>
-            )}
-            <OpenCreateModal />
+        <>
+            <S.ListContainer>
+                <Button1 onClick={deleteAndNavigate} colorStyle="Neutral">
+                    <Text fontStyle="action-lg" label="단어장 삭제" />
+                </Button1>
+                <S.Separator />
+                {listData.length > 0 && (
+                    <>
+                        {processedList.map((item) => (
+                            <WordItem {...item} />
+                        ))}
+                        <S.Separator />
+                    </>
+                )}
+                <OpenCreateModal />
+            </S.ListContainer>
             <WordDetailModal wordsetId={wordsetId} />
-        </S.ListContainer>
+        </>
     );
 };
 

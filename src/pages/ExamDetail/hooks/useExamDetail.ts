@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ResultItem } from "../components/ResultList";
+import GetExam from "../../../apis/services/exam/get-exam";
+import { getDataFromApiRes } from "../../../apis/services";
 
 export type ProblemType = {
     question: string;
@@ -21,7 +23,7 @@ type DataType = {
     results: ResultItem[];
 };
 
-const TEMP_DATA: DataType = {
+const _TEMP_DATA: DataType = {
     examId: 1,
     examName: "1",
     createdAt: new Date(),
@@ -70,8 +72,10 @@ const TEMP_DATA: DataType = {
 const useExamDetail = (examId: number) => {
     const { data } = useQuery({
         queryFn: async () => {
-            console.log({ examId });
-            return TEMP_DATA;
+            const res = GetExam({ examId });
+            const data = await getDataFromApiRes(res);
+
+            return data;
         },
         queryKey: ["examDetail"],
         initialData: null,

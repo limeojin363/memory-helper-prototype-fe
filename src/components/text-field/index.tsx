@@ -1,4 +1,3 @@
-import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Colors } from "../../designs/colors";
 import { FontStyleMap } from "../texts/Text";
@@ -17,20 +16,52 @@ type SProps = {
     borderRadius?: string;
     activeTransformScale?: number;
     disabled?: boolean;
+    colorSetName: ColorSetName;
+};
+
+type ColorSetName =
+    | "PRIMARY-INITIAL"
+    | "PRIMARY-DISABLED"
+    | "NEUTRAL-INITIAL"
+    | "NEUTRAL-DISABLED";
+
+const ColorSetMap: {
+    [key in ColorSetName]: {
+        bgColor: string;
+        borderColor: string;
+        textColor: string;
+    };
+} = {
+    "NEUTRAL-DISABLED": {
+        bgColor: Colors["neutral-light-dark"],
+        borderColor: Colors["neutral-light-dark"],
+        textColor: Colors["neutral-dark-dark"],
+    },
+    "NEUTRAL-INITIAL": {
+        bgColor: "black",
+        borderColor: "black",
+        textColor: "black",
+    },
+    "PRIMARY-DISABLED": {
+        bgColor: Colors["neutral-light-darkest"],
+        borderColor: Colors["highlight-darkest"],
+        textColor: Colors["neutral-dark-dark"],
+    },
+    "PRIMARY-INITIAL": {
+        bgColor: "transparent",
+        borderColor: Colors["highlight-dark"],
+        textColor: Colors["neutral-dark-dark"],
+    },
 };
 
 const S = {
     Root: styled.input<SProps>`
-        width: ${({ width }) =>
-            width
-                ? `${width}`
-                : // padding 보정
-                  "calc(100% - 32px)"};
-        /* height: ${({ height }) => (height ? `${height}` : "40px")}; */
+        width: calc(100% - 32px);
         border-radius: ${({ borderRadius }) =>
             borderRadius ? `${borderRadius}` : "12px"};
 
         border: none;
+        outline: none;
 
         display: flex;
         justify-content: center;
@@ -42,17 +73,16 @@ const S = {
 
         color: black;
 
-        box-shadow: 0 0 0 1px black inset;
+        background-color: ${({ colorSetName }) =>
+            ColorSetMap[colorSetName].bgColor};
+        box-shadow: 0 0 0 1px
+            ${({ colorSetName }) => ColorSetMap[colorSetName].borderColor} inset;
+        color: ${({ colorSetName }) => ColorSetMap[colorSetName].textColor};
 
-        ${({ disabled }) =>
-            disabled
-                ? css`
-                      background-color: ${Colors["neutral-light-dark"]};
-                  `
-                : css`
-                      background-color: ${Colors["neutral-light-medium"]};
-                  `}/* :focus-visible {
-            box-shadow: 0 0 0 3px ${Colors["neutral-dark-darkest"]} inset;
-        } */
+        :focus {
+            box-shadow: 0 0 0 2px
+                ${({ colorSetName }) => ColorSetMap[colorSetName].borderColor}
+                inset;
+        }
     `,
 };

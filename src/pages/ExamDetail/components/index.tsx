@@ -43,6 +43,7 @@ const ExamTitle = ({
 
     return (
         <TextField
+            colorSetName="PRIMARY-INITIAL"
             value={propValue}
             onChange={onChange}
             onKeyDown={onKeyEnterDown}
@@ -58,10 +59,10 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
     const examDetailData = useExamDetail(examId);
     if (!examDetailData) return null;
 
-    const howManyProblems = examDetailData.problems.length;
-    const sourceWordsetId = examDetailData.sourceWordsetId;
-    const sourceWordsetName = examDetailData.sourceWordsetName;
-    const dateView = examDetailData.createdAt.toLocaleDateString("ko-KR", {
+    const howManyProblems = examDetailData.problemResultList.length;
+    const sourceWordsetId = examDetailData.sourceWordSetId;
+    const sourceWordsetName = examDetailData.sourceWordSetName;
+    const dateView = new Date(examDetailData.createdAt).toLocaleDateString("ko-KR", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -101,7 +102,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
                 />
                 <ButtonWithText text={"문제 풀기"} onClick={goToSolvingPage} />
             </S.ButtonsArea>
-            <ResultList listData={examDetailData.results} />
+            <ResultList examId={examId} />
         </S.Root>
     );
 };

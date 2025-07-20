@@ -34,13 +34,10 @@ const ResultItem = ({ itemData }: { itemData: ResultItem }) => {
 };
 
 // Pure
-const ResultList = ({ listData }: ResultListProps) => {
+const ResultList = ({ examId }: { examId: number }) => {
     return (
         <S.ListRoot>
             <Text label="시험 결과" fontStyle="heading-2" />
-            {listData.map((item) => (
-                <ResultItem itemData={item} key={item.resultId} />
-            ))}
         </S.ListRoot>
     );
 };

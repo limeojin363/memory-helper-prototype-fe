@@ -28,6 +28,7 @@ const modalStatusAtom = atom<ModalStatus>(null);
 
 const listDataAtom = atom<GetWordsetDetailData["list"]>([]);
 
+// Modal의 열기(CREATE, VIEW)와 닫기, 모드 수정(VIEW <-> MODIFY), navigation 등을 반환
 // TODO: list 데이터의 동기화 방식 변경(맘에 안듦)
 const useWordModalState = () => {
     const [status, setStatus] = useAtom<ModalStatus>(modalStatusAtom);

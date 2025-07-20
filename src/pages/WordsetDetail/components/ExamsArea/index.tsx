@@ -2,6 +2,7 @@ import styled from "@emotion/styled";
 import useCreateExam from "../../hooks/useCreateExam";
 import Button1 from "../../../../components/button1";
 import Icon from "../../../../components/icons/Icon";
+import { useNavigate } from "@tanstack/react-router";
 
 const ExamsArea = ({
     examIds,
@@ -11,11 +12,21 @@ const ExamsArea = ({
     wordsetId: number;
 }) => {
     const createExam = useCreateExam(wordsetId);
+    const navigate = useNavigate();
 
     return (
         <S.Root>
             {examIds.map((examId) => (
-                <div>{examId}</div>
+                <div
+                    onClick={() =>
+                        navigate({
+                            to: "/exam/$examId",
+                            params: { examId: String(examId) },
+                        })
+                    }
+                >
+                    {examId}
+                </div>
             ))}
             <Button1
                 height={"40px"}

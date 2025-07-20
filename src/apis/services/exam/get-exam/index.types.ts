@@ -10,8 +10,12 @@ export type GetExamReqParam = {
 };
 
 export type GetExamResData = {
-    code: string;
-    data: Problem[];
+    createdAt: Date;
+    examId: number;
+    examName: string;
+    sourceWordSetId: number;
+    sourceWordSetName: string;
+    problemResultList: Problem[];
 };
 
 export type Problem = {
