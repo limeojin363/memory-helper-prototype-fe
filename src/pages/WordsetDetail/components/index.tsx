@@ -6,7 +6,7 @@ import WordsetName from "./WordsetName";
 import Header from "../../../components/layouts/mobile/Header";
 import { useNavigate } from "@tanstack/react-router";
 import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import Button1 from "../../../components/button1";
 import ExamsArea from "./ExamsArea";
 import Text from "../../../components/texts/Text";
@@ -48,22 +48,38 @@ const ModeSelector = ({
     );
 };
 
-// ROOT
+const PageContext = createContext<{
+    wordsetId: number;
+    pageData: GetWordsetDetailData;
+}>({
+    wordsetId: 0,
+    pageData: {
+        name: "",
+        list: [],
+        examIds: [],
+    },
+});
+
+const usePageData = () => useContext(PageContext).pageData;
+const useWordsetId = () => useContext(PageContext).wordsetId;
+
+// Page Root
 const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
     const pageData = useWordsetDetailData(wordsetId);
 
     if (!pageData) return null;
 
-    return <IfDataValid pageData={pageData} wordsetId={wordsetId} />;
+    return (
+        <PageContext.Provider value={{ wordsetId, pageData }}>
+            <IfDataValid />
+        </PageContext.Provider>
+    );
 };
 
-const IfDataValid = ({
-    wordsetId,
-    pageData,
-}: {
-    wordsetId: number;
-    pageData: GetWordsetDetailData;
-}) => {
+WordsetDetailPage.usePageData = usePageData;
+WordsetDetailPage.useWordsetId = useWordsetId;
+
+const IfDataValid = () => {
     const navigate = useNavigate();
     const [pageMode, setPageMode] = useState<"WORDS" | "EXAMS">("WORDS");
 
@@ -72,24 +88,24 @@ const IfDataValid = ({
             to: "/wordset",
         });
 
-    const setName = pageData.name;
-    const examIds = pageData.examIds;
+    const pageData = usePageData();
+    const wordsetId = useWordsetId();
 
     return (
         // Provider for Modal Status
         <AtomProvider>
             <S.Outer>
                 <Header goBack={goBack}>
-                    <WordsetName
-                        valueFromProps={setName}
-                        wordsetId={wordsetId}
-                    />
+                    <WordsetName valueFromProps={pageData.name} />
                 </Header>
                 <ModeSelector mode={pageMode} setMode={setPageMode} />
                 {pageMode === "WORDS" ? (
-                    <WordsArea listData={pageData.list} wordsetId={wordsetId} />
+                    <WordsArea />
                 ) : (
-                    <ExamsArea examIds={examIds} wordsetId={wordsetId} />
+                    <ExamsArea
+                        examIds={pageData.examIds}
+                        wordsetId={wordsetId}
+                    />
                 )}
             </S.Outer>
         </AtomProvider>

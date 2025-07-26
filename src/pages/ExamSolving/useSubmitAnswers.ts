@@ -3,6 +3,8 @@ import { useExamId } from ".";
 import useExamDetail from "../ExamDetail/hooks/useExamDetail";
 import { choiceAtomFamily } from "./useChoice";
 import { useMemo } from "react";
+import { useMutation } from "@tanstack/react-query";
+import CheckAnswer from "../../apis/services/exam/check-answer";
 
 const useSubmitAnswers = () => {
     const examId = useExamId();
@@ -12,7 +14,7 @@ const useSubmitAnswers = () => {
             atom((get) => {
                 if (!examDetailData) return null;
 
-                return examDetailData.problems.map((problem) =>
+                return examDetailData.problemResultList.map((problem) =>
                     get(
                         choiceAtomFamily({
                             examId,
@@ -23,7 +25,17 @@ const useSubmitAnswers = () => {
             }),
         [examId, examDetailData],
     );
+    
     const entireChoices = useAtomValue(entireChoicesAtom);
+
+    // TODO: singleChoice 반영 후 작업
+    // const {mutate} = useMutation({
+    //     mutationFn: async()=>{
+    //         await CheckAnswer({ checkedAnswers: entireChoices, examId });
+    //     },
+    // });
+
+    return () => mutate();
 };
 
 export default useSubmitAnswers;

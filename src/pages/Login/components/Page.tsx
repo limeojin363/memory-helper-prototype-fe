@@ -23,7 +23,9 @@ const LoginPage = ({
     return (
         <S.PageWrapper>
             <Header>
-                <Text fontStyle="heading-3" label={"로그인"} />
+                <S.HeaderTextWrapper>
+                    <Text fontStyle="heading-3" label={"로그인"} />
+                </S.HeaderTextWrapper>
             </Header>
             <form
                 onSubmit={(e) => {

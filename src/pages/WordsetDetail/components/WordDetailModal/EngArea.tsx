@@ -1,26 +1,40 @@
 import { ClipLoader } from "react-spinners";
 import styled from "@emotion/styled";
-import { ChangeEventHandler } from "react";
 import Button1 from "../../../../components/button1";
 import TextField from "../../../../components/text-field";
 import Text from "../../../../components/texts/Text";
 import { Colors } from "../../../../designs/colors";
 import Icon from "../../../../components/icons/Icon";
+import { useMutation } from "@tanstack/react-query";
+import WordApi from "../../../../apis/services/word";
+import WordDetailEditor from "./WordDetailEditor";
+import { getDataFromApiRes } from "../../../../apis/services";
+import WordDetailModal from ".";
 
-const EngArea = ({
-    value,
-    onChange,
-    loadServerMeanings,
-    isLoadingMeanings,
-    isEditable,
-}: {
-    value: string;
-    onChange: ChangeEventHandler<HTMLInputElement>;
-    loadServerMeanings: () => void;
-    isLoadingMeanings: boolean;
-    isEditable: boolean;
-}) => {
-    const showLoadButton = !isLoadingMeanings && !!value && isEditable;
+const useServerActions = () => {
+    const { engWord, addLoadedMeanings } = WordDetailEditor.useEditorContext();
+
+    const { mutate: loadServerMeanings, isPending: isLoadingMeanings } =
+        useMutation({
+            mutationFn: async () => {
+                const res = WordApi.WordExists({
+                    word: engWord,
+                });
+                const data = await getDataFromApiRes(res);
+                const gottenMeanings = data.meaning;
+
+                addLoadedMeanings(gottenMeanings);
+            },
+        });
+
+    return { loadServerMeanings, isLoadingMeanings };
+};
+
+const EngArea = () => {
+    const { loadServerMeanings, isLoadingMeanings } = useServerActions();
+    const { engWord: value, changeWord } = WordDetailEditor.useEditorContext();
+    const { editable } = WordDetailModal.useModalContext();
+    const showLoadButton = !isLoadingMeanings && !!value && editable;
 
     const inputKeyDownHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key !== "Enter") return;
@@ -34,11 +48,11 @@ const EngArea = ({
             <S.EngInputWrapper>
                 <TextField
                     colorSetName={
-                        isEditable ? "PRIMARY-INITIAL" : "PRIMARY-DISABLED"
+                        editable ? "PRIMARY-INITIAL" : "PRIMARY-DISABLED"
                     }
-                    disabled={!isEditable}
+                    disabled={!editable}
                     onKeyDown={inputKeyDownHandler}
-                    onChange={onChange}
+                    onChange={(e) => changeWord(e.target.value)}
                     value={value}
                 />
                 {showLoadButton && (

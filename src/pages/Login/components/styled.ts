@@ -10,6 +10,13 @@ const S = {
         width: 100vw;
     `,
     Input: styled.input``,
+    HeaderTextWrapper: styled.div`
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    `,
 
 };
 

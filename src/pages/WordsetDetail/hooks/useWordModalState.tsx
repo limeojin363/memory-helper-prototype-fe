@@ -1,8 +1,8 @@
 import Icon from "../../../components/icons/Icon";
 import { TypeKey } from "../../../components/type-selector/TypeSelector";
 import { NavigationInfo } from "../../../components/detail-modal/DetailModal";
-import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
-import { atom, useAtom } from "jotai";
+import WordsetDetailPage from "../components";
+import { useState } from "react";
 
 export type ItemData = {
     selectedData: {
@@ -24,15 +24,14 @@ export type ModalStatus = ItemData | "CREATE-NEW-WORD" | null;
 export const isExisting = (modalInfo: ModalStatus): modalInfo is ItemData =>
     typeof modalInfo === "object" && modalInfo !== null;
 
-const modalStatusAtom = atom<ModalStatus>(null);
-
-const listDataAtom = atom<GetWordsetDetailData["list"]>([]);
-
-// Modal의 열기(CREATE, VIEW)와 닫기, 모드 수정(VIEW <-> MODIFY), navigation 등을 반환
-// TODO: list 데이터의 동기화 방식 변경(맘에 안듦)
+// 제공하는 정보
+    // Modal의 열기(CREATE, VIEW)와 닫기 함수
+    // 모드 수정(VIEW <-> MODIFY) 함수
+    // navigation 객체
+    // 현재 선택된 단어의 정보(status)
 const useWordModalState = () => {
-    const [status, setStatus] = useAtom<ModalStatus>(modalStatusAtom);
-    const [listData, setListData] = useAtom(listDataAtom);
+    const [status, setStatus] = useState<ModalStatus>(null);
+    const listData = WordsetDetailPage.usePageData().list;
 
     const openWithSelection = (wordId: number) => {
         const selectedData = listData.find((item) => item.wordId === wordId);
@@ -144,7 +143,6 @@ const useWordModalState = () => {
         openWithCreateMode,
         openWithSelection,
         status,
-        setListData,
         selectModeOnExisting,
         ...infoForNavigation,
     };

@@ -3,28 +3,15 @@ import Button1 from "../../../../components/button1";
 import Icon from "../../../../components/icons/Icon";
 import TextField from "../../../../components/text-field";
 import Text from "../../../../components/texts/Text";
-import TypeSelector, {
-    TypeKey,
-} from "../../../../components/type-selector/TypeSelector";
+import TypeSelector from "../../../../components/type-selector/TypeSelector";
+import WordDetailModal from ".";
+import WordDetailEditor from "./WordDetailEditor";
 
-const KorArea = ({
-    meanings,
-    changeMeaningByIdx,
-    changeTypeByIdx,
-    deleteMeaningByIdx,
-    addCustomMeaning,
-    isEditable,
-}: {
-    meanings: {
-        type: TypeKey;
-        value: string;
-    }[];
-    changeTypeByIdx: (idx: number, type: TypeKey) => void;
-    changeMeaningByIdx: (idx: number, value: string) => void;
-    deleteMeaningByIdx: (idx: number) => void;
-    addCustomMeaning: () => void;
-    isEditable: boolean;
-}) => {
+const KorArea = () => {
+    const { editable } = WordDetailModal.useModalContext();
+    const { korMeanings, addCustomMeaning, changeMeaningByIdx, changeTypeByIdx, deleteMeaningByIdx } =
+        WordDetailEditor.useEditorContext();
+
     // keydown 리스너: enter 키에 반응
     const inputKeyDownHandler =
         (idx: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -32,7 +19,7 @@ const KorArea = ({
 
             // shift 눌리지 않음
             if (!e.shiftKey) {
-                if (meanings.length - 1 === idx) {
+                if (korMeanings.length - 1 === idx) {
                     addCustomMeaning();
                     setTimeout(() => {
                         const NextInput = document.querySelector(
@@ -63,19 +50,19 @@ const KorArea = ({
         addCustomMeaning();
         setTimeout(() => {
             const CreatedInput = document.querySelector(
-                `input[data-idx="${meanings.length}"]`,
+                `input[data-idx="${korMeanings.length}"]`,
             ) as HTMLInputElement | null;
             CreatedInput?.focus();
         });
     };
 
-    const showTrashButton = isEditable;
+    const showTrashButton = editable;
 
     return (
         <S.KorAreaWrapper>
             <S.KorTopWrapper>
                 <Text fontStyle="heading-5" label="Kor" />
-                {isEditable && (
+                {editable && (
                     <Button1
                         onClick={onClickAddCustom}
                         width={"16px"}
@@ -101,20 +88,20 @@ const KorArea = ({
                 )}
             </S.KorTopWrapper>
 
-            {meanings.map((item, idx) => (
+            {korMeanings.map((item, idx) => (
                 <S.KorMeaningItemWrapper key={idx}>
                     <TypeSelector
                         colorSetName={
-                            isEditable ? "PRIMARY-INITIAL" : "PRIMARY-DISABLED"
+                            editable ? "PRIMARY-INITIAL" : "PRIMARY-DISABLED"
                         }
-                        disabled={!isEditable}
+                        disabled={!editable}
                         select={(t) => changeTypeByIdx(idx, t)}
                         value={item.type}
                     />
                     <TextField
-                        disabled={!isEditable}
+                        disabled={!editable}
                         colorSetName={
-                            isEditable ? "PRIMARY-INITIAL" : "PRIMARY-DISABLED"
+                            editable ? "PRIMARY-INITIAL" : "PRIMARY-DISABLED"
                         }
                         data-idx={idx}
                         type="text"

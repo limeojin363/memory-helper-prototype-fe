@@ -28,5 +28,5 @@ export type Problem = {
 
 export type MultipleChoice = {
     id: string;
-    meaning: string;
+    value: string;
 };

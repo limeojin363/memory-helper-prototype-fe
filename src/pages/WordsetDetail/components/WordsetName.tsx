@@ -6,6 +6,7 @@ import WordsetApi from "../../../apis/services/wordset";
 import { queryClient } from "../../../routes/__root";
 import { FontStyleMap } from "../../../components/texts/Text";
 import ButtonWithText from "../../../components/button-with-text";
+import WordsetDetailPage from ".";
 
 const useRenameWordset = ({ wordsetId }: { wordsetId: number }) => {
     const { mutate: rename } = useMutation({
@@ -32,11 +33,10 @@ const useRenameWordset = ({ wordsetId }: { wordsetId: number }) => {
 
 const WordsetName = ({
     valueFromProps,
-    wordsetId,
 }: {
     valueFromProps: string;
-    wordsetId: number;
 }) => {
+    const wordsetId = WordsetDetailPage.useWordsetId();
     const [value, setValue] = useState(valueFromProps);
 
     const isChanged = value !== valueFromProps;

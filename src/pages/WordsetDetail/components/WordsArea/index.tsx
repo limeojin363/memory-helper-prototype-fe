@@ -1,14 +1,12 @@
 import Icon from "../../../../components/icons/Icon";
 import { Colors } from "../../../../designs/colors";
 import styled from "@emotion/styled";
-import useWordModalState from "../../hooks/useWordModalState";
 import Button1 from "../../../../components/button1";
 import useDeleteWordsetAndNavigate from "../../hooks/useDeleteWordsetAndNavigate";
 import Text from "../../../../components/texts/Text";
-import WordDetailModal from "../WordDetailModal";
-import { GetWordsetDetailData } from "../../../../apis/services/wordset/get-wordset-detail/index.types";
+import WordDetailModal, { WordModalProvider } from "../WordDetailModal";
 import { TypeKey } from "../../../../components/type-selector/TypeSelector";
-import { useEffect } from "react";
+import WordsetDetailPage from "..";
 
 export type WordItemProps = {
     id: number;
@@ -18,10 +16,15 @@ export type WordItemProps = {
 };
 
 const OpenCreateModal = () => {
-    const { openWithCreateMode: openCreateMode } = useWordModalState();
+    const { openWithCreateMode } = WordDetailModal.useModalContext();
+
 
     return (
-        <Button1 height={"40px"} onClick={openCreateMode} colorStyle="Neutral">
+        <Button1
+            height={"40px"}
+            onClick={openWithCreateMode}
+            colorStyle="Neutral"
+        >
             <Icon colorName="neutral-dark-darkest" iconName="plus" size={20} />
         </Button1>
     );
@@ -32,7 +35,7 @@ const WordItem = ({ id, eng, firstMeaning, meaningCount }: WordItemProps) => {
     const mainText = eng;
     const sideText = `"${firstMeaning}" 등 ${meaningCount}개 의미`;
 
-    const { openWithSelection: select } = useWordModalState();
+    const { openWithSelection: select } = WordDetailModal.useModalContext();
 
     return (
         <Button1
@@ -56,50 +59,51 @@ const listProcessCallback = (item: {
         type: TypeKey;
         value: string;
     }>;
-}): WordItemProps & { key: number } => ({
+}): WordItemProps => ({
     eng: item.word,
     firstMeaning: item.meaning[0].value,
     meaningCount: item.meaning.length,
-    key: item.wordId,
     id: item.wordId,
 });
 
 // List 영역과 Modal 영역으로 나뉨
-const WordsArea = ({
-    listData,
-    wordsetId,
-}: {
-    listData: GetWordsetDetailData["list"];
-    wordsetId: number;
-}) => {
-    const { setListData } = useWordModalState();
-    const deleteAndNavigate = useDeleteWordsetAndNavigate(wordsetId);
-    const processedList = listData.map(listProcessCallback);
+const WordsArea = () => {
+    const pageData = WordsetDetailPage.usePageData();
+    const wordsetId = WordsetDetailPage.useWordsetId();
 
-    // 동기화
-    // 영 맘에 들지 않는다. useEffect는 날릴 수 있을 때 날린다.
-    useEffect(() => {
-        if (listData) setListData(listData);
-    }, [setListData, listData]);
+    const deleteAndNavigate = useDeleteWordsetAndNavigate(wordsetId);
+    const processedListData = pageData.list.map(listProcessCallback);
+
 
     return (
-        <>
-            <S.ListContainer>
+        <WordModalProvider>
+            <S.WordsAreaContainer>
                 <Button1 onClick={deleteAndNavigate} colorStyle="Neutral">
                     <Text fontStyle="action-lg" label="단어장 삭제" />
                 </Button1>
                 <S.Separator />
-                {listData.length > 0 && (
-                    <>
-                        {processedList.map((item) => (
-                            <WordItem {...item} />
-                        ))}
-                        <S.Separator />
-                    </>
-                )}
+                <WordList processedListData={processedListData} />
                 <OpenCreateModal />
-            </S.ListContainer>
-            <WordDetailModal wordsetId={wordsetId} />
+            </S.WordsAreaContainer>
+            <WordDetailModal />
+        </WordModalProvider>
+    );
+};
+
+const WordList = ({
+    processedListData,
+}: {
+    processedListData: WordItemProps[];
+}) => {
+    const length = processedListData.length;
+
+    if (length === 0) return null;
+    return (
+        <>
+            {processedListData.map((item) => (
+                <WordItem {...item} />
+            ))}
+            <S.Separator />
         </>
     );
 };
@@ -107,7 +111,7 @@ const WordsArea = ({
 export default WordsArea;
 
 const S = {
-    ListContainer: styled.div`
+    WordsAreaContainer: styled.div`
         width: calc(100% - 80px);
         display: flex;
         flex-direction: column;
