@@ -1,7 +1,5 @@
 import styled from "@emotion/styled";
 import { Colors } from "../../../designs/colors";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import Icon from "../../../components/icons/Icon";
 import Text from "../../../components/texts/Text";
 import { useNavigate } from "@tanstack/react-router";
@@ -21,7 +19,7 @@ const formatDate = (date: Date) => {
     return `${year}-${month}-${day}`;
 };
 
-const WordSetItem = ({
+const WordsetsPageList = ({
     id,
     createdAt,
     name,
@@ -30,26 +28,6 @@ const WordSetItem = ({
     const formattedDate = formatDate(createdAt);
     const navigate = useNavigate();
 
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        setActivatorNodeRef,
-    } = useSortable({
-        id,
-        transition: {
-            duration: 150,
-            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-        },
-    });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
-
     const onClick = () =>
         navigate({
             to: "/wordset/$wordsetId",
@@ -57,14 +35,7 @@ const WordSetItem = ({
         });
 
     return (
-        <S.Root id={id} ref={setNodeRef} onClick={onClick} style={style}>
-            <div ref={setActivatorNodeRef} {...attributes} {...listeners}>
-                <Icon
-                    size={16}
-                    iconName="drag-handle"
-                    colorName="neutral-dark-lightest"
-                />
-            </div>
+        <S.Root id={id} onClick={onClick}>
             <S.Body>
                 <S.TextRow>
                     <Text
@@ -102,7 +73,7 @@ const WordSetItem = ({
     );
 };
 
-export default WordSetItem;
+export default WordsetsPageList;
 
 const S = {
     Root: styled.div`
@@ -116,6 +87,10 @@ const S = {
 
         padding: 16px;
         border-radius: 16px;
+
+        :active {
+            transform: scale(0.99);
+        }
     `,
     Body: styled.div`
         display: flex;

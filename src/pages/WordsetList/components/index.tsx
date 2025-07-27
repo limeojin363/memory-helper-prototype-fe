@@ -1,11 +1,28 @@
 import styled from "@emotion/styled";
 import { Colors } from "../../../designs/colors";
 import SearchBar from "../../../components/layouts/mobile/SearchBar";
-import List from "./List";
 import useInput from "../../../hooks/useInput";
 import Icon from "../../../components/icons/Icon";
 import useWordsetListData from "../hooks/useWordsetListData";
 import useCreateAndNavigate from "../hooks/useCreateAndNavigate";
+import { GetAllWordsetsResData } from "../../../apis/services/wordset/get-wordsets/index.types";
+import WordsetsPageList from "./Item";
+
+const List = ({ data }: { data: GetAllWordsetsResData | undefined }) => {
+    return (
+        <S.ListContainer>
+            {data?.map(({ createdAt, setId, setName, testSetsCount }) => (
+                <WordsetsPageList
+                    id={String(setId)}
+                    key={setId}
+                    name={setName}
+                    createdAt={new Date(createdAt)}
+                    problemSetCount={testSetsCount}
+                />
+            ))}
+        </S.ListContainer>
+    );
+};
 
 const WordsetListPage = () => {
     const [value, onChange] = useInput();
@@ -62,4 +79,12 @@ const S = {
 
         z-index: 100;
     `,
+    ListContainer: styled.div`
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    `,
+
 };
