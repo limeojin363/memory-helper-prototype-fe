@@ -11,8 +11,7 @@ import UpdateWordInWordset from "../../../../apis/services/wordset/update-word-i
 import DeleteWordInWordset from "../../../../apis/services/wordset/delete-word-in-wordset";
 
 const useServerActions = () => {
-    const { engWord, korMeanings } =
-        WordDetailEditor.useEditorContext();
+    const { engWord, korMeanings } = WordDetailEditor.useEditorContext();
     const { wordId, close: closeModal } = WordDetailModal.useModalContext();
     const wordsetId = WordsetDetailPage.useWordsetId();
 
@@ -81,7 +80,8 @@ const useServerActions = () => {
 };
 
 const ButtonsArea = () => {
-    const { mode, selectModeOnExisting } = WordDetailModal.useModalContext();
+    const { mode, selectModeOnExisting, switchable } =
+        WordDetailModal.useModalContext();
     const { createWord, deleteWord, updateWord } = useServerActions();
 
     switch (mode) {
@@ -90,8 +90,13 @@ const ButtonsArea = () => {
         case "VIEW":
             return (
                 <>
-                    <ButtonWithText onClick={deleteWord} text={"삭제"} />
                     <ButtonWithText
+                        disabled={!switchable}
+                        onClick={deleteWord}
+                        text={"삭제"}
+                    />
+                    <ButtonWithText
+                        disabled={!switchable}
                         onClick={() => selectModeOnExisting("MODIFY")}
                         text={"수정"}
                     />
