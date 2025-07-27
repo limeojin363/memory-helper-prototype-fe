@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import svgr from "vite-plugin-svgr";
-import { visualizer } from "rollup-plugin-visualizer";
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -14,6 +14,6 @@ export default defineConfig({
         }),
         svgr(),
         TanStackRouterVite(),
-        visualizer({ open: true }), // HTML 리포트 자동 열림
+        tsconfigPaths(),
     ],
 });

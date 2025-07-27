@@ -1,12 +1,12 @@
 import styled from "@emotion/styled";
-import { Colors } from "../../../designs/colors";
-import SearchBar from "../../../components/layouts/mobile/SearchBar";
-import useInput from "../../../hooks/useInput";
-import Icon from "../../../components/icons/Icon";
+import useInput from "@/hooks/useInput";
+import { Colors } from "@/designs/colors";
+import { GetAllWordsetsResData } from "@/apis/services/wordset/get-wordsets/index.types";
+import WordsetsPageList from "./Item";
 import useWordsetListData from "../hooks/useWordsetListData";
 import useCreateAndNavigate from "../hooks/useCreateAndNavigate";
-import { GetAllWordsetsResData } from "../../../apis/services/wordset/get-wordsets/index.types";
-import WordsetsPageList from "./Item";
+import SearchBar from "@/components/layouts/mobile/SearchBar";
+import Icon from "@/components/icons/Icon";
 
 const List = ({ data }: { data: GetAllWordsetsResData | undefined }) => {
     return (
