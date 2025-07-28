@@ -10,8 +10,12 @@ export type GetExamReqParam = {
 };
 
 export type GetExamResData = {
-    code: string;
-    data: Problem[];
+    createdAt: Date;
+    examId: number;
+    examName: string;
+    sourceWordSetId: number;
+    sourceWordSetName: string;
+    problemResultList: Problem[];
 };
 
 export type Problem = {
@@ -24,5 +28,5 @@ export type Problem = {
 
 export type MultipleChoice = {
     id: string;
-    meaning: string;
+    value: string;
 };

@@ -18,6 +18,12 @@
     /* Linting */
     "strict": true,
     "noFallthroughCasesInSwitch": true,
+
+        /* Path Alias */
+    "baseUrl": "src",
+    "paths": {
+      "@/*": ["*"],
+    }
   },
   "include": ["src"]
 }

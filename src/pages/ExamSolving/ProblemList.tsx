@@ -4,7 +4,6 @@ import Text from "../../components/texts/Text";
 import { createContext, useContext } from "react";
 import SolvingChoice from "./SolvingChoice";
 
-
 const ProblemItemContext = createContext<{ problemId: number }>({
     problemId: 0,
 });

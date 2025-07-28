@@ -1,15 +1,18 @@
 import styled from "@emotion/styled";
 import WordsArea from "./WordsArea";
 import { useWordsetDetailData } from "../hooks/useWordsetDetailData";
-import { Provider } from "jotai";
-import WordsetName from "./WordsetName";
+import { Provider as AtomProvider } from "jotai";
 import Header from "../../../components/layouts/mobile/Header";
 import { useNavigate } from "@tanstack/react-router";
 import { GetWordsetDetailData } from "../../../apis/services/wordset/get-wordset-detail/index.types";
-import { useState } from "react";
+import { createContext, useContext, useState } from "react";
 import Button1 from "../../../components/button1";
 import ExamsArea from "./ExamsArea";
 import Text from "../../../components/texts/Text";
+import { useMutation } from "@tanstack/react-query";
+import WordsetApi from "@/apis/services/wordset";
+import { queryClient } from "@/routes/__root";
+import EditableTitle from "@/components/editable-title";
 
 const ModeSelector = ({
     mode,
@@ -48,22 +51,63 @@ const ModeSelector = ({
     );
 };
 
-// ROOT
+const PageContext = createContext<{
+    wordsetId: number;
+    pageData: GetWordsetDetailData;
+}>({
+    wordsetId: 0,
+    pageData: {
+        name: "",
+        list: [],
+        examIds: [],
+    },
+});
+
+const usePageData = () => useContext(PageContext).pageData;
+const useWordsetId = () => useContext(PageContext).wordsetId;
+
+// Page Root
 const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
     const pageData = useWordsetDetailData(wordsetId);
 
     if (!pageData) return null;
 
-    return <Content pageData={pageData} wordsetId={wordsetId} />;
+    return (
+        <PageContext.Provider value={{ wordsetId, pageData }}>
+            <IfDataValid />
+        </PageContext.Provider>
+    );
 };
 
-const Content = ({
-    wordsetId,
-    pageData,
-}: {
-    wordsetId: number;
-    pageData: GetWordsetDetailData;
-}) => {
+WordsetDetailPage.usePageData = usePageData;
+WordsetDetailPage.useWordsetId = useWordsetId;
+
+const useRename = () => {
+    const wordsetId = WordsetDetailPage.useWordsetId();
+
+    const { mutate: rename } = useMutation({
+        mutationFn: async (newTitle: string) => {
+            if (!wordsetId) {
+                return;
+            }
+
+            return WordsetApi.RenameWordset({
+                setName: newTitle,
+                id: wordsetId,
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["wordsetDetail", wordsetId],
+            });
+        },
+        mutationKey: ["renameWordset", wordsetId],
+    });
+
+    return (name: string) => rename(name);
+};
+
+const IfDataValid = () => {
     const navigate = useNavigate();
     const [pageMode, setPageMode] = useState<"WORDS" | "EXAMS">("WORDS");
 
@@ -72,24 +116,32 @@ const Content = ({
             to: "/wordset",
         });
 
-    const setName = pageData.name;
-    const examIds = pageData.examIds;
+    const pageData = usePageData();
+    const wordsetId = useWordsetId();
+
+    const renameRequest = useRename();
 
     return (
         // Provider for Modal Status
-        <Provider>
+        <AtomProvider>
             <S.Outer>
                 <Header goBack={goBack}>
-                    <WordsetName valueFromProps={setName} wordsetId={wordsetId} />
+                    <EditableTitle
+                        initialValue={pageData.name}
+                        renameRequest={renameRequest}
+                    />
                 </Header>
                 <ModeSelector mode={pageMode} setMode={setPageMode} />
                 {pageMode === "WORDS" ? (
-                    <WordsArea listData={pageData.list} wordsetId={wordsetId} />
+                    <WordsArea />
                 ) : (
-                    <ExamsArea examIds={examIds} wordsetId={wordsetId} />
+                    <ExamsArea
+                        examIds={pageData.examIds}
+                        wordsetId={wordsetId}
+                    />
                 )}
             </S.Outer>
-        </Provider>
+        </AtomProvider>
     );
 };
 

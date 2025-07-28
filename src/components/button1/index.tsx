@@ -36,6 +36,7 @@ type SProps = {
     height?: string;
     width?: string;
     borderRadius?: string;
+    borderColor?: string;
     activeTransformScale?: number;
     bgColor?: string;
     colorStyle?: keyof typeof ColorStyleMap;
@@ -68,7 +69,6 @@ const S = {
         border-radius: ${({ borderRadius }) =>
             borderRadius ? `${borderRadius}` : "12px"};
 
-        background-color: ${({ bgColor }) => bgColor || "transparent"};
 
         border: none;
 
@@ -79,6 +79,12 @@ const S = {
         cursor: pointer;
 
         ${({ colorStyle }) => colorStyle && ColorStyleMap[colorStyle]}
+        ${({bgColor}) => bgColor && css`
+            background-color: ${bgColor};
+        `}
+        ${({ borderColor }) => borderColor && css`
+            box-shadow: 0 0 0 1.4px ${borderColor} inset;
+        `}
 
         :active {
             transform: scale(

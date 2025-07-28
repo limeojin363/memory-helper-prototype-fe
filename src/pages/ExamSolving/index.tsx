@@ -24,7 +24,7 @@ const ExamSolvingPage = ({ examId }: { examId: number }) => {
 
     if (!examDetailData) return null;
 
-    const problemList = examDetailData.problems;
+    const problemList = examDetailData.problemResultList;
     const examName = examDetailData.examName;
 
     return (
