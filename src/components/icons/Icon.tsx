@@ -14,6 +14,7 @@ import IcLinedArrowNext from "../../assets/icons/lined-arrow-next.svg?react";
 import IcChoiceCheck from "../../assets/icons/choice-check.svg?react";
 import IcResultRight from "../../assets/icons/result-right.svg?react";
 import IcResultWrong from "../../assets/icons/result-wrong.svg?react";
+import IcModifyPen from "../../assets/icons/modify-pen.svg?react"
 import styled from "@emotion/styled";
 import { MouseEventHandler } from "react";
 
@@ -33,6 +34,7 @@ const RawIcons = {
     "choice-check": IcChoiceCheck,
     "result-right": IcResultRight,
     "result-wrong": IcResultWrong,
+    "modify-pen": IcModifyPen,
 } as const;
 
 export type IconName = keyof typeof RawIcons;
