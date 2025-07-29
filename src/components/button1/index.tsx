@@ -39,6 +39,7 @@ type SProps = {
     borderColor?: string;
     activeTransformScale?: number;
     bgColor?: string;
+    disabled?: boolean;
     colorStyle?: keyof typeof ColorStyleMap;
 };
 
@@ -93,6 +94,12 @@ const S = {
         }
         :focus-visible {
             box-shadow: 0 0 0 3px ${Colors["neutral-dark-darkest"]} inset;
+        }
+
+        :disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+            ${({ colorStyle }) => colorStyle && ColorStyleMap["Disabled"]}
         }
     `,
 };

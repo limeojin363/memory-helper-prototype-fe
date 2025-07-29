@@ -18,12 +18,14 @@ export type WordItemProps = {
 const OpenCreateModal = () => {
     const { openWithCreateMode } = WordDetailModal.useModalContext();
 
+    const isWordsetModifiable = WordsetDetailPage.usePageData().examIds.length === 0;
 
     return (
         <Button1
+            disabled={!isWordsetModifiable}
             height={"40px"}
             onClick={openWithCreateMode}
-            colorStyle="Neutral"
+            colorStyle={isWordsetModifiable ? "Neutral" : "Disabled"}
         >
             <Icon colorName="neutral-dark-darkest" iconName="plus" size={20} />
         </Button1>
@@ -74,11 +76,12 @@ const WordsArea = () => {
     const deleteAndNavigate = useDeleteWordsetAndNavigate(wordsetId);
     const processedListData = pageData.list.map(listProcessCallback);
 
+    const isWordsetModifiable = WordsetDetailPage.usePageData().examIds.length === 0;
 
     return (
         <WordModalProvider>
             <S.WordsAreaContainer>
-                <Button1 onClick={deleteAndNavigate} colorStyle="Neutral">
+                <Button1 disabled={!isWordsetModifiable} onClick={deleteAndNavigate} colorStyle="Neutral">
                     <Text fontStyle="action-lg" label="단어장 삭제" />
                 </Button1>
                 <S.Separator />
@@ -98,6 +101,7 @@ const WordList = ({
     const length = processedListData.length;
 
     if (length === 0) return null;
+
     return (
         <>
             {processedListData.map((item) => (
