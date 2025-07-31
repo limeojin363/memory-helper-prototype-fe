@@ -85,13 +85,13 @@ WordsetDetailPage.useWordsetId = useWordsetId;
 const useRename = () => {
     const wordsetId = WordsetDetailPage.useWordsetId();
 
-    const { mutate: rename } = useMutation({
+    const { mutateAsync: rename, isPending } = useMutation({
         mutationFn: async (newTitle: string) => {
             if (!wordsetId) {
                 return;
             }
 
-            return WordsetApi.RenameWordset({
+            await WordsetApi.RenameWordset({
                 setName: newTitle,
                 id: wordsetId,
             });
@@ -104,7 +104,7 @@ const useRename = () => {
         mutationKey: ["renameWordset", wordsetId],
     });
 
-    return (name: string) => rename(name);
+    return { renameRequest: (name: string) => rename(name), isPending };
 };
 
 const IfDataValid = () => {
@@ -119,7 +119,7 @@ const IfDataValid = () => {
     const pageData = usePageData();
     const wordsetId = useWordsetId();
 
-    const renameRequest = useRename();
+    const { renameRequest, isPending } = useRename();
 
     return (
         // Provider for Modal Status
@@ -129,6 +129,7 @@ const IfDataValid = () => {
                     <EditableTitle
                         initialValue={pageData.name}
                         renameRequest={renameRequest}
+                        isPending={isPending}
                     />
                 </Header>
                 <ModeSelector mode={pageMode} setMode={setPageMode} />

@@ -6,12 +6,41 @@ import useExamDetail from "../hooks/useExamDetail";
 import ButtonWithText from "../../../components/button-with-text";
 import ResultList from "./ResultList";
 import EditableTitle from "@/components/editable-title";
+import { useMutation } from "@tanstack/react-query";
+import { RenameExam } from "@/apis/services/exam/remame";
+import { queryClient } from "@/routes/__root";
+
+const useRename = (examId: number) => {
+    const { mutateAsync: rename, isPending } = useMutation({
+        mutationFn: async (newTitle: string) => {
+            if (!examId) {
+                return;
+            }
+
+            await RenameExam({
+                examId,
+                examName: newTitle,
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ["examDetail", examId],
+            });
+        },
+        mutationKey: ["renameExam", examId],
+    });
+
+    return { renameRequest: (name: string) => rename(name), isPending };
+};
+
 
 const ExamDetailPage = ({ examId }: { examId: number }) => {
     const { history } = useRouter();
     const navigate = useNavigate();
 
     const examDetailData = useExamDetail(examId);
+    const { renameRequest, isPending } = useRename(examId);
+
     if (!examDetailData) return null;
 
     const howManyProblems = examDetailData.problemResponses.length;
@@ -43,7 +72,8 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
             <Header goBack={goBack}>
                 <EditableTitle
                     initialValue={examDetailData.examName}
-                    renameRequest={() => {}}
+                    renameRequest={renameRequest}
+                    isPending={isPending}
                 />
             </Header>
             <S.MetaDataArea>
