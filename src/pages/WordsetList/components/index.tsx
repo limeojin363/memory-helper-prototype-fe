@@ -1,11 +1,9 @@
 import styled from "@emotion/styled";
-import useInput from "@/hooks/useInput";
 import { Colors } from "@/designs/colors";
 import { GetAllWordsetsResData } from "@/apis/services/wordset/get-wordsets/index.types";
 import WordsetsPageList from "./Item";
 import useWordsetListData from "../hooks/useWordsetListData";
 import useCreateAndNavigate from "../hooks/useCreateAndNavigate";
-import SearchBar from "@/components/layouts/mobile/SearchBar";
 import Icon from "@/components/icons/Icon";
 
 const List = ({ data }: { data: GetAllWordsetsResData | undefined }) => {
@@ -25,14 +23,12 @@ const List = ({ data }: { data: GetAllWordsetsResData | undefined }) => {
 };
 
 const WordsetListPage = () => {
-    const [value, onChange] = useInput();
     const listData = useWordsetListData();
     const createAndNavigate = useCreateAndNavigate();
 
     return (
         <>
             <S.MainArea>
-                <SearchBar value={value} onChange={onChange} />
                 <List data={listData} />
             </S.MainArea>
             <S.AddButton onClick={createAndNavigate}>

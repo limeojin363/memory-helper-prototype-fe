@@ -15,14 +15,12 @@ https://port-0-memory-helper-prototype-be-m6ekc447ebe44eb6.sel4.cloudtype.app/sw
 
 https://github.com/KimJungMook/memory-helper-prototype-be
 
-# [250727] To-do List
+# [250731] To-do List
 
 ## 코어 기능
 
 - 시험 생성 -> 시험 보기 -> 결과 보기 플로우 전체가 굴러가도록 API 부착하고 테스트 - 백엔드랑 소통하면서 고칠 거 고치면서 진행하기
   - /api/exam/check 잘 굴러가는지 확인, 시험 보고 제출하는 부분에다가 API 붙이기
-    -> multipleChoices -> singleChoice 변경사항을 먼저 적용해야 함(15분?)
-  - 백엔드에 요청해서 API가 시험 이름을 반환하도록 하기(id뿐만 아니라..)
 
 - (백엔드 작업 완료 시) /exam/{id} API 붙이기
 - 로그인 플로우 점검(라우팅 구조와 Blocking)
@@ -41,8 +39,12 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 - 각 페이지에다가 최신 헤더 적용
 - Header position을 sticky로
 
+### EditableTitle 관련
 
-### 이외
+- Loading 상태 구현(15분?)
+- "시험"에 EditableTitle 적용(5분?)
+
+### 기타 작업
 
 - 로그인 페이지 마크업 새로 작성(10분?)
 

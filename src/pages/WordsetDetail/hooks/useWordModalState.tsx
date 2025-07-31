@@ -25,10 +25,10 @@ export const isExisting = (modalInfo: ModalStatus): modalInfo is ItemData =>
     typeof modalInfo === "object" && modalInfo !== null;
 
 // 제공하는 정보
-    // Modal의 열기(CREATE, VIEW)와 닫기 함수
-    // 모드 수정(VIEW <-> MODIFY) 함수
-    // navigation 객체
-    // 현재 선택된 단어의 정보(status)
+// Modal의 열기(CREATE, VIEW)와 닫기 함수
+// 모드 수정(VIEW <-> MODIFY) 함수
+// navigation 객체
+// 현재 선택된 단어의 정보(status)
 const useWordModalState = () => {
     const [status, setStatus] = useState<ModalStatus>(null);
     const listData = WordsetDetailPage.usePageData().list;
@@ -55,6 +55,8 @@ const useWordModalState = () => {
 
     const openWithCreateMode = () => setStatus("CREATE-NEW-WORD");
 
+    const isWordsetModifiable = WordsetDetailPage.usePageData().examIds.length === 0;
+
     //  << case 정리 >>
     // view
     //  - prev
@@ -62,7 +64,9 @@ const useWordModalState = () => {
     //    - 이전 요소 X -> ["<-", deactive, 미동작]
     //  - next:
     //    - 다음 요소 O -> ["->", active, 동작]
-    //    - 다음 요소 X -> ["NEW", active, 동작]
+    //    - 다음 요소 X
+    //      - isWordsetModifiable -> ["NEW", active, 동작]
+    //      - !isWordsetModifiable -> X
     // create
     //  - prev:
     //    - 이전 요소 O -> ["<-", active, 동작]
@@ -83,10 +87,8 @@ const useWordModalState = () => {
             const nextItem = listData[currentIndex + 1];
 
             return {
-                prev: {
-                    navigate: doesPrevExists
-                        ? () => openWithSelection(prevItem.wordId)
-                        : () => {},
+                prev: doesPrevExists ? {
+                    navigate: () => openWithSelection(prevItem.wordId),
                     content: (
                         <Icon
                             colorName="neutral-dark-darkest"
@@ -94,19 +96,21 @@ const useWordModalState = () => {
                             size={20}
                         />
                     ),
-                    active: doesPrevExists,
-                },
-                next: {
-                    navigate: doesNextExists
-                        ? () => openWithSelection(nextItem.wordId)
-                        : openWithCreateMode,
-                    content: doesNextExists ? (
+                    active: true,
+                }: undefined,
+                next: doesNextExists ? {
+                    navigate: () => openWithSelection(nextItem.wordId),
+                    content: (
                         <Icon
                             colorName="neutral-dark-darkest"
                             iconName="lined-arrow-next"
                             size={20}
                         />
-                    ) : (
+                    ),
+                    active: true,
+                } : isWordsetModifiable ? {
+                    navigate: openWithCreateMode,
+                    content: (
                         <Icon
                             colorName="neutral-dark-darkest"
                             iconName="plus"
@@ -114,7 +118,7 @@ const useWordModalState = () => {
                         />
                     ),
                     active: true,
-                },
+                } : undefined,
             };
         } else {
             const doesPrevExists = listData.length > 0;
@@ -124,7 +128,7 @@ const useWordModalState = () => {
                 prev: {
                     navigate: doesPrevExists
                         ? () => openWithSelection(prevItem.wordId)
-                        : () => {},
+                        : () => { },
                     content: (
                         <Icon
                             colorName="neutral-dark-darkest"

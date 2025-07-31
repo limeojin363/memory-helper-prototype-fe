@@ -15,7 +15,8 @@ export type GetExamResData = {
     examName: string;
     sourceWordSetId: number;
     sourceWordSetName: string;
-    problemResultList: Problem[];
+    problemResponses: Problem[];
+    resultResponses: unknown;
 };
 
 export type Problem = {

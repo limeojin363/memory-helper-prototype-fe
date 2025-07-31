@@ -14,7 +14,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
     const examDetailData = useExamDetail(examId);
     if (!examDetailData) return null;
 
-    const howManyProblems = examDetailData.problemResultList.length;
+    const howManyProblems = examDetailData.problemResponses.length;
     const sourceWordsetId = examDetailData.sourceWordSetId;
     const sourceWordsetName = examDetailData.sourceWordSetName;
     const dateView = new Date(examDetailData.createdAt).toLocaleDateString(
