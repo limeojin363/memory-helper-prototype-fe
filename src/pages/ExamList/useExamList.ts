@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import GetAllExams from "../../apis/services/exam/get-all-exams";
 import { getDataFromApiRes } from "../../apis/services";
+import GetExams from "@/apis/services/exam/get-exam-list";
 
 const useExamList = () => {
     const { data } = useQuery({
         queryFn: async () => {
-            const res = GetAllExams();
+            const res = GetExams({ page: 0, size: 5 });
             const data = getDataFromApiRes(res);
 
             return data;

@@ -1,15 +1,15 @@
 import styled from "@emotion/styled";
 import { Colors } from "@/designs/colors";
-import { GetAllWordsetsResData } from "@/apis/services/wordset/get-wordsets/index.types";
+import { GetWordsetListResData } from "@/apis/services/wordset/get-wordset-list/index.types";
 import WordsetsPageList from "./Item";
 import useWordsetListData from "../hooks/useWordsetListData";
 import useCreateAndNavigate from "../hooks/useCreateAndNavigate";
 import Icon from "@/components/icons/Icon";
 
-const List = ({ data }: { data: GetAllWordsetsResData | undefined }) => {
+const List = ({ data }: { data: GetWordsetListResData | undefined }) => {
     return (
         <S.ListContainer>
-            {data?.map(({ createdAt, setId, setName, testSetsCount }) => (
+            {data?.content.map(({ createdAt, setId, setName, testSetsCount }) => (
                 <WordsetsPageList
                     id={String(setId)}
                     key={setId}

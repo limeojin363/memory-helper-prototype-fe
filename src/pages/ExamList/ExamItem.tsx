@@ -1,8 +1,7 @@
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
-import S from "./ProblemSetItem.styled";
+import S from "./ExamItem.styled";
 import Icon from "../../components/icons/Icon";
 import Text from "../../components/texts/Text";
+import { useNavigate } from "@tanstack/react-router";
 
 type ProblemSetItemProps = {
     id: string;
@@ -22,7 +21,7 @@ const formatDate = (date: Date) => {
     return `${year}-${month}-${day}`;
 };
 
-const ProblemSetItem = ({
+const ExamItem = ({
     id,
     name,
     generatedAt,
@@ -31,35 +30,14 @@ const ProblemSetItem = ({
     recentStudiedAt,
     problemNumber,
 }: ProblemSetItemProps) => {
-        const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        setActivatorNodeRef,
-    } = useSortable({
-        id,
-        transition: {
-            duration: 150,
-            easing: "cubic-bezier(0.25, 1, 0.5, 1)",
-        },
-    });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
+    const navigate = useNavigate();
 
     return (
-        <S.Root id={id} ref={setNodeRef} style={style}>
-            <div ref={setActivatorNodeRef} {...attributes} {...listeners}>
-                <Icon
-                    size={16}
-                    iconName="drag-handle"
-                    colorName="neutral-dark-lightest"
-                />
-            </div>
+        <S.Root
+            onClick={() => {
+                navigate({ to: "/exam/$examId", params: { examId: id } });
+            }}
+        >
             <S.Body>
                 <S.TextRow>
                     <Text
@@ -138,4 +116,4 @@ const ProblemSetItem = ({
     );
 };
 
-export default ProblemSetItem;
+export default ExamItem;
