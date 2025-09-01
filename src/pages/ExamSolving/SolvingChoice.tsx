@@ -1,18 +1,22 @@
 import styled from "@emotion/styled";
-import useChoices from "./useChoice";
 import Text from "../../components/texts/Text";
 import { Colors } from "../../designs/colors";
 import Icon from "../../components/icons/Icon";
+import ExamSolvingPage from ".";
+import { ProblemItem } from "./ProblemList";
 
 const SolvingChoice = ({ id, value }: { id: string; value: string }) => {
-    const { isSelected, toggleChoice } = useChoices();
+    const { answers, updateAnswer } = ExamSolvingPage.useContext();
+    const { problemIndex } = ProblemItem.useData();
+
+    const isSelected = answers[problemIndex] === Number(id);
 
     return (
-        <S.ChoiceRoot onClick={() => toggleChoice(id)}>
+        <S.ChoiceRoot onClick={() => updateAnswer(problemIndex, Number(id))}>
             <S.NumArea>
                 <S.NumTextWrapper>
                     <Text label={`${id}`} />
-                    {isSelected(id) && (
+                    {isSelected&&(
                         <S.CheckWrapper>
                             <Icon
                                 colorName="support-red-medium"

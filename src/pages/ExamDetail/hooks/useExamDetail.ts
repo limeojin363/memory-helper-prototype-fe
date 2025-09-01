@@ -77,7 +77,7 @@ const useExamDetail = (examId: number) => {
 
             return data;
         },
-        queryKey: ["examDetail"],
+        queryKey: ["examDetail", examId],
         initialData: null,
     });
 

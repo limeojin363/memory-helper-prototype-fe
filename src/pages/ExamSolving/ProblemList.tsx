@@ -3,27 +3,35 @@ import { ProblemType } from "../ExamDetail/hooks/useExamDetail";
 import Text from "../../components/texts/Text";
 import { createContext, useContext } from "react";
 import SolvingChoice from "./SolvingChoice";
+import ExamSolvingPage from ".";
 
-const ProblemItemContext = createContext<{ problemId: number }>({
+const ProblemItemContext = createContext<{ problemId: number; problemIndex: number }>({
     problemId: 0,
+    problemIndex: 0,
 });
 
-export const useProblemId = () => {
-    const { problemId } = useContext(ProblemItemContext);
+const useData = () => {
+    const { problemId, problemIndex } = useContext(ProblemItemContext);
 
-    return problemId;
+    return { problemId, problemIndex };
 };
 
-const ProblemItem = ({ itemData }: { itemData: ProblemType }) => {
+export const ProblemItem = ({ itemData, problemIndex }: { itemData: ProblemType; problemIndex: number }) => {
     const { multipleChoice, problemId, question, problemNumber } = itemData;
 
+    const processedChoices = (()=>{
+        const copied = [... multipleChoice];
+        copied.sort((a, b) => a.id.localeCompare(b.id));
+        return copied;
+    })()
+
     return (
-        <ProblemItemContext.Provider value={{ problemId }}>
+        <ProblemItemContext.Provider value={{ problemId, problemIndex }}>
             <S.ItemRoot>
                 <Text label={`${problemNumber}. ${question}`} fontStyle="body-lg"/>
                 <S.ChoicesWrapper>
-                    {multipleChoice.map(({ id, value }) => (
-                        <SolvingChoice id={id} value={value} />
+                    {processedChoices.map(({ id, value }) => (
+                        <SolvingChoice key={id} id={id} value={value} />
                     ))}
                 </S.ChoicesWrapper>
             </S.ItemRoot>
@@ -31,11 +39,15 @@ const ProblemItem = ({ itemData }: { itemData: ProblemType }) => {
     );
 };
 
-const ProblemList = ({ listData }: { listData: ProblemType[] }) => {
+ProblemItem.useData = useData;
+
+const ProblemList = () => {
+    const listData = ExamSolvingPage.usePageData().problemResponses;
+
     return (
         <S.ListRoot>
-            {listData.map((item) => (
-                <ProblemItem key={item.problemNumber} itemData={item} />
+            {listData.map((item, problemIndex) => (
+                <ProblemItem key={item.problemNumber} itemData={item} problemIndex={problemIndex} />
             ))}
         </S.ListRoot>
     );

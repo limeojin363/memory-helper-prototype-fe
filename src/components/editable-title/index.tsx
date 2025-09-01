@@ -9,9 +9,11 @@ import Icon from "../icons/Icon";
 const EditableTitle = ({
     initialValue,
     renameRequest,
+    isPending,
 }: {
     initialValue: string;
-    renameRequest: (name: string) => void;
+    renameRequest: (name: string) => Promise<unknown>;
+    isPending: boolean;
 }) => {
     const [mode, setMode] = useState<"VIEW" | "MODIFY">("VIEW");
 
@@ -31,15 +33,15 @@ const EditableTitle = ({
         <S.Root>
             {isModifing ? (
                 <>
-                    <S.Input value={value} onChange={onChange} />
+                    <S.Input value={value} onChange={onChange} disabled={isPending} />
                     <S.ButtonsPositioner>
                         <ButtonWithText
                             height="24px"
                             width="24px"
                             text="V"
                             borderRadius="30%"
-                            onClick={() => {
-                                renameRequest(value);
+                            onClick={async () => {
+                                await renameRequest(value);
                                 setMode("VIEW");
                             }}
                         />
@@ -103,6 +105,10 @@ const S = {
 
         :focus {
             box-shadow: 0 0 0 2px ${Colors["neutral-dark-darkest"]} inset;
+        }
+
+        :disabled {
+            cursor: not-allowed;
         }
     `,
     ButtonsPositioner: styled.div`
