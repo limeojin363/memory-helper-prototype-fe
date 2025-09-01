@@ -13,7 +13,7 @@ const useCreateAndNavigate = () => {
         mutationFn: async () => {
             if (!wordsetListData) return;
 
-            const num = wordsetListData.reduce((max, wordset) => {
+            const num = wordsetListData.content.reduce((max, wordset) => {
                 const match = wordset.setName.match(/Wordset(\d+)/);
                 const number = match ? parseInt(match[1], 10) : 0;
                 return Math.max(max, number);
