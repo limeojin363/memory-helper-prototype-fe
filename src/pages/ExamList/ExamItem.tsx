@@ -1,4 +1,5 @@
-import S from "./ExamItem.styled";
+import styled from "@emotion/styled";
+import { Colors } from "../../designs/colors";
 import Icon from "../../components/icons/Icon";
 import Text from "../../components/texts/Text";
 import { useNavigate } from "@tanstack/react-router";
@@ -117,3 +118,32 @@ const ExamItem = ({
 };
 
 export default ExamItem;
+
+const S = {
+    Root: styled.div`
+        display: flex;
+        gap: 16px;
+        align-items: center;
+
+        user-select: none;
+
+        background-color: ${Colors["neutral-light-light"]};
+
+        padding: 16px;
+        border-radius: 16px;
+
+        :active {
+            transform: scale(0.99);
+        }
+    `,
+    Body: styled.div`
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+    `,
+    TextRow: styled.div`
+        display: flex;
+        gap: 4px;
+    `,
+};

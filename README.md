@@ -17,18 +17,20 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 
 # [250802] To-do List
 
-## 코어 기능
+## 코어 기능(전반적인 플로우 구현)
 
-- 시험 생성 -> 시험 보기 -> 결과 보기 플로우 전체가 굴러가도록 API 부착하고 테스트 - 백엔드랑 소통하면서 고칠 거 고치면서 진행하기
-  - /api/wordsets/list, /api/exams/list 백엔드 작업 선행 필요..
-  - /api/exam/check 잘 굴러가는지 확인, 시험 보고 제출하는 부분에다가 API 붙이기
+* 단어장 생성 및 편집 -> 시험 생성 -> 문제 풀기 or 시험 결과 보기
 
-- (백엔드 작업 완료 시) /exam/{id} API 붙이기
-- 로그인 플로우 점검(라우팅 구조와 Blocking)
+- "/wordset/{id}"의 "시험" 탭이 API에서 호출한 정보들을 리스트 형태로 표시 <- 구현은 했고 디자인 개선이 필요함
+- "/exam/{id}" 페이지의 "시험 결과"에 결과 리스트 UI를 표시하고, "/result/{id}"로 navigate할 수 있도록 하기 <- 구현은 했고 디자인 개선이 필요함
+- "/exam/{id}" 페이지에 "시험 삭제" 버튼 만들고 API 코드 작성해서 붙이기
+- "/result/{id}" 페이지 만들기 <- 구현은 했고 디자인 개선이 필요함
 
 ## 소단위 기능 작업
 
-- 무한 스크롤
+- (디자인작업 선행 필요) wordset과 exam의 constraints 기획 및 백엔드에 요청, UI 작업 진행하기
+- 로그인 플로우 개선(라우팅 구조와 Blocking 방식에 대해 고민)
+- 무한 스크롤(wordset 및 exam)
 
 ### 로딩 UI 적용
 

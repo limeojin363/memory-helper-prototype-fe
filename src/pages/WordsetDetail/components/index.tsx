@@ -31,7 +31,7 @@ const ModeSelector = ({
                 <Text
                     fontStyle={mode === "WORDS" ? "action-xl" : "action-xl"}
                     fontSize={mode === "WORDS" ? 18 : 17}
-                    label="단어장"
+                    label="단어 목록"
                     colorName={"neutral-dark-darkest"}
                 />
             </Button1>
@@ -43,7 +43,7 @@ const ModeSelector = ({
                 <Text
                     fontStyle={mode === "EXAMS" ? "action-xl" : "action-xl"}
                     fontSize={mode === "EXAMS" ? 18 : 17}
-                    label="시험"
+                    label="시험 목록"
                     colorName={"neutral-dark-darkest"}
                 />
             </Button1>
@@ -117,7 +117,6 @@ const IfDataValid = () => {
         });
 
     const pageData = usePageData();
-    const wordsetId = useWordsetId();
 
     const { renameRequest, isPending } = useRename();
 
@@ -133,14 +132,7 @@ const IfDataValid = () => {
                     />
                 </Header>
                 <ModeSelector mode={pageMode} setMode={setPageMode} />
-                {pageMode === "WORDS" ? (
-                    <WordsArea />
-                ) : (
-                    <ExamsArea
-                        examIds={pageData.examIds}
-                        wordsetId={wordsetId}
-                    />
-                )}
+                {pageMode === "WORDS" ? <WordsArea /> : <ExamsArea />}
             </S.Outer>
         </AtomProvider>
     );

@@ -12,6 +12,8 @@ const ExamResultPage = ({ resultId }: ExamResultPageProps) => {
     const { history } = useRouter();
     const navigate = useNavigate();
 
+    console.log({resultDetail})
+
     if (!resultDetail) return null;
 
     const { createdAt, problemResultList, examName, examId } = resultDetail;
@@ -24,7 +26,7 @@ const ExamResultPage = ({ resultId }: ExamResultPageProps) => {
                 examId: examId.toString(),
             },
         });
-    const dateView = createdAt.toLocaleDateString("ko-KR", {
+    const dateView = new Date(createdAt).toLocaleDateString("ko-KR", {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
@@ -34,7 +36,7 @@ const ExamResultPage = ({ resultId }: ExamResultPageProps) => {
         <S.PageRoot>
             <Header goBack={goBack}>
                 <S.HeaderAreaContainer>
-                    <Text label={`${examName}`} onClick={goToExam} />
+                    <Text label={`${examName}`} onClick={goToExam} fontStyle="heading-2" />
                     <Text
                         colorName="neutral-dark-lightest"
                         fontStyle="body-sm"

@@ -5,17 +5,13 @@ import { useNavigate } from "@tanstack/react-router";
 
 export type ResultItem = {
     resultId: number;
-    date: string;
+    createdAt: string;
     totalProblemsNum: number;
     correctedAnswersNum: number;
 };
 
-type ResultListProps = {
-    listData: ResultItem[];
-};
-
-const ResultItem = ({ itemData }: { itemData: ResultItem }) => {
-    const { correctedAnswersNum, date, resultId, totalProblemsNum } = itemData;
+const ResultItem = ({ data }: { data: ResultItem }) => {
+    const { correctedAnswersNum, createdAt, resultId, totalProblemsNum } = data;
 
     const navigate = useNavigate();
     const onClick = () =>
@@ -26,7 +22,7 @@ const ResultItem = ({ itemData }: { itemData: ResultItem }) => {
 
     return (
         <S.ItemRoot onClick={onClick}>
-            <Text label={`공부한 날짜: ${date}`} />
+            <Text label={`생성 날짜: ${createdAt}`} />
             <Text label={`문제 수: ${totalProblemsNum}`} />
             <Text label={`정답 수: ${correctedAnswersNum}`} />
         </S.ItemRoot>
@@ -34,16 +30,38 @@ const ResultItem = ({ itemData }: { itemData: ResultItem }) => {
 };
 
 // Pure
-const ResultList = ({ examId }: { examId: number }) => {
+const ResultList = ({
+    data,
+}: {
+    data:
+        | {
+              resultId: number;
+              createdAt: string;
+              totalProblemsNum: number;
+              correctedAnswersNum: number;
+          }[]
+        | null;
+}) => {
+    const hasResults = data !== null && data.length > 0;
+
     return (
-        <S.ListRoot>
-            <Text label="시험 결과" fontStyle="heading-2" />
-        </S.ListRoot>
+        <S.Root>
+            <Text label="시험 결과 목록" fontStyle="heading-2" />
+            {hasResults ? (
+                <S.List>
+                    {data.map((item) => (
+                        <ResultItem key={item.resultId} data={item} />
+                    ))}
+                </S.List>
+            ) : (
+                <Text label="아직 시험을 본 기록이 없어요." />
+            )}
+        </S.Root>
     );
 };
 
 const S = {
-    ListRoot: styled.div`
+    Root: styled.div`
         width: calc(100% - 30px);
         padding: 15px;
 
@@ -53,6 +71,7 @@ const S = {
         align-items: center;
         gap: 8px;
     `,
+    List: styled.div``,
     ItemRoot: styled.div`
         width: calc(100% - 16px);
         display: flex;
