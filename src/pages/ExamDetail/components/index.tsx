@@ -9,6 +9,8 @@ import EditableTitle from "@/components/editable-title";
 import { useMutation } from "@tanstack/react-query";
 import { RenameExam } from "@/apis/services/exam/remame";
 import { queryClient } from "@/routes/__root";
+import ExamApi from "@/apis/services/exam";
+import { getDataFromApiRes } from "@/apis/services";
 
 const useRename = (examId: number) => {
     const { mutateAsync: rename, isPending } = useMutation({
@@ -37,6 +39,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
     const { history } = useRouter();
     const navigate = useNavigate();
 
+    const deleteExam = useDelete(examId);
     const examDetailData = useExamDetail(examId);
     const { renameRequest, isPending } = useRename(examId);
 
@@ -68,6 +71,11 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
 
     const resultListData = examDetailData.resultResponses;
 
+    const deleteAndNavigate = async () => {
+        await deleteExam();
+        goBack();
+    };
+
     return (
         <S.Root>
             <Header goBack={goBack}>
@@ -90,10 +98,27 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
                     onClick={goToWordset}
                 />
                 <ButtonWithText text={"문제 풀기"} onClick={goToSolvingPage} />
+                <ButtonWithText
+                    text={"시험 삭제"}
+                    onClick={deleteAndNavigate}
+                />
             </S.ButtonsArea>
-            <ResultList data={resultListData}/>
+            <ResultList data={resultListData} />
         </S.Root>
     );
+};
+
+const useDelete = (examId: number) => {
+    const { mutateAsync } = useMutation({
+        mutationFn: async () => {
+            const res = ExamApi.DeleteExam({ examId });
+            const data = await getDataFromApiRes(res);
+
+            return data;
+        },
+    });
+
+    return () => mutateAsync();
 };
 
 export default ExamDetailPage;
