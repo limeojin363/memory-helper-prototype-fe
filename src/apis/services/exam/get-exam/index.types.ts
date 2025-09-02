@@ -1,9 +1,6 @@
 import { ApiFunc } from "../../types";
 
-export type GetExamFunc = ApiFunc<
-    GetExamReqParam,
-    GetExamResData
->;
+export type GetExamFunc = ApiFunc<GetExamReqParam, GetExamResData>;
 
 export type GetExamReqParam = {
     examId: number;
@@ -16,7 +13,14 @@ export type GetExamResData = {
     sourceWordSetId: number;
     sourceWordSetName: string;
     problemResponses: Problem[];
-    resultResponses: unknown;
+    resultResponses:
+        | null
+        | {
+              resultId: number;
+              createdAt: string;
+              totalProblemsNum: number;
+              correctedAnswersNum: number;
+          }[];
 };
 
 export type Problem = {

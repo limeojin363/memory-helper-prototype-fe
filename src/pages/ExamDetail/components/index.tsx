@@ -33,7 +33,6 @@ const useRename = (examId: number) => {
     return { renameRequest: (name: string) => rename(name), isPending };
 };
 
-
 const ExamDetailPage = ({ examId }: { examId: number }) => {
     const { history } = useRouter();
     const navigate = useNavigate();
@@ -67,6 +66,8 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
             params: { examId: String(examId) },
         });
 
+    const resultListData = examDetailData.resultResponses;
+
     return (
         <S.Root>
             <Header goBack={goBack}>
@@ -90,7 +91,7 @@ const ExamDetailPage = ({ examId }: { examId: number }) => {
                 />
                 <ButtonWithText text={"문제 풀기"} onClick={goToSolvingPage} />
             </S.ButtonsArea>
-            <ResultList examId={examId} />
+            <ResultList data={resultListData}/>
         </S.Root>
     );
 };
