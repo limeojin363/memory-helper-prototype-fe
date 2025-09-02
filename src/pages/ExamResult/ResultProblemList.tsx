@@ -1,16 +1,16 @@
 import styled from "@emotion/styled";
 import Text from "../../components/texts/Text";
-import { ProblemResultItemType } from "./useResultDetail";
 import { Colors } from "../../designs/colors";
 import ResultChoice from "./ResultChoice";
+import { ProblemResult } from "@/apis/services/result/types";
 
 type ResultProblemListProps = {
-    listData: ProblemResultItemType[];
+    listData: ProblemResult[];
 };
 const ResultProblemItem = ({
     itemData,
 }: {
-    itemData: ProblemResultItemType;
+    itemData: ProblemResult;
 }) => {
     const {
         multipleChoice,
@@ -20,29 +20,20 @@ const ResultProblemItem = ({
         question,
     } = itemData;
 
-    const userAnswerView = userAnswers.map((answer) => answer.value).join(", ");
-    const rightAnswerView = rightAnswers
-        .map((answer) => answer.value)
-        .join(", ");
-
     return (
         <S.ItemRoot>
             <Text label={`${problemNumber}. ${question}`} fontStyle="body-lg"/>
             <div>
-                <Text label={`내가 낸 답: ${userAnswerView}`} />
-                <Text label={`정답: ${rightAnswerView}`} />
+                <Text label={`내가 낸 답: ${userAnswers.id}`} />
+                <Text label={`정답: ${rightAnswers.id}`} />
             </div>
             <S.ChoicesWrapper>
                 {multipleChoice.map(({ id, value }) => (
                     <ResultChoice
-                        num={id}
+                        num={Number(id)}
                         value={value}
-                        checked={userAnswers.some(
-                            (answerItem) => answerItem.id === id,
-                        )}
-                        focused={rightAnswers.some(
-                            (answerItem) => answerItem.id === id,
-                        )}
+                        checked={userAnswers.id === id}
+                        focused={rightAnswers.id === id}
                     />
                 ))}
             </S.ChoicesWrapper>
