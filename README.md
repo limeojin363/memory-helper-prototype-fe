@@ -15,7 +15,7 @@ https://port-0-memory-helper-prototype-be-m6ekc447ebe44eb6.sel4.cloudtype.app/sw
 
 https://github.com/KimJungMook/memory-helper-prototype-be
 
-# [250802] To-do List
+# [250903] To-do List
 
 ## 코어 기능(전반적인 플로우 구현)
 
