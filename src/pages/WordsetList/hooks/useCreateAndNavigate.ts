@@ -3,11 +3,11 @@ import { useNavigate } from "@tanstack/react-router";
 import { queryClient } from "../../../routes/__root";
 import { getDataFromApiRes } from "../../../apis/services";
 import WordsetApi from "../../../apis/services/wordset";
-import useWordsetListData from "./useWordsetListData";
+import useInfiniteWordsetList from "./useWordsetListData";
 
 const useCreateAndNavigate = () => {
     const navigate = useNavigate();
-    const wordsetListData = useWordsetListData();
+    const wordsetListData = useInfiniteWordsetList();
 
     const { mutate: createAndNavigate } = useMutation({
         mutationFn: async () => {

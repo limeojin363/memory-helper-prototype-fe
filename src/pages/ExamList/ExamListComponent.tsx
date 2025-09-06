@@ -2,10 +2,18 @@ import { GetExamsResData } from "@/apis/services/exam/get-exam-list/index.types"
 import ExamItem from "./ExamItem";
 import styled from "@emotion/styled";
 
-const ExamListComponent = ({ data }: { data?: GetExamsResData }) => {
+const ExamListComponent = ({
+    data,
+    ref,
+    isFetchingNextPage,
+}: {
+    data?: GetExamsResData["content"];
+    ref: (node?: Element | null) => void;
+    isFetchingNextPage: boolean;
+}) => {
     return (
         <S.Root>
-            {data?.content.map((exam) => (
+            {data?.map((exam) => (
                 <ExamItem
                     id={String(exam.examId)}
                     key={exam.examId}
@@ -13,10 +21,17 @@ const ExamListComponent = ({ data }: { data?: GetExamsResData }) => {
                     generatedAt={new Date(exam.generatedAt)}
                     basedOn={"exam.basedWordsetName"}
                     howManyTimesStudied={exam.timesStudied}
-                    recentStudiedAt={new Date(exam.recentStudiedAt ?? Date.now())}
+                    recentStudiedAt={
+                        new Date(exam.recentStudiedAt ?? Date.now())
+                    }
                     problemNumber={exam.problemCount}
                 />
             ))}
+            {isFetchingNextPage ? (
+                <>불러오는 중... </>
+            ) : (
+                <div ref={ref}></div>
+            )}
         </S.Root>
     );
 };

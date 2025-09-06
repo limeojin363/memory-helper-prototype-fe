@@ -1,35 +1,52 @@
 import styled from "@emotion/styled";
 import { Colors } from "@/designs/colors";
-import { GetWordsetListResData } from "@/apis/services/wordset/get-wordset-list/index.types";
-import WordsetsPageList from "./Item";
-import useWordsetListData from "../hooks/useWordsetListData";
+import WordsetsPageItem from "./Item";
+import useInfiniteWordsetList from "../hooks/useWordsetListData";
 import useCreateAndNavigate from "../hooks/useCreateAndNavigate";
 import Icon from "@/components/icons/Icon";
-
-const List = ({ data }: { data: GetWordsetListResData | undefined }) => {
-    return (
-        <S.ListContainer>
-            {data?.content.map(({ createdAt, setId, setName, testSetsCount }) => (
-                <WordsetsPageList
-                    id={String(setId)}
-                    key={setId}
-                    name={setName}
-                    createdAt={new Date(createdAt)}
-                    problemSetCount={testSetsCount}
-                />
-            ))}
-        </S.ListContainer>
-    );
-};
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 const WordsetListPage = () => {
-    const listData = useWordsetListData();
+    const { data, fetchNextPage, isFetchingNextPage } =
+        useInfiniteWordsetList();
     const createAndNavigate = useCreateAndNavigate();
+    const { ref, inView } = useInView();
+
+    useEffect(() => {
+        if (inView && !isFetchingNextPage) fetchNextPage();
+    }, [fetchNextPage, inView, isFetchingNextPage]);
 
     return (
         <>
             <S.MainArea>
-                <List data={listData} />
+                <S.ListContainer>
+                    {data && (
+                        <>
+                            {data.map(
+                                ({
+                                    createdAt,
+                                    setId,
+                                    setName,
+                                    testSetsCount,
+                                }) => (
+                                    <WordsetsPageItem
+                                        id={String(setId)}
+                                        key={setId}
+                                        name={setName}
+                                        createdAt={new Date(createdAt)}
+                                        problemSetCount={testSetsCount}
+                                    />
+                                ),
+                            )}
+                        </>
+                    )}
+                    {isFetchingNextPage ? (
+                        <>불러오는 중... </>
+                    ) : (
+                        <div ref={ref}></div>
+                    )}
+                </S.ListContainer>
             </S.MainArea>
             <S.AddButton onClick={createAndNavigate}>
                 <Icon
@@ -82,5 +99,4 @@ const S = {
         flex-direction: column;
         gap: 8px;
     `,
-
 };

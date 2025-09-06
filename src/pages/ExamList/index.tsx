@@ -1,13 +1,27 @@
+import { useEffect } from "react";
 import ExamListComponent from "./ExamListComponent";
 import useExamList from "./useExamList";
 import styled from "@emotion/styled";
+import { useInView } from "react-intersection-observer";
 
 const ExamListPage = () => {
-    const examList = useExamList();
+    const { data, fetchNextPage, isFetchingNextPage } = useExamList();
+
+    const { ref, inView } = useInView();
+
+    useEffect(() => {
+        if (inView && !isFetchingNextPage) {
+            fetchNextPage();
+        }
+    }, [fetchNextPage, inView, isFetchingNextPage]);
 
     return (
         <S.MiddleArea>
-            <ExamListComponent data={examList} />
+            <ExamListComponent
+                ref={ref}
+                data={data}
+                isFetchingNextPage={isFetchingNextPage}
+            />
         </S.MiddleArea>
     );
 };

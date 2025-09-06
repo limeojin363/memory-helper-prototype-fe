@@ -19,7 +19,7 @@ const formatDate = (date: Date) => {
     return `${year}-${month}-${day}`;
 };
 
-const WordsetsPageList = ({
+const WordsetsPageItem = ({
     id,
     createdAt,
     name,
@@ -73,7 +73,7 @@ const WordsetsPageList = ({
     );
 };
 
-export default WordsetsPageList;
+export default WordsetsPageItem;
 
 const S = {
     Root: styled.div`

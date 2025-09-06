@@ -1,19 +1,34 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getDataFromApiRes } from "../../apis/services";
 import GetExams from "@/apis/services/exam/get-exam-list";
 
-const useExamList = () => {
-    const { data } = useQuery({
-        queryFn: async () => {
-            const res = GetExams({ page: 0, size: 5 });
+const useExamList = (
+    {
+        name,
+    }: {
+        name?: string;
+    } = { name: "" },
+) => {
+    const { fetchNextPage, data, isFetchingNextPage } = useInfiniteQuery({
+        queryFn: async ({ pageParam }) => {
+            const res = GetExams({ page: pageParam, size: 15, name });
             const data = getDataFromApiRes(res);
 
             return data;
         },
-        queryKey: ["exam-list"],
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, allPages) => {
+            if (lastPage.last) return undefined;
+            return allPages.length;
+        },
+        queryKey: ["exam-list-infinite", name],
     });
 
-    return data;
+    return {
+        data: data?.pages.map((page) => page.content).flat(),
+        fetchNextPage,
+        isFetchingNextPage,
+    };
 };
 
 export default useExamList;

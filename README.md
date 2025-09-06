@@ -23,13 +23,13 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 
 - "/wordset/{id}"의 "시험" 탭이 API에서 호출한 정보들을 리스트 형태로 표시 <- 구현은 했고 디자인 개선이 필요함
 - "/exam/{id}" 페이지의 "시험 결과"에 결과 리스트 UI를 표시하고, "/result/{id}"로 navigate할 수 있도록 하기 <- 구현은 했고 디자인 개선이 필요함
-- "/exam/{id}" 페이지에 "시험 삭제" 버튼 만들고 API 코드 작성해서 붙이기
 - "/result/{id}" 페이지 만들기 <- 구현은 했고 디자인 개선이 필요함
 
 ## 소단위 기능 작업
 
 - (디자인작업 선행 필요) wordset과 exam의 constraints 기획 및 백엔드에 요청, UI 작업 진행하기
 - 로그인 플로우 개선(라우팅 구조와 Blocking 방식에 대해 고민)
+- 검색 기능(wordset 및 exam)
 - 무한 스크롤(wordset 및 exam)
 
 ### 로딩 UI 적용
