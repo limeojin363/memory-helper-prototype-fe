@@ -9,88 +9,88 @@ import ProblemList from "./ProblemList";
 import SubmitButton from "./SubmitButton";
 
 const ExamSolvingPageContext = createContext<{
-    examId: number;
-    pageData: GetExamResData;
-    answers: (number | null)[];
-    updateAnswer: (pIdx: number, value: number) => void;
+  examId: number;
+  pageData: GetExamResData;
+  answers: (number | null)[];
+  updateAnswer: (pIdx: number, value: number) => void;
 }>({
+  examId: 0,
+  pageData: {
+    createdAt: new Date(),
     examId: 0,
-    pageData: {
-        createdAt: new Date(),
-        examId: 0,
-        examName: "",
-        sourceWordSetId: 0,
-        sourceWordSetName: "",
-        problemResponses: [],
-        resultResponses: null,
-    },
-    answers: [],
-    updateAnswer: () => {},
+    examName: "",
+    sourceWordSetId: 0,
+    sourceWordSetName: "",
+    problemResponses: [],
+    resultResponses: null,
+  },
+  answers: [],
+  updateAnswer: () => {},
 });
 
 const useExamId = () => {
-    const { examId } = useContext(ExamSolvingPageContext);
+  const { examId } = useContext(ExamSolvingPageContext);
 
-    return examId;
+  return examId;
 };
 
 const usePageData = () => {
-    const { pageData } = useContext(ExamSolvingPageContext);
+  const { pageData } = useContext(ExamSolvingPageContext);
 
-    return pageData;
+  return pageData;
 };
 
 const useAnswers = (pageData: GetExamResData) => {
-    const [answers, setAnswers] = useState<(number | null)[]>(
-        pageData.problemResponses.map(() => null),
-    );
+  const [answers, setAnswers] = useState<(number | null)[]>(
+    pageData.problemResponses.map(() => null),
+  );
 
-    const updateAnswer = (pIdx: number, value: number) =>
-        setAnswers((prev) => {
-            const newAnswers = [...prev];
-            if (newAnswers[pIdx] === value)
-                newAnswers[pIdx] = null; // Toggle off if already selected
-            else newAnswers[pIdx] = value; // Set the new value
-            return newAnswers;
-        });
+  const updateAnswer = (pIdx: number, value: number) =>
+    setAnswers((prev) => {
+      const newAnswers = [...prev];
+      if (newAnswers[pIdx] === value)
+        newAnswers[pIdx] = null; // Toggle off if already selected
+      else newAnswers[pIdx] = value; // Set the new value
+      return newAnswers;
+    });
 
-    return { answers, updateAnswer };
+  return { answers, updateAnswer };
 };
 
 const ExamSolvingPage = ({ examId }: { examId: number }) => {
-    const pageData = useExamDetail(examId);
+  const pageData = useExamDetail(examId);
 
-    if (!pageData) return null;
+  if (!pageData) return null;
 
-    return <PageContent examId={examId} pageData={pageData} />;
+  return <PageContent examId={examId} pageData={pageData} />;
 };
 
 const PageContent = ({
-    examId,
-    pageData,
+  examId,
+  pageData,
 }: {
-    examId: number;
-    pageData: GetExamResData;
+  examId: number;
+  pageData: GetExamResData;
 }) => {
-    const { answers, updateAnswer } = useAnswers(pageData);
-    const { history } = useRouter();
-    const goBack = () => history.go(-1);
+  const { answers, updateAnswer } = useAnswers(pageData);
+  const { history } = useRouter();
+  const goBack = () => history.go(-1);
 
-    return (
-        <ExamSolvingPageContext.Provider
-            value={{ examId, pageData, answers, updateAnswer }}
-        >
-            <S.Root>
-                <Header goBack={goBack}>
-                    <Text label={pageData.examName} fontStyle="heading-2" />
-                </Header>
-                <S.Inner>
-                    <ProblemList />
-                    <SubmitButton />
-                </S.Inner>
-            </S.Root>
-        </ExamSolvingPageContext.Provider>
-    );
+  return (
+    <ExamSolvingPageContext.Provider
+      value={{ examId, pageData, answers, updateAnswer }}
+    >
+      <S.Root>
+        <Header goBack={goBack}>
+          <Text label={pageData.examName} fontStyle="heading-2" />
+        </Header>
+        <S.Inner>
+          <ProblemList />
+          <SubmitButton />
+        </S.Inner>
+      </S.Root>
+    </ExamSolvingPageContext.Provider>
+  );
 };
 
 ExamSolvingPage.useExamId = useExamId;
@@ -98,16 +98,16 @@ ExamSolvingPage.usePageData = usePageData;
 ExamSolvingPage.useContext = () => useContext(ExamSolvingPageContext);
 
 const S = {
-    Root: styled.div`
-        width: 100%;
-    `,
-    Inner: styled.div`
-        padding: 20px;
+  Root: styled.div`
+    width: 100%;
+  `,
+  Inner: styled.div`
+    padding: 20px;
 
-        display: flex;
-        flex-direction: column;
-        gap: 40px;
-    `,
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  `,
 };
 
 export default ExamSolvingPage;

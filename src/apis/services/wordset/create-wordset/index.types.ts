@@ -1,15 +1,15 @@
 import { ApiFunc } from "../../types";
 
 export type CreateWordsetFunc = ApiFunc<
-    CreateWordsetReqBody,
-    CreateWordsetResData
+  CreateWordsetReqBody,
+  CreateWordsetResData
 >;
 
 export type CreateWordsetReqBody = {
-    setName: string;
+  setName: string;
 };
 
 export type CreateWordsetResData = {
-    setId: number;
-    setName: string;
+  setId: number;
+  setName: string;
 };

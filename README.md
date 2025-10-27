@@ -19,11 +19,11 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 
 ## 코어 기능(전반적인 플로우 구현)
 
-* 단어장 생성 및 편집 -> 시험 생성 -> 문제 풀기 or 시험 결과 보기
+- 단어장 생성 및 편집 -> 시험 생성 -> 문제 풀기 or 시험 결과 보기
 
-- "/wordset/{id}"의 "시험" 탭이 API에서 호출한 정보들을 리스트 형태로 표시 <- 구현은 했고 디자인 개선이 필요함
-- "/exam/{id}" 페이지의 "시험 결과"에 결과 리스트 UI를 표시하고, "/result/{id}"로 navigate할 수 있도록 하기 <- 구현은 했고 디자인 개선이 필요함
-- "/result/{id}" 페이지 만들기 <- 구현은 했고 디자인 개선이 필요함
+* "/wordset/{id}"의 "시험" 탭이 API에서 호출한 정보들을 리스트 형태로 표시 <- 구현은 했고 디자인 개선이 필요함
+* "/exam/{id}" 페이지의 "시험 결과"에 결과 리스트 UI를 표시하고, "/result/{id}"로 navigate할 수 있도록 하기 <- 구현은 했고 디자인 개선이 필요함
+* "/result/{id}" 페이지 만들기 <- 구현은 했고 디자인 개선이 필요함
 
 ## 소단위 기능 작업
 
@@ -39,7 +39,7 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 
 ### 페이지 최상단 Header or SearchBar(/wordset, /exam)
 
- -> 보류 상태(백엔드에서의 API 작업이 선행되어야 함)
+-> 보류 상태(백엔드에서의 API 작업이 선행되어야 함)
 
 - 각 페이지에다가 최신 헤더 적용
 - Header position을 sticky로

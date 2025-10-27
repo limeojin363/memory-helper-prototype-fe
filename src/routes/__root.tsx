@@ -5,36 +5,36 @@ import { Colors } from "../designs/colors";
 import styled from "@emotion/styled";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "jotai-devtools/styles.css";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 export const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {},
-    },
+  defaultOptions: {
+    queries: {},
+  },
 });
 
 export const Route = createRootRoute({
-    component: () => (
-        <QueryClientProvider client={queryClient}>
-            <RootLayout>
-                <Outlet />
-            </RootLayout>
-            <Global
-                styles={css`
-                    ${emotionReset}
-                `}
-            />
-            <ReactQueryDevtools/>
-        </QueryClientProvider>
-    ),
+  component: () => (
+    <QueryClientProvider client={queryClient}>
+      <RootLayout>
+        <Outlet />
+      </RootLayout>
+      <Global
+        styles={css`
+          ${emotionReset}
+        `}
+      />
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  ),
 });
 
 const RootLayout = styled.div`
-    background-color: ${Colors["neutral-light-medium"]};
+  background-color: ${Colors["neutral-light-medium"]};
 
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 
-    align-items: center;
-    min-height: 100dvh;
+  align-items: center;
+  min-height: 100dvh;
 `;

@@ -7,13 +7,13 @@ import GetWordsetList from "./get-wordset-list";
 import RenameWordset from "./rename-wordset";
 
 const WordsetApi = {
-    AddWordToWordset,
-    CreateWordset,
-    DeleteWordInWordset,
-    DeleteWordset,
-    GetWordsetDetail,
-    GetWordsetList,
-    RenameWordset,
+  AddWordToWordset,
+  CreateWordset,
+  DeleteWordInWordset,
+  DeleteWordset,
+  GetWordsetDetail,
+  GetWordsetList,
+  RenameWordset,
 };
 
 export default WordsetApi;

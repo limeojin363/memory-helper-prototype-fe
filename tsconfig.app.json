@@ -19,10 +19,10 @@
     "strict": true,
     "noFallthroughCasesInSwitch": true,
 
-        /* Path Alias */
+    /* Path Alias */
     "baseUrl": "src",
     "paths": {
-      "@/*": ["*"],
+      "@/*": ["*"]
     }
   },
   "include": ["src"]

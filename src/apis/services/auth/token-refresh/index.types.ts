@@ -1,15 +1,15 @@
 import { ApiFunc } from "../../types";
 
 export type TokenRefreshFunc = ApiFunc<
-    TokenRefreshReqBody,
-    TokenRefreshResData
+  TokenRefreshReqBody,
+  TokenRefreshResData
 >;
 
 export type TokenRefreshReqBody = {
-    refreshToken: string;
+  refreshToken: string;
 };
 
 export type TokenRefreshResData = {
-    accessToken: string;
-    refreshToken: string;
+  accessToken: string;
+  refreshToken: string;
 };

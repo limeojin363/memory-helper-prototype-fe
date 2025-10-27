@@ -5,11 +5,11 @@ import DeleteExam from "./delete-exam";
 import GetExams from "./get-exam-list";
 
 const ExamApi = {
-    CheckAnswer,
-    CreateExam,
-    GetExam,
-    DeleteExam,
-    GetExams,
+  CheckAnswer,
+  CreateExam,
+  GetExam,
+  DeleteExam,
+  GetExams,
 };
 
 export default ExamApi;

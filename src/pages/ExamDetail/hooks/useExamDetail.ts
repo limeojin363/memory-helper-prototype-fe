@@ -3,28 +3,28 @@ import GetExam from "../../../apis/services/exam/get-exam";
 import { getDataFromApiRes } from "../../../apis/services";
 
 export type ProblemType = {
-    question: string;
-    problemId: number;
-    problemNumber: number;
-    multipleChoice: {
-        id: string;
-        value: string;
-    }[];
+  question: string;
+  problemId: number;
+  problemNumber: number;
+  multipleChoice: {
+    id: string;
+    value: string;
+  }[];
 };
 
 const useExamDetail = (examId: number) => {
-    const { data } = useQuery({
-        queryFn: async () => {
-            const res = GetExam({ examId });
-            const data = await getDataFromApiRes(res);
+  const { data } = useQuery({
+    queryFn: async () => {
+      const res = GetExam({ examId });
+      const data = await getDataFromApiRes(res);
 
-            return data;
-        },
-        queryKey: ["examDetail", examId],
-        initialData: null,
-    });
+      return data;
+    },
+    queryKey: ["examDetail", examId],
+    initialData: null,
+  });
 
-    return data;
+  return data;
 };
 
 export default useExamDetail;

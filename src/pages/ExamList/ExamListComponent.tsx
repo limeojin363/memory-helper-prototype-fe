@@ -33,8 +33,8 @@ const ExamListComponent = ({
           problemNumber={exam.problemCount}
         />
       ))}
-          <S.PageDescription>{pageDescription}</S.PageDescription>
-          {!isFetching && <div ref={ref}></div>}
+      <S.PageDescription>{pageDescription}</S.PageDescription>
+      {!isFetching && <div ref={ref}></div>}
     </S.Root>
   );
 };

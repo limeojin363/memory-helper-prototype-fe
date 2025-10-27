@@ -5,11 +5,11 @@ import Signup from "./signup";
 import TokenRefresh from "./token-refresh";
 
 const AuthApi = {
-    GetUserInfo,
-    Login,
-    Logout,
-    Signup,
-    TokenRefresh,
+  GetUserInfo,
+  Login,
+  Logout,
+  Signup,
+  TokenRefresh,
 };
 
 export default AuthApi;
