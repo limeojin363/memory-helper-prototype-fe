@@ -3,35 +3,36 @@ import WordsetApi from "../../../apis/services/wordset";
 import { getDataFromApiRes } from "../../../apis/services";
 
 const useInfiniteWordsetList = (
-    {
-        name,
-    }: {
-        name?: string;
-    } = { name: "" },
+  {
+    name,
+  }: {
+    name?: string;
+  } = { name: "" },
 ) => {
-    const { fetchNextPage, data, isFetchingNextPage } = useInfiniteQuery({
-        queryFn: async ({ pageParam }) => {
-            const res = WordsetApi.GetWordsetList({
-                name,
-                page: pageParam,
-                size: 15,
-            });
-            const data = await getDataFromApiRes(res);
-            return data;
-        },
-        initialPageParam: 0,
-        getNextPageParam: (lastPage, allPages) => {
-            if (lastPage.last) return undefined;
-            return allPages.length;
-        },
-        queryKey: ["wordsetList-infinite", name],
-    });
+  const { fetchNextPage, data, isFetching, hasNextPage } = useInfiniteQuery({
+    queryFn: async ({ pageParam }) => {
+      const res = WordsetApi.GetWordsetList({
+        name,
+        page: pageParam,
+        size: 10,
+      });
+      const data = await getDataFromApiRes(res);
+      return data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.last) return undefined;
+      return allPages.length;
+    },
+    queryKey: ["wordsetList-infinite", name],
+  });
 
-    return {
-        data: data?.pages.map((page) => page.content).flat(),
-        fetchNextPage,
-        isFetchingNextPage,
-    };
+  return {
+    data: data?.pages.map((page) => page.content).flat(),
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+  };
 };
 
 export default useInfiniteWordsetList;

@@ -3,32 +3,33 @@ import { getDataFromApiRes } from "../../apis/services";
 import GetExams from "@/apis/services/exam/get-exam-list";
 
 const useExamList = (
-    {
-        name,
-    }: {
-        name?: string;
-    } = { name: "" },
+  {
+    name,
+  }: {
+    name?: string;
+  } = { name: "" },
 ) => {
-    const { fetchNextPage, data, isFetchingNextPage } = useInfiniteQuery({
-        queryFn: async ({ pageParam }) => {
-            const res = GetExams({ page: pageParam, size: 15, name });
-            const data = getDataFromApiRes(res);
+  const { fetchNextPage, data, isFetching, hasNextPage } = useInfiniteQuery({
+    queryFn: async ({ pageParam }) => {
+      const res = GetExams({ page: pageParam, size: 10, name });
+      const data = getDataFromApiRes(res);
 
-            return data;
-        },
-        initialPageParam: 0,
-        getNextPageParam: (lastPage, allPages) => {
-            if (lastPage.last) return undefined;
-            return allPages.length;
-        },
-        queryKey: ["exam-list-infinite", name],
-    });
+      return data;
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.last) return undefined;
+      return allPages.length;
+    },
+    queryKey: ["exam-list-infinite", name],
+  });
 
-    return {
-        data: data?.pages.map((page) => page.content).flat(),
-        fetchNextPage,
-        isFetchingNextPage,
-    };
+  return {
+    data: data?.pages.map((page) => page.content).flat(),
+    fetchNextPage,
+    isFetching,
+    hasNextPage,
+  };
 };
 
 export default useExamList;

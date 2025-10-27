@@ -27,10 +27,10 @@ https://github.com/KimJungMook/memory-helper-prototype-be
 
 ## 소단위 기능 작업
 
-- (디자인작업 선행 필요) wordset과 exam의 constraints 기획 및 백엔드에 요청, UI 작업 진행하기
+- (디자인작업 선행 필요) wordset과 exam의 constraints 기획 및 백엔드에 작업 요청, UI 작업 진행하기
 - 로그인 플로우 개선(라우팅 구조와 Blocking 방식에 대해 고민)
-- 검색 기능(wordset 및 exam)
-- 무한 스크롤(wordset 및 exam)
+- 검색 기능(wordset 및 exam) 적용
+- 무한 스크롤(wordset 및 exam) 적용
 
 ### 로딩 UI 적용
 

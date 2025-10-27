@@ -6,5 +6,8 @@ export const Route = createFileRoute("/_authenticated")({
 });
 
 function RouteComponent() {
+    const { isLoggedIn } = useAuth();
+    if (!isLoggedIn) return <Navigate to="/login" />;
+
     return <Outlet />;
 }

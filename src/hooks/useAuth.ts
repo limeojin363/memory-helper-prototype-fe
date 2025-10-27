@@ -24,8 +24,8 @@ const useAuth = () => {
     const [refreshToken, setRefreshToken] = useAtom(refreshTokenAtom);
     const [userInfo, setUserInfo] = useAtom(userInfoAtom);
 
-    // 수정 필요: 유효성이 미검증된 토큰의 존재만 확인하는 문제
-    const getIsLoggedIn = !!accessToken;
+    // 수정 필요: 유효성 검증 여부와는 관계없이 토큰의 존재만 확인하는 문제?
+    const isLoggedIn = !!accessToken;
 
     return {
         accessToken,
@@ -34,7 +34,7 @@ const useAuth = () => {
         setRefreshToken,
         userInfo,
         setUserInfo,
-        getIsLoggedIn,
+        isLoggedIn: isLoggedIn,
     };
 };
 
