@@ -17,10 +17,9 @@ const useExamOfWordsetList = (wordsetId: number) => {
       const data = getDataFromApiRes(res);
       return data;
     },
-    initialData: null,
   });
 
-  if (data === null) return null;
+  if (!data) return null;
 
   return data.content;
 };

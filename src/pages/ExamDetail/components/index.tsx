@@ -28,6 +28,9 @@ const useRename = (examId: number) => {
       queryClient.invalidateQueries({
         queryKey: ["examDetail", examId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["exam-list-infinite"],
+      });
     },
     mutationKey: ["renameExam", examId],
   });
@@ -106,6 +109,11 @@ const useDelete = (examId: number) => {
       const data = await getDataFromApiRes(res);
 
       return data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["exam-list-infinite"],
+      });
     },
   });
 

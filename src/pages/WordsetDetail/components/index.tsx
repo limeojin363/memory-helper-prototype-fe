@@ -66,15 +66,35 @@ const PageContext = createContext<{
 const usePageData = () => useContext(PageContext).pageData;
 const useWordsetId = () => useContext(PageContext).wordsetId;
 
+const LoadingUI = () => {
+  const navigate = useNavigate();
+  const goBack = () =>
+    navigate({
+      to: "/wordset",
+    });
+
+  return (
+    <S.Outer>
+      <Header goBack={goBack}>
+        <Text
+          fontStyle="heading-2"
+          label="불러오는 중..."
+          colorName="neutral-dark-lightest"
+        />
+      </Header>
+    </S.Outer>
+  );
+};
+
 // Page Root
 const WordsetDetailPage = ({ wordsetId }: { wordsetId: number }) => {
   const pageData = useWordsetDetailData(wordsetId);
 
-  if (!pageData) return null;
+  if (!pageData) return <LoadingUI />;
 
   return (
     <PageContext.Provider value={{ wordsetId, pageData }}>
-      <IfDataValid />
+      <IfLoaded />
     </PageContext.Provider>
   );
 };
@@ -100,6 +120,9 @@ const useRename = () => {
       queryClient.invalidateQueries({
         queryKey: ["wordsetDetail", wordsetId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["wordsetList-infinite"],
+      });
     },
     mutationKey: ["renameWordset", wordsetId],
   });
@@ -107,7 +130,7 @@ const useRename = () => {
   return { renameRequest: (name: string) => rename(name), isPending };
 };
 
-const IfDataValid = () => {
+const IfLoaded = () => {
   const navigate = useNavigate();
   const [pageMode, setPageMode] = useState<"WORDS" | "EXAMS">("WORDS");
 

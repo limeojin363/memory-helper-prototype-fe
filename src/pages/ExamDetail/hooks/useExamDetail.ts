@@ -21,7 +21,7 @@ const useExamDetail = (examId: number) => {
       return data;
     },
     queryKey: ["examDetail", examId],
-    initialData: null,
+    staleTime: Infinity,
   });
 
   return data;

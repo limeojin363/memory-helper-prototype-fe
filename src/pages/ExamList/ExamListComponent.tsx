@@ -13,7 +13,7 @@ const ExamListComponent = ({
   isFetching: boolean;
   hasNextPage: boolean;
 }) => {
-  const pageDescription = isFetching
+  const bottomDescription = isFetching
     ? "불러오는 중"
     : hasNextPage
       ? "스크롤해서 더 불러오세요"
@@ -33,7 +33,7 @@ const ExamListComponent = ({
           problemNumber={exam.problemCount}
         />
       ))}
-      <S.PageDescription>{pageDescription}</S.PageDescription>
+      <S.BottomDescription>{bottomDescription}</S.BottomDescription>
       {!isFetching && <div ref={ref}></div>}
     </S.Root>
   );
@@ -48,7 +48,7 @@ const S = {
     gap: 8px;
     padding-bottom: 140px;
   `,
-  PageDescription: styled.div`
+  BottomDescription: styled.div`
     text-align: center;
   `,
 };

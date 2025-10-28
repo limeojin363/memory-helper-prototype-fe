@@ -15,6 +15,13 @@ const useCreateExam = (wordsetId: number) => {
       queryClient.invalidateQueries({
         queryKey: ["wordsetDetail", wordsetId],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["wordsetList-infinite"],
+      });
+       queryClient.invalidateQueries({
+        queryKey: ["exam-list-infinite"],
+      });
+
     },
   });
 

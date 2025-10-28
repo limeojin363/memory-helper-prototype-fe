@@ -22,6 +22,7 @@ const useExamList = (
       return allPages.length;
     },
     queryKey: ["exam-list-infinite", name],
+    staleTime: Infinity,
   });
 
   return {

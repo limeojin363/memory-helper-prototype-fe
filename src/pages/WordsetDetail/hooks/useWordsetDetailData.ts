@@ -4,12 +4,13 @@ import { getDataFromApiRes } from "../../../apis/services";
 
 export const useWordsetDetailData = (wordsetId: number) => {
   const { data } = useQuery({
-    queryKey: ["wordsetDetail", wordsetId],
     queryFn: () => {
+      console.log(1234);
       const res = WordsetApi.GetWordsetDetail({ id: wordsetId });
       return getDataFromApiRes(res);
     },
-    initialData: null,
+    staleTime: Infinity,
+    queryKey: ["wordsetDetail", wordsetId],
   });
 
   return data;

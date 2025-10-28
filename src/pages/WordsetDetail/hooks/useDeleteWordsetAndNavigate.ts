@@ -12,8 +12,9 @@ const useDeleteWordsetAndNavigate = (setId: number) => {
     },
     onSuccess: async () => {
       await queryClient.invalidateQueries({
-        queryKey: ["wordsetList"],
+        queryKey: ["wordsetList-infinite"],
       });
+      
       navigate({ to: "/wordset" });
     },
   });

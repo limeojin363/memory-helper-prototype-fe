@@ -25,6 +25,7 @@ const useInfiniteWordsetList = (
       return allPages.length;
     },
     queryKey: ["wordsetList-infinite", name],
+    staleTime: Infinity,
   });
 
   return {
