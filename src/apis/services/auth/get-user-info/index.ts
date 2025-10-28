@@ -1,6 +1,6 @@
-import { baseApiClient } from "../../../core/clients";
+import authenticatedApiClient from "../../../core/clients";
 import { GetUserInfoFunc } from "./index.types";
 
-const GetUserInfo: GetUserInfoFunc = () => baseApiClient.get("auth/user-info");
+const GetUserInfo: GetUserInfoFunc = () => authenticatedApiClient.get("auth/user");
 
 export default GetUserInfo;
