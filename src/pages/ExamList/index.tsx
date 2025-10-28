@@ -1,22 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import ExamListComponent from "./ExamListComponent";
 import useExamList from "./useExamList";
 import styled from "@emotion/styled";
 import { useInView } from "react-intersection-observer";
+import SearchBar from "@/components/layouts/mobile/SearchBar";
+import { debounce } from "lodash";
 
 const ExamListPage = () => {
-  const { data, fetchNextPage, isFetching, hasNextPage } = useExamList();
-
+  const [search, setSearch] = useState("");
+  const { data, fetchNextPage, isFetching, hasNextPage } = useExamList({ name: search });
+  const debouncedFetch = debounce(fetchNextPage, 300);
   const { ref, inView } = useInView();
 
   useEffect(() => {
     if (inView && !isFetching) {
-      fetchNextPage();
+      debouncedFetch();
     }
-  }, [fetchNextPage, inView, isFetching]);
+  }, [debouncedFetch, inView, isFetching]);
 
   return (
     <S.MiddleArea>
+      <SearchBar onChange={(e) => setSearch(e.target.value)} value={search} />
       <ExamListComponent
         hasNextPage={hasNextPage}
         ref={ref}

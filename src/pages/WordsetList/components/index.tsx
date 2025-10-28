@@ -5,17 +5,22 @@ import useInfiniteWordsetList from "../hooks/useWordsetListData";
 import useCreateAndNavigate from "../hooks/useCreateAndNavigate";
 import Icon from "@/components/icons/Icon";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import SearchBar from "@/components/layouts/mobile/SearchBar";
+import { debounce } from "lodash";
 
 const WordsetListPage = () => {
+  const [search, setSearch] = useState("");
   const { data, fetchNextPage, isFetching, hasNextPage } =
-    useInfiniteWordsetList();
+    useInfiniteWordsetList({ name: search });
   const createAndNavigate = useCreateAndNavigate();
   const { ref, inView } = useInView();
 
+  const debouncedFetch = debounce(fetchNextPage, 300);
+
   useEffect(() => {
-    if (inView && !isFetching) fetchNextPage();
-  }, [fetchNextPage, inView, isFetching]);
+    if (inView && !isFetching) debouncedFetch();
+  }, [debouncedFetch, inView, isFetching]);
 
   const pageDescription = isFetching
     ? "불러오는 중"
@@ -24,7 +29,8 @@ const WordsetListPage = () => {
       : "마지막 페이지입니다.";
 
   return (
-    <>
+    <S.Root>
+      <SearchBar onChange={(e) => setSearch(e.target.value)} value={search} />
       <S.MainArea>
         <S.ListContainer>
           <>
@@ -45,20 +51,27 @@ const WordsetListPage = () => {
       <S.AddButton onClick={createAndNavigate}>
         <Icon iconName="plus" size={28} colorName="highlight-lightest" />
       </S.AddButton>
-    </>
+    </S.Root>
   );
 };
 
 export default WordsetListPage;
 
 const S = {
+  Root: styled.div`
+    width: calc(100% - 32px);
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin: 12px 0;
+  `,
   MainArea: styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
 
-    width: calc(100% - 32px);
-    margin: 20px 16px 0;
     /* BottomNavigation 고려하여 보정 */
     padding-bottom: 140px;
   `,
