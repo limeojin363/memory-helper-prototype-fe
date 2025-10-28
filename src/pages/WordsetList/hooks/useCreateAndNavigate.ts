@@ -3,27 +3,18 @@ import { useNavigate } from "@tanstack/react-router";
 import { queryClient } from "../../../routes/__root";
 import { getDataFromApiRes } from "../../../apis/services";
 import WordsetApi from "../../../apis/services/wordset";
-import useInfiniteWordsetList from "./useWordsetListData";
 
 const useCreateAndNavigate = () => {
   const navigate = useNavigate();
-  const wordsetListData = useInfiniteWordsetList();
 
   const { mutate: createAndNavigate } = useMutation({
     mutationFn: async () => {
-      if (!wordsetListData) return;
+      const res = WordsetApi.CreateWordset({setName: "DUMMY"});
 
-      const num = wordsetListData.content.reduce((max, wordset) => {
-        const match = wordset.setName.match(/Wordset(\d+)/);
-        const number = match ? parseInt(match[1], 10) : 0;
-        return Math.max(max, number);
-      }, 0);
-
-      // const num = 1;
-      const newSetName = `Wordset${num + 1}`;
-
-      const res = WordsetApi.CreateWordset({ setName: newSetName });
+      console.log(res);
       const data = await getDataFromApiRes(res);
+
+      console.log({data});
 
       if (!data) return;
       navigate({
